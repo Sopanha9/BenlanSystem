@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenLanSystem", "BenLanSystem\BenLanSystem.csproj", "{F8C1D80E-92F0-45A1-BFE0-C97FDB4EBA1B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Html&Css", "Html&Css", "{BCA98849-5C55-407F-9005-002458A3356E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

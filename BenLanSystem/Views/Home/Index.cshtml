@@ -1,8 +1,480 @@
-﻿@{
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section" id="hero-section">
+    <div class="hero-container">
+        <!-- Hero Image with Glow Border -->
+        <div class="hero-image-wrapper" id="hero-image-wrapper">
+            <img src="~/designs/hero.png" alt="Angkor Wat Temple - Cambodia" class="hero-image" id="hero-image" />
+        </div>
+
+        <!-- Booking Form Card -->
+        <div class="booking-card" id="booking-card">
+            <h2 class="booking-title" id="booking-title">Book your ticket</h2>
+
+            <form class="booking-form" id="booking-form">
+                <!-- Departing From -->
+                <div class="form-field" id="field-departing">
+                    <input type="text" placeholder="Departing from" id="input-departing" autocomplete="off" />
+                    <span class="field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Going To -->
+                <div class="form-field" id="field-goingto">
+                    <input type="text" placeholder="Going to" id="input-goingto" autocomplete="off" />
+                    <span class="field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Going Date -->
+                <div class="form-field" id="field-goingdate">
+                    <input type="text" placeholder="Going date" id="input-goingdate" onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
+                    <span class="field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Returning Date -->
+                <div class="form-field" id="field-returningdate">
+                    <input type="text" placeholder="Returning date" id="input-returningdate" onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
+                    <span class="field-icon" aria-hidden="true">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Search Button -->
+                <button type="submit" class="search-btn" id="search-button">Search</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- =============================================
+     QUICK CHECK SECTION
+     ============================================= -->
+<section class="quick-check-section" id="quick-check-section">
+    <div class="section-container">
+
+        <!-- Section Header -->
+        <div class="section-header" id="quick-check-header">
+            <div class="section-title-group">
+                <!-- Lightning bolt icon -->
+                <svg class="section-title-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                <h2 class="section-title" id="quick-check-title">Quick Check</h2>
+            </div>
+            <button class="see-more-btn" id="see-more-btn" onclick="toggleQuickCheck()">See more</button>
+        </div>
+
+        <!-- Ticket Cards Grid -->
+        <div class="tickets-grid" id="tickets-grid">
+
+            <!-- Card 1 (always visible) -->
+            <div class="ticket-card" id="ticket-card-1">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-1">Book now</button>
+                </div>
+            </div>
+
+            <!-- Card 2 (always visible) -->
+            <div class="ticket-card" id="ticket-card-2">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-2">Book now</button>
+                </div>
+            </div>
+
+            <!-- Card 3 (always visible) -->
+            <div class="ticket-card" id="ticket-card-3">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-3">Book now</button>
+                </div>
+            </div>
+
+            <!-- Cards 4-9 (hidden by default, shown on "See more") -->
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-4">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-4">Book now</button>
+                </div>
+            </div>
+
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-5">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-5">Book now</button>
+                </div>
+            </div>
+
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-6">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-6">Book now</button>
+                </div>
+            </div>
+
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-7">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-7">Book now</button>
+                </div>
+            </div>
+
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-8">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-8">Book now</button>
+                </div>
+            </div>
+
+            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-9">
+                <div class="ticket-card-header">
+                    <div class="ticket-route-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
+                </div>
+                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
+                <div class="ticket-footer">
+                    <div class="ticket-price">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                        </svg>
+                        <span>$7</span>
+                    </div>
+                    <button class="book-now-btn" id="book-btn-9">Book now</button>
+                </div>
+            </div>
+
+        </div><!-- end tickets-grid -->
+    </div>
+</section>
+
+<!-- =============================================
+     WHY CHOOSE US SECTION
+     ============================================= -->
+<section class="why-choose-section" id="why-choose-section">
+    <div class="section-container">
+
+        <!-- Section Header -->
+        <div class="why-header" id="why-header">
+            <svg class="section-title-icon thumbs-up" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M2 20h2a1 1 0 001-1V9a1 1 0 00-1-1H2v12zM22 9a2 2 0 00-2-2h-6.32l.96-4.57.03-.32a1.5 1.5 0 00-.44-1.06L13.17 0 7.59 5.59A2 2 0 007 7v11a2 2 0 002 2h9a1.99 1.99 0 001.84-1.22l3.02-7.05A2 2 0 0022 11V9z"/>
+            </svg>
+            <h2 class="section-title" id="why-choose-title">Why choose us!</h2>
+        </div>
+
+        <!-- Feature Cards Grid -->
+        <div class="features-grid" id="features-grid">
+
+            <!-- Complimentary -->
+            <div class="feature-card" id="feature-card-1">
+                <div class="feature-icon-box" id="feature-icon-1">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4v-2z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Complimentary</h4>
+                    <p class="feature-desc">We offer a bottle of pure drinking water on board</p>
+                </div>
+            </div>
+
+            <!-- Liability Insurance -->
+            <div class="feature-card" id="feature-card-2">
+                <div class="feature-icon-box" id="feature-icon-2">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Liability Insurance</h4>
+                    <p class="feature-desc">All of our fleets are covering by liability insurance both domestic and international route.</p>
+                </div>
+            </div>
+
+            <!-- Payment & Ticket -->
+            <div class="feature-card" id="feature-card-3">
+                <div class="feature-icon-box" id="feature-icon-3">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Payment & Ticket</h4>
+                    <p class="feature-desc">You can purchase our ticket and pay real time with varieties of payment method and our e-ticket will send to your email.</p>
+                </div>
+            </div>
+
+            <!-- Comfortable Seat -->
+            <div class="feature-card" id="feature-card-4">
+                <div class="feature-icon-box" id="feature-icon-4">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Comfortable Seat</h4>
+                    <p class="feature-desc">Generally, vans have up to 17 seats, but we removed 6 to provide more space and comfortable reclining seats.</p>
+                </div>
+            </div>
+
+            <!-- Customer Service -->
+            <div class="feature-card" id="feature-card-5">
+                <div class="feature-icon-box" id="feature-icon-5">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12l-4-2.12V14H6V6h8v2.12L18 6v8z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Customer Service</h4>
+                    <p class="feature-desc">Our 24/7 support team is ready to assist you in both Khmer and English.</p>
+                </div>
+            </div>
+
+            <!-- Air Conditioned -->
+            <div class="feature-card" id="feature-card-6">
+                <div class="feature-icon-box" id="feature-icon-6">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22 11h-4.17l3.24-3.24-1.41-1.42L15 11h-2V9l4.66-4.66-1.42-1.41L13 6.17V2h-2v4.17L7.76 2.93 6.34 4.34 11 9v2H9L4.34 6.34 2.93 7.76 6.17 11H2v2h4.17l-3.24 3.24 1.41 1.42L9 13h2v2l-4.66 4.66 1.42 1.41L11 17.83V22h2v-4.17l3.24 3.24 1.42-1.41L13 15v-2h2l4.66 4.66 1.41-1.42L17.83 13H22v-2z"/>
+                    </svg>
+                </div>
+                <div class="feature-text">
+                    <h4 class="feature-title">Air Conditioned</h4>
+                    <p class="feature-desc">Cambodia is a hot country, so our air-conditioning is regularly checked by professionals to ensure your comfort.</p>
+                </div>
+            </div>
+
+        </div><!-- end features-grid -->
+    </div>
+</section>
+
+<!-- =============================================
+     DESTINATIONS SECTION
+     ============================================= -->
+<section class="destinations-section" id="destinations-section">
+    <div class="section-container">
+
+        <!-- Section Header -->
+        <div class="destinations-header" id="destinations-header">
+            <div class="section-title-group">
+                <!-- Arrow / location icon -->
+                <svg class="section-title-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
+                </svg>
+                <h2 class="section-title" id="destinations-title">Destinations</h2>
+            </div>
+            <p class="destinations-subtitle" id="destinations-subtitle">Explore 6 available destinations.</p>
+        </div>
+
+        <!-- Destinations Grid -->
+        <div class="destinations-grid" id="destinations-grid">
+
+            <!-- Siem Reap -->
+            <div class="dest-card" id="dest-card-siemreap">
+                <img src="~/designs/siemreap.png" alt="Siem Reap" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Siem Reap</span>
+            </div>
+
+            <!-- Phnom Penh -->
+            <div class="dest-card" id="dest-card-phnompenh">
+                <img src="~/designs/phnompenh.png" alt="Phnom Penh" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Phnom Penh</span>
+            </div>
+
+            <!-- Kompot -->
+            <div class="dest-card" id="dest-card-kompot">
+                <img src="~/designs/kompot.png" alt="Kompot" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Kompot</span>
+            </div>
+
+            <!-- Battambang -->
+            <div class="dest-card" id="dest-card-battambang">
+                <img src="~/designs/btb.png" alt="Battambang" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Battambang</span>
+            </div>
+
+            <!-- Kompong Thom -->
+            <div class="dest-card" id="dest-card-kpc">
+                <img src="~/designs/kpc.png" alt="Kompong Thom" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Kompong thom</span>
+            </div>
+
+            <!-- Bonteay Meanchey -->
+            <div class="dest-card" id="dest-card-bmc">
+                <img src="~/designs/bmc.png" alt="Bonteay Meanchey" class="dest-img" loading="lazy" />
+                <div class="dest-overlay"></div>
+                <span class="dest-name">Bonteay Meanchey</span>
+            </div>
+
+        </div><!-- end destinations-grid -->
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    function toggleQuickCheck() {
+        const extras = document.querySelectorAll('.ticket-card-extra');
+        const btn = document.getElementById('see-more-btn');
+        const isExpanded = btn.textContent.trim() === 'See less';
+
+        extras.forEach(function(card, index) {
+            if (isExpanded) {
+                card.classList.add('hidden');
+                card.classList.remove('fade-in-card');
+            } else {
+                card.classList.remove('hidden');
+                // staggered fade-in
+                setTimeout(function() {
+                    card.classList.add('fade-in-card');
+                }, index * 60);
+            }
+        });
+
+        btn.textContent = isExpanded ? 'See more' : 'See less';
+    }
+</script>
+}
