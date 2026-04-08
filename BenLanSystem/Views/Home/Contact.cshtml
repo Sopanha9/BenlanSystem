@@ -1,0 +1,130 @@
+@{
+    ViewData["Title"] = "Contact Us";
+    ViewData["Description"] = "Get in touch with BenLan. Find our phone number, branches in Phnom Penh, Siem Reap, and Kompot, and locate us on the map.";
+    ViewData["ActivePage"] = "Contact";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/contact.css" asp-append-version="true"/>
+}
+
+<!-- =============================================
+     CONTACT PAGE
+     ============================================= -->
+<section class="contact-section" id="contact-page">
+    <div class="section-container">
+
+        <!-- Page Header -->
+        <div class="contact-page-header">
+            <h1 class="contact-page-title">Contact us</h1>
+            <p class="contact-page-subtitle">
+                Have questions or ready to book your trip? Contact us today — we're here to help you every step of the way.
+            </p>
+        </div>
+
+        <!-- Two-panel layout: Info Card + Map -->
+        <div class="contact-panels">
+
+            <!-- Left: Info Card -->
+            <div class="contact-info-card" id="contact-info-card">
+
+                <!-- Phone -->
+                <div class="contact-phone-row" id="contact-phone">
+                    <span class="contact-label">Phone Number:</span>
+                    <span class="contact-value">
+                        <a href="tel:098765432">098&nbsp;765 432</a> /
+                        <a href="tel:012345678">012 345 678</a>
+                    </span>
+                </div>
+
+                <!-- Branches -->
+                <div class="contact-branches" id="contact-branches">
+                    <p class="contact-label">Our Branches:</p>
+
+                    <!-- Phnom Penh -->
+                    <div class="branch-group" id="branch-pp">
+                        <button class="branch-toggle" aria-expanded="true" aria-controls="branch-pp-list" id="branch-pp-btn">
+                            <span class="branch-toggle-icon">+</span>
+                            <span>Phnom Penh</span>
+                        </button>
+                        <ul class="branch-sub-list" id="branch-pp-list">
+                            <li><span class="branch-dot">•</span> ACLEDA University</li>
+                            <li><span class="branch-dot">•</span> Toul Kork</li>
+                            <li><span class="branch-dot">•</span> Park Phnom Penh</li>
+                        </ul>
+                    </div>
+
+                    <!-- Siem Reap -->
+                    <div class="branch-group" id="branch-sr">
+                        <button class="branch-toggle collapsed" aria-expanded="false" aria-controls="branch-sr-list" id="branch-sr-btn">
+                            <span class="branch-toggle-icon">+</span>
+                            <span>Siem Reap</span>
+                        </button>
+                        <ul class="branch-sub-list collapsed" id="branch-sr-list">
+                            <li><span class="branch-dot">•</span> Pub Street Area</li>
+                            <li><span class="branch-dot">•</span> Angkor Market</li>
+                        </ul>
+                    </div>
+
+                    <!-- Kompot -->
+                    <div class="branch-group" id="branch-kp">
+                        <button class="branch-toggle collapsed" aria-expanded="false" aria-controls="branch-kp-list" id="branch-kp-btn">
+                            <span class="branch-toggle-icon">+</span>
+                            <span>Kompot</span>
+                        </button>
+                        <ul class="branch-sub-list collapsed" id="branch-kp-list">
+                            <li><span class="branch-dot">•</span> Central Kompot</li>
+                            <li><span class="branch-dot">•</span> Kampot Riverside</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right: Map -->
+            <div class="contact-map-panel" id="contact-map-panel">
+                <iframe
+                    id="contact-map"
+                    title="BenLan Phnom Penh Location"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31246.53019523682!2d104.88738!3d11.5688796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310951e13984c9b1%3A0xec0e8ccd51af3dfc!2sPhnom%20Penh%2C%20Cambodia!5e0!3m2!1sen!2s!4v1712576400000!5m2!1sen!2s"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    // Branch accordion toggle
+    document.querySelectorAll('.branch-toggle').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var targetId = btn.getAttribute('aria-controls');
+            var list = document.getElementById(targetId);
+            var isExpanded = btn.getAttribute('aria-expanded') === 'true';
+
+            // Toggle
+            if (isExpanded) {
+                btn.setAttribute('aria-expanded', 'false');
+                btn.classList.add('collapsed');
+                list.classList.add('collapsed');
+                btn.querySelector('.branch-toggle-icon').textContent = '+';
+            } else {
+                btn.setAttribute('aria-expanded', 'true');
+                btn.classList.remove('collapsed');
+                list.classList.remove('collapsed');
+                btn.querySelector('.branch-toggle-icon').textContent = '−';
+            }
+        });
+    });
+
+    // Init icon for open accordion
+    document.querySelectorAll('.branch-toggle:not(.collapsed) .branch-toggle-icon').forEach(function(icon) {
+        icon.textContent = '−';
+    });
+</script>
+}

@@ -1,0 +1,241 @@
+/* =============================================
+   BenLan — contact.css
+   Styles for the Contact page only
+   ============================================= */
+
+/* Page container — max-width + horizontal padding */
+.section-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+@media (max-width: 992px) {
+    .section-container { padding: 0 24px; }
+}
+
+@media (max-width: 480px) {
+    .section-container { padding: 0 16px; }
+}
+
+.contact-section {
+    padding: 60px 0 80px;
+}
+
+/* Page header */
+.contact-page-header {
+    margin-bottom: 36px;
+}
+
+.contact-page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 12px;
+    letter-spacing: 0.01em;
+}
+
+.contact-page-subtitle {
+    font-size: 0.925rem;
+    color: rgba(255, 255, 255, 0.72);
+    margin: 0;
+    line-height: 1.6;
+    max-width: 680px;
+}
+
+/* Two-panel grid */
+.contact-panels {
+    display: grid;
+    grid-template-columns: 1fr 1.55fr;
+    gap: 24px;
+    align-items: stretch;
+    min-height: 300px;
+}
+
+/* ── Left Info Card ── */
+.contact-info-card {
+    background: #141b35;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 30px 28px 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: fadeSlideIn 0.5s ease-out;
+}
+
+/* Phone row */
+.contact-phone-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.contact-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+}
+
+.contact-value {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.contact-value a {
+    color: rgba(255, 255, 255, 0.72);
+    transition: color 0.2s ease;
+}
+
+.contact-value a:hover {
+    color: #ffffff;
+}
+
+/* Branches block */
+.contact-branches {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.contact-branches > .contact-label {
+    margin-bottom: 10px;
+}
+
+.branch-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.branch-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.82);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 8px 0 6px;
+    text-align: left;
+    transition: color 0.2s ease;
+    letter-spacing: 0.01em;
+}
+
+.branch-toggle:hover {
+    color: #ffffff;
+}
+
+.branch-toggle-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+    width: 16px;
+    color: rgba(255, 255, 255, 0.55);
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.branch-toggle:hover .branch-toggle-icon {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.branch-sub-list {
+    list-style: none;
+    padding: 0 0 4px 24px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow: hidden;
+    max-height: 200px;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
+    opacity: 1;
+}
+
+.branch-sub-list.collapsed {
+    max-height: 0;
+    opacity: 0;
+}
+
+.branch-sub-list li {
+    font-size: 0.825rem;
+    color: rgba(255, 255, 255, 0.58);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.5;
+}
+
+.branch-dot {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+}
+
+/* ── Right Map Panel ── */
+.contact-map-panel {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    min-height: 300px;
+    animation: fadeSlideIn 0.6s ease-out 0.1s both;
+}
+
+.contact-map-panel iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: block;
+    border: none;
+    filter: grayscale(15%) contrast(1.05);
+}
+
+/* =============================================
+   RESPONSIVE — CONTACT PAGE
+   ============================================= */
+@media (max-width: 900px) {
+    .contact-panels {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-map-panel {
+        min-height: 320px;
+    }
+
+    .contact-map-panel iframe {
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 640px) {
+    .contact-section {
+        padding: 40px 0 60px;
+    }
+
+    .contact-page-title {
+        font-size: 1.4rem;
+    }
+
+    .contact-info-card {
+        padding: 24px 20px 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contact-page-title {
+        font-size: 1.25rem;
+    }
+
+    .contact-info-card {
+        padding: 20px 16px 24px;
+        border-radius: 14px;
+    }
+
+    .contact-map-panel {
+        border-radius: 14px;
+    }
+}

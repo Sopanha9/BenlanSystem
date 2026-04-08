@@ -1,5 +1,10 @@
 @{
     ViewData["Title"] = "Home Page";
+    ViewData["ActivePage"] = "Home";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true"/>
 }
 
 <!-- Hero Section -->
@@ -454,6 +459,136 @@
     </div>
 </section>
 
+<!-- =============================================
+     FAQs SECTION
+     ============================================= -->
+<section class="faqs-section" id="faqs-section">
+    <div class="section-container">
+
+        <!-- Section Header -->
+        <div class="faqs-header" id="faqs-header">
+            <svg class="section-title-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            <h2 class="section-title" id="faqs-title">FAQs</h2>
+        </div>
+
+        <!-- FAQ Accordion List -->
+        <div class="faqs-list" id="faqs-list">
+
+            <!-- FAQ 1: How to book? -->
+            <div class="faq-item" id="faq-item-1">
+                <button class="faq-trigger" id="faq-trigger-1" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">How to book?</span>
+                    <span class="faq-chevron" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-body" id="faq-body-1">
+                    <div class="faq-content">
+                        <p>You can booking bus ticket via:</p>
+                        <ul class="faq-list">
+                            <li>Phone: <a href="tel:0123445534">0123445534</a></li>
+                            <li>Call Center: <a href="https://t.me/BenlanCentre" target="_blank" rel="noopener">t.me/BenlanCentre</a></li>
+                            <li>WhatsApp &amp; Line: 0182737232</li>
+                            <li>ChatBot: <a href="https://t.me/BenlanChat_bote" target="_blank" rel="noopener">t.me/BenlanChat_bote</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 2: Branch Locations? -->
+            <div class="faq-item" id="faq-item-2">
+                <button class="faq-trigger" id="faq-trigger-2" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">Branch Locations?</span>
+                    <span class="faq-chevron" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-body" id="faq-body-2">
+                    <div class="faq-content">
+                        <p>Our Branch Locations:</p>
+                        <ul class="faq-list">
+                            <li>Phnom Penh: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Siem Reap: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Sihanoukville: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Battambang: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Poi Pet: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 3: When to arrive? -->
+            <div class="faq-item" id="faq-item-3">
+                <button class="faq-trigger" id="faq-trigger-3" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">When to arrive?</span>
+                    <span class="faq-chevron" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-body" id="faq-body-3">
+                    <div class="faq-content">
+                        <ul class="faq-list">
+                            <li>Be arrived at the bus station 15 minutes prior departure.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 4: Payment options? -->
+            <div class="faq-item" id="faq-item-4">
+                <button class="faq-trigger" id="faq-trigger-4" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">Payment options?</span>
+                    <span class="faq-chevron" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-body" id="faq-body-4">
+                    <div class="faq-content">
+                        <p>We are accepted payment:</p>
+                        <ul class="faq-list">
+                            <li>KHQR</li>
+                            <li>Credit/Debit Card</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ 5: Directions to? -->
+            <div class="faq-item" id="faq-item-5">
+                <button class="faq-trigger" id="faq-trigger-5" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">Directions to?</span>
+                    <span class="faq-chevron" aria-hidden="true">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </span>
+                </button>
+                <div class="faq-body" id="faq-body-5">
+                    <div class="faq-content">
+                        <p>Find directions to our stations:</p>
+                        <ul class="faq-list">
+                            <li>Phnom Penh Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
+                            <li>Siem Reap Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
+                            <li>Battambang Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- end faqs-list -->
+    </div>
+</section>
+
 @section Scripts {
 <script>
     function toggleQuickCheck() {
@@ -475,6 +610,31 @@
         });
 
         btn.textContent = isExpanded ? 'See more' : 'See less';
+    }
+
+    function toggleFaq(trigger) {
+        var item = trigger.closest('.faq-item');
+        var body = item.querySelector('.faq-body');
+        var isOpen = item.classList.contains('faq-open');
+
+        // Close all open items first
+        document.querySelectorAll('.faq-item.faq-open').forEach(function(openItem) {
+            var openBody = openItem.querySelector('.faq-body');
+            openBody.style.maxHeight = openBody.scrollHeight + 'px';
+            // Next frame collapse
+            requestAnimationFrame(function() {
+                openBody.style.maxHeight = '0';
+            });
+            openItem.classList.remove('faq-open');
+            openItem.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+        });
+
+        // If it was not open, open it now
+        if (!isOpen) {
+            item.classList.add('faq-open');
+            trigger.setAttribute('aria-expanded', 'true');
+            body.style.maxHeight = body.scrollHeight + 'px';
+        }
     }
 </script>
 }
