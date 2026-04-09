@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Blog";
+    ViewData["Description"] = "Read the BenLan blog to discover Cambodia travel tips, hidden gems, and journey stories.";
+    ViewData["ActivePage"] = "Blog";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/blog.css" asp-append-version="true"/>
+}
+
+<!-- =============================================
+     BLOG LISTING PAGE
+     ============================================= -->
+<section class="blog-listing-section" id="blog-page">
+    <div class="blog-container">
+
+        <!-- Header -->
+        <div class="blog-listing-header">
+            <p class="blog-listing-subtitle">Read the blog to understand more</p>
+        </div>
+
+        <!-- Blog Cards -->
+        <div class="blog-cards-list" id="blog-cards-list">
+
+            <!-- Card 1 -->
+            <article class="blog-card" id="blog-card-1">
+                <div class="blog-card-body">
+                    <h2 class="blog-card-title">Discover the Beauty of Cambodia</h2>
+                    <p class="blog-card-excerpt">
+                        Explore the breathtaking landscapes and rich culture of Cambodia, from the iconic Angkor Wat to hidden local gems.
+                        Whether you're planning your first visit or looking for new adventures, this guide will inspire your journey
+                        and help you experience the country like never before.
+                    </p>
+                    <a asp-controller="Home" asp-action="BlogDetail" asp-route-id="1" class="blog-card-btn" id="blog-card-btn-1">
+                        Read more →
+                    </a>
+                </div>
+                <div class="blog-card-img-wrap">
+                    <img src="~/designs/blogImages/card1.png" alt="Discover the Beauty of Cambodia" class="blog-card-img" loading="lazy" />
+                </div>
+            </article>
+
+            <!-- Card 2 -->
+            <article class="blog-card" id="blog-card-2">
+                <div class="blog-card-body">
+                    <h2 class="blog-card-title">Your Perfect Journey Starts Here</h2>
+                    <p class="blog-card-excerpt">
+                        Travel is more than just reaching a destination — it's about the experience along the way.
+                        Discover tips, stories, and ideas to make your trips smoother, more comfortable, and truly unforgettable.
+                        Let us guide you toward your next great adventure.
+                    </p>
+                    <a asp-controller="Home" asp-action="BlogDetail" asp-route-id="2" class="blog-card-btn" id="blog-card-btn-2">
+                        Read more →
+                    </a>
+                </div>
+                <div class="blog-card-img-wrap">
+                    <img src="~/designs/blogImages/card2.png" alt="Your Perfect Journey Starts Here" class="blog-card-img" loading="lazy" />
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>

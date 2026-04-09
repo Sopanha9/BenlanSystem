@@ -26,6 +26,20 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Blog()
+    {
+        ViewData["ActivePage"] = "Blog";
+        return View();
+    }
+
+    public IActionResult BlogDetail(int id = 1)
+    {
+        if (id < 1 || id > 2) return RedirectToAction("Blog");
+        ViewData["ActivePage"] = "Blog";
+        ViewData["BlogId"] = id;
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

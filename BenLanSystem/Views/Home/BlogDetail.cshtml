@@ -1,0 +1,180 @@
+@{
+    int blogId = (int)(ViewData["BlogId"] ?? 1);
+    bool isPost1 = blogId == 1;
+
+    string postTitle      = isPost1 ? "Discover the Beauty of Cambodia"   : "Your Perfect Journey Starts Here";
+    string postDescription = isPost1
+        ? "BenLan — Blog | Discover the Beauty of Cambodia"
+        : "BenLan — Blog | Your Perfect Journey Starts Here";
+
+    ViewData["Title"]       = postTitle;
+    ViewData["Description"] = postDescription;
+    ViewData["ActivePage"]  = "Blog";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/blog.css" asp-append-version="true"/>
+}
+
+<!-- =============================================
+     BLOG DETAIL PAGE
+     ============================================= -->
+<section class="blog-detail-section" id="blog-detail-page">
+    <div class="blog-container">
+
+        <!-- Article header -->
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">@postTitle</h1>
+
+            @if (isPost1)
+            {
+                <blockquote class="blog-detail-quote">
+                    <p>
+                        "Cambodia is a land of timeless beauty, where ancient history meets vibrant modern life.
+                        From the world-famous Angkor Wat to peaceful countryside villages, every corner of this country
+                        offers something unique for travelers seeking both adventure and cultural depth."
+                    </p>
+                </blockquote>
+            }
+            else
+            {
+                <blockquote class="blog-detail-quote">
+                    <p>
+                        "Every great journey begins with a single step — and the right planning can turn an ordinary trip
+                        into an unforgettable experience. Whether you're traveling for adventure, relaxation, or discovery,
+                        having the right support makes all the difference."
+                    </p>
+                </blockquote>
+            }
+        </div>
+
+        <!-- 3 Content rows -->
+        <div class="blog-content-rows" id="blog-content-rows">
+
+            @if (isPost1)
+            {
+                <!-- Post 1 – Row 1: Explore Iconic Landmarks (text left, image right) -->
+                <div class="blog-row-card" id="blog-row-1">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Explore Iconic Landmarks</h2>
+                        <p class="blog-row-desc">
+                            No visit to Cambodia is complete without experiencing Angkor Wat, a breathtaking temple complex that stands
+                            as a symbol of the nation's rich heritage. Beyond that, destinations like Bayon Temple and Ta Prohm reveal the
+                            artistic brilliance and spiritual depth of the Khmer Empire.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/prsat.png" alt="Angkor Wat Landmark" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+
+                <!-- Post 1 – Row 2: Discover Hidden Gems (text right, image left — reversed) -->
+                <div class="blog-row-card reversed" id="blog-row-2">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Discover Hidden Gems</h2>
+                        <p class="blog-row-desc">
+                            While the temples are extraordinary, Cambodia has much more to offer. Explore the quiet charm of Kampot,
+                            dip in the pristine beaches of Koh Rong, or enjoy the cool mountain air in Mondulkiri. These hidden gems
+                            provide a more peaceful and authentic travel experience.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/elephant.png" alt="Elephant in Cambodia jungle" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+
+                <!-- Post 1 – Row 3: Experience Local Culture (text left, image right) -->
+                <div class="blog-row-card" id="blog-row-3">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Experience Local Culture</h2>
+                        <p class="blog-row-desc">
+                            Immerse yourself in Cambodian culture through its food, traditions, and warm hospitality.
+                            From street food markets to traditional performances, every moment gives you a deeper understanding
+                            of local life and customs.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/lake.png" alt="Cambodian floating village" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Post 2 – Row 1: Plan with Confidence (text left, image right) -->
+                <div class="blog-row-card" id="blog-row-1">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Plan with Confidence</h2>
+                        <p class="blog-row-desc">
+                            Good planning is the foundation of a successful trip. From choosing the right destination to organizing your
+                            schedule, a clear plan helps you avoid stress and make the most of your time.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/planning.png" alt="Travel planning" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+
+                <!-- Post 2 – Row 2: Travel in Comfort (text right, image left — reversed) -->
+                <div class="blog-row-card reversed" id="blog-row-2">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Travel in Comfort</h2>
+                        <p class="blog-row-desc">
+                            Comfort matters when you're on the road. Spacious seating, clean vehicles, and smooth rides ensure that
+                            your journey is just as enjoyable as your destination.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/card2.png" alt="Travel in comfort" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+
+                <!-- Post 2 – Row 3: Rely on Professionals (text left, image right) -->
+                <div class="blog-row-card" id="blog-row-3">
+                    <div class="blog-row-text">
+                        <h2 class="blog-row-title">Rely on Professionals</h2>
+                        <p class="blog-row-desc">
+                            Experienced drivers and well-managed services provide safety and reliability. With professional support,
+                            you can relax knowing that every detail is handled with care.
+                        </p>
+                    </div>
+                    <div class="blog-row-img-wrap">
+                        <img src="~/designs/blogImages/driver.png" alt="Professional driver" class="blog-row-img" loading="lazy" />
+                    </div>
+                </div>
+            }
+
+        </div>
+
+        <!-- Prev / Next navigation -->
+        <nav class="blog-detail-nav" id="blog-detail-nav" aria-label="Blog post navigation">
+            @if (blogId > 1)
+            {
+                <a asp-controller="Home" asp-action="BlogDetail" asp-route-id="@(blogId - 1)"
+                   class="blog-nav-btn blog-nav-prev" id="blog-nav-prev">
+                    ← Previous post
+                </a>
+            }
+            else
+            {
+                <span class="blog-nav-btn blog-nav-prev disabled">← Previous post</span>
+            }
+
+            <a asp-controller="Home" asp-action="Blog" class="blog-nav-btn" id="blog-nav-back">
+                All posts
+            </a>
+
+            @if (blogId < 2)
+            {
+                <a asp-controller="Home" asp-action="BlogDetail" asp-route-id="@(blogId + 1)"
+                   class="blog-nav-btn blog-nav-next" id="blog-nav-next">
+                    Next post →
+                </a>
+            }
+            else
+            {
+                <span class="blog-nav-btn blog-nav-next disabled">Next post →</span>
+            }
+        </nav>
+
+    </div>
+</section>

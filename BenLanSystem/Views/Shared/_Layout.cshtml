@@ -26,7 +26,7 @@
                     <li><a asp-controller="Home" asp-action="Index"   class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Home"    ? "active" : "")" id="nav-home">Home</a></li>
                     <li><a asp-controller="Home" asp-action="About"   class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "About"   ? "active" : "")" id="nav-about">About us</a></li>
                     <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Book"    ? "active" : "")" id="nav-book">Book ticket</a></li>
-                    <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Blog"    ? "active" : "")" id="nav-blog">Blog</a></li>
+                    <li><a asp-controller="Home" asp-action="Blog"    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Blog"    ? "active" : "")" id="nav-blog">Blog</a></li>
                     <li><a asp-controller="Home" asp-action="Contact" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">Contact</a></li>
                     <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Booking" ? "active" : "")" id="nav-mybooking">My booking</a></li>
                 </ul>
