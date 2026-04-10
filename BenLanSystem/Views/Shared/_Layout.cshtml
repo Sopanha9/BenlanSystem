@@ -15,6 +15,10 @@
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
+    @{
+        var displayName = User?.Identity?.Name ?? "User";
+        var profileInitial = displayName.Length > 0 ? char.ToUpperInvariant(displayName[0]).ToString() : "U";
+    }
     <!-- Navbar -->
     <header>
         <nav class="benlan-navbar" id="main-navbar">
@@ -29,13 +33,26 @@
                     <li><a asp-controller="Home" asp-action="Blog"    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Blog"    ? "active" : "")" id="nav-blog">Blog</a></li>
                     <li><a asp-controller="Home" asp-action="Contact" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">Contact</a></li>
                     <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Booking" ? "active" : "")" id="nav-mybooking">My booking</a></li>
+                    @if (!User.Identity?.IsAuthenticated ?? true)
+                    {
+                        <li><a asp-controller="Account" asp-action="Login" class="nav-link-item" id="nav-login">Login</a></li>
+                        <li><a asp-controller="Account" asp-action="Register" class="nav-link-item" id="nav-register">Register</a></li>
+                    }
                 </ul>
                 <div class="navbar-profile" id="navbar-profile">
-                    <button class="profile-btn" id="profile-button" aria-label="User profile">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                        </svg>
-                    </button>
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <div class="auth-badge" id="profile-button" aria-label="User profile">@profileInitial</div>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="auth-link-btn">Logout</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="auth-link-btn auth-link-ghost">Login</a>
+                        <a asp-controller="Account" asp-action="Register" class="auth-link-btn auth-link-solid">Register</a>
+                    }
                 </div>
                 <!-- Mobile hamburger -->
                 <button class="navbar-hamburger" id="navbar-hamburger" aria-label="Toggle menu">
