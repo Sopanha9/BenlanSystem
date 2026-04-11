@@ -66,6 +66,7 @@ public class AccountController(UserManager<IdentityUser> userManager, SignInMana
         {
             UserName = model.Email,
             Email = model.Email,
+            PhoneNumber = model.PhoneNumber,
             EmailConfirmed = true
         };
 

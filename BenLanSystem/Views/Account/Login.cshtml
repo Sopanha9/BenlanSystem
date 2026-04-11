@@ -8,43 +8,51 @@
 }
 
 <section class="auth-shell">
-    <div class="auth-card">
-        <div class="auth-header">
-            <p class="auth-overline">Welcome back</p>
-            <h1>Login to BenLan</h1>
-            <p class="auth-subtitle">Track bookings, manage tickets, and continue your trip planning.</p>
+    <div class="auth-stage">
+        <p class="auth-page-title">Log in page</p>
+
+        <div class="auth-frame">
+            <div class="auth-photo-wrap">
+                <img src="~/designs/login/loginAndRegister.png" alt="Travelers enjoying a trip" class="auth-photo" />
+            </div>
+
+            <div class="auth-card">
+                <img src="~/designs/image.png" alt="BenLan logo" class="auth-logo" />
+
+                <div class="auth-header">
+                    <h1>Before enjoy your trip</h1>
+                    <p class="auth-subtitle">Please Sign in</p>
+                </div>
+
+                <form asp-action="Login" asp-controller="Account" method="post" class="auth-form">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                    <div asp-validation-summary="ModelOnly" class="auth-validation"></div>
+
+                    <div class="auth-field">
+                        <label asp-for="Email">Username / Email</label>
+                        <input asp-for="Email" class="auth-input" placeholder="Please enter your email" />
+                        <span asp-validation-for="Email" class="auth-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="auth-input" placeholder="Please enter your password" />
+                        <span asp-validation-for="Password" class="auth-error"></span>
+                    </div>
+
+                    <a href="#" class="auth-forgot">Forget password?</a>
+
+                    <button type="submit" class="auth-submit">Log in</button>
+                </form>
+
+                <p class="auth-alt-link">
+                    Don't have an account?
+                    <a asp-action="Register" asp-controller="Account">Register</a>
+                </p>
+            </div>
         </div>
-
-        <form asp-action="Login" asp-controller="Account" method="post" class="auth-form">
-            @Html.AntiForgeryToken()
-            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
-
-            <div asp-validation-summary="ModelOnly" class="auth-validation"></div>
-
-            <div class="auth-field">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="auth-input" placeholder="name@example.com" />
-                <span asp-validation-for="Email" class="auth-error"></span>
-            </div>
-
-            <div class="auth-field">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="auth-input" placeholder="Your password" />
-                <span asp-validation-for="Password" class="auth-error"></span>
-            </div>
-
-            <label class="auth-checkbox-row">
-                <input asp-for="RememberMe" />
-                <span>Remember me on this device</span>
-            </label>
-
-            <button type="submit" class="auth-submit">Login</button>
-        </form>
-
-        <p class="auth-alt-link">
-            New here?
-            <a asp-action="Register" asp-controller="Account">Create account</a>
-        </p>
     </div>
 </section>
 

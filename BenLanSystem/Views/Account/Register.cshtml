@@ -8,48 +8,65 @@
 }
 
 <section class="auth-shell">
-    <div class="auth-card">
-        <div class="auth-header">
-            <p class="auth-overline">Get started</p>
-            <h1>Create your account</h1>
-            <p class="auth-subtitle">Book faster, track your trips, and keep every ticket in one place.</p>
+    <div class="auth-stage">
+        <p class="auth-page-title">Register</p>
+
+        <div class="auth-frame">
+            <div class="auth-photo-wrap">
+                <img src="~/designs/login/loginAndRegister.png" alt="Travelers enjoying a trip" class="auth-photo" />
+            </div>
+
+            <div class="auth-card">
+                <img src="~/designs/image.png" alt="BenLan logo" class="auth-logo" />
+
+                <div class="auth-header">
+                    <h1>Don't have an account yet?</h1>
+                    <p class="auth-subtitle">Please register</p>
+                </div>
+
+                <form asp-action="Register" asp-controller="Account" method="post" class="auth-form">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="auth-validation"></div>
+
+                    <div class="auth-field">
+                        <label asp-for="FullName">Username</label>
+                        <input asp-for="FullName" class="auth-input" placeholder="Please enter your username" />
+                        <span asp-validation-for="FullName" class="auth-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="auth-input" placeholder="Please enter your phone number" />
+                        <span asp-validation-for="PhoneNumber" class="auth-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="auth-input" placeholder="Please enter your email" />
+                        <span asp-validation-for="Email" class="auth-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="auth-input" placeholder="Please enter your password" />
+                        <span asp-validation-for="Password" class="auth-error"></span>
+                    </div>
+
+                    <div class="auth-field">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" class="auth-input" placeholder="Please confirm your password" />
+                        <span asp-validation-for="ConfirmPassword" class="auth-error"></span>
+                    </div>
+
+                    <button type="submit" class="auth-submit">Sign up</button>
+                </form>
+
+                <p class="auth-alt-link">
+                    Already have an account?
+                    <a asp-action="Login" asp-controller="Account">Log in</a>
+                </p>
+            </div>
         </div>
-
-        <form asp-action="Register" asp-controller="Account" method="post" class="auth-form">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="auth-validation"></div>
-
-            <div class="auth-field">
-                <label asp-for="FullName"></label>
-                <input asp-for="FullName" class="auth-input" placeholder="Your full name" />
-                <span asp-validation-for="FullName" class="auth-error"></span>
-            </div>
-
-            <div class="auth-field">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="auth-input" placeholder="name@example.com" />
-                <span asp-validation-for="Email" class="auth-error"></span>
-            </div>
-
-            <div class="auth-field">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="auth-input" placeholder="At least 6 characters" />
-                <span asp-validation-for="Password" class="auth-error"></span>
-            </div>
-
-            <div class="auth-field">
-                <label asp-for="ConfirmPassword"></label>
-                <input asp-for="ConfirmPassword" class="auth-input" placeholder="Repeat your password" />
-                <span asp-validation-for="ConfirmPassword" class="auth-error"></span>
-            </div>
-
-            <button type="submit" class="auth-submit">Create account</button>
-        </form>
-
-        <p class="auth-alt-link">
-            Already have an account?
-            <a asp-action="Login" asp-controller="Account">Login</a>
-        </p>
     </div>
 </section>
 

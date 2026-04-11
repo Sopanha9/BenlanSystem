@@ -127,6 +127,10 @@ ul {
   transform: scale(0.97);
 }
 
+.auth-nav-item {
+  display: none;
+}
+
 /* Profile Button */
 .navbar-profile {
   display: flex;
@@ -387,6 +391,10 @@ ul {
     padding: 12px 16px;
     width: 100%;
     display: block;
+  }
+
+  .auth-nav-item {
+    display: list-item;
   }
 
   .navbar-hamburger {

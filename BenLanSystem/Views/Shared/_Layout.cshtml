@@ -35,8 +35,8 @@
                     <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Booking" ? "active" : "")" id="nav-mybooking">My booking</a></li>
                     @if (!User.Identity?.IsAuthenticated ?? true)
                     {
-                        <li><a asp-controller="Account" asp-action="Login" class="nav-link-item" id="nav-login">Login</a></li>
-                        <li><a asp-controller="Account" asp-action="Register" class="nav-link-item" id="nav-register">Register</a></li>
+                        <li class="auth-nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link-item" id="nav-login">Login</a></li>
+                        <li class="auth-nav-item"><a asp-controller="Account" asp-action="Register" class="nav-link-item" id="nav-register">Register</a></li>
                     }
                 </ul>
                 <div class="navbar-profile" id="navbar-profile">

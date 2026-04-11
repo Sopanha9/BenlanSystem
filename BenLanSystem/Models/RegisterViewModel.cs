@@ -13,6 +13,10 @@ public class RegisterViewModel
     [EmailAddress]
     public string Email { get; set; } = string.Empty;
 
+    [Phone]
+    [Display(Name = "Phone number")]
+    public string? PhoneNumber { get; set; }
+
     [Required]
     [DataType(DataType.Password)]
     [StringLength(100, MinimumLength = 6)]
