@@ -10,12 +10,13 @@
     position: relative;
     width: 100%;
     height: 340px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .bt-hero-img-wrap {
     position: absolute;
     inset: 0;
+    overflow: hidden;
 }
 
 .bt-hero-img {
@@ -44,27 +45,28 @@
     transform: translateX(-50%);
     width: calc(100% - 80px);
     max-width: 1100px;
-    background: rgba(20, 28, 60, 0.72);
+    background: rgba(20, 28, 60, 0.85);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 16px;
     padding: 14px 18px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.4),
         0 2px 8px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
     z-index: 20;
     animation: fadeSlideIn 0.5s ease-out both;
+    box-sizing: border-box;
 }
 
 /* Individual field */
 .bt-field {
-    flex: 1;
-    min-width: 0;
+    flex: 1 1 160px;
+    min-width: 130px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -73,6 +75,8 @@
     border-radius: 10px;
     padding: 10px 14px;
     transition: border-color 0.2s, background 0.2s;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .bt-field:focus-within {
@@ -90,6 +94,8 @@
 
 .bt-field input {
     flex: 1;
+    min-width: 0;
+    width: 100%;
     background: none;
     border: none;
     outline: none;
@@ -97,7 +103,9 @@
     font-size: 0.82rem;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.9);
-    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .bt-field input::placeholder {
@@ -768,6 +776,15 @@
 /* =============================================
    RESPONSIVE
    ============================================= */
+@media (max-width: 1100px) {
+    .bt-search-bar {
+        width: calc(100% - 48px);
+        padding: 12px 14px;
+        gap: 6px;
+    }
+    .bt-field { flex: 1 1 120px; min-width: 110px; }
+}
+
 @media (max-width: 992px) {
     .bt-hero { height: 280px; }
 
@@ -775,11 +792,11 @@
         width: calc(100% - 48px);
         bottom: -24px;
         padding: 12px 14px;
-        gap: 4px;
+        gap: 6px;
         flex-wrap: wrap;
     }
 
-    .bt-field { flex: 1 1 calc(50% - 8px); min-width: 140px; }
+    .bt-field { flex: 1 1 calc(50% - 10px); min-width: 140px; }
     .bt-field-divider { display: none; }
     .bt-swap-btn { display: none; }
     .bt-search-btn { flex: 1 1 100%; justify-content: center; margin-top: 4px; }
