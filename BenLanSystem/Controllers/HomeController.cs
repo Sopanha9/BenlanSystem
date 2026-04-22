@@ -26,6 +26,13 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult BookTicket()
+    {
+        ViewData["Title"] = "Book Ticket";
+        ViewData["ActivePage"] = "Book";
+        return View();
+    }
+
     public IActionResult Blog()
     {
         ViewData["ActivePage"] = "Blog";
