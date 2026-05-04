@@ -14,59 +14,56 @@
 <section class="bt-hero">
     <div class="bt-hero-img-wrap">
         <img src="~/designs/hero-bus.jpg" alt="BenLan Bus" class="bt-hero-img" />
-        <div class="bt-hero-overlay"></div>
     </div>
 
-    <!-- Search Bar -->
-    <div class="bt-search-bar" id="bt-search-bar">
-        <!-- Departing From -->
-        <div class="bt-field" id="bt-field-from">
-            <span class="bt-field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/>
-                </svg>
-            </span>
-            <input type="text" placeholder="Departing from" id="bt-input-from" autocomplete="off" />
+    <!-- Glass Panel + Search -->
+    <div class="bt-hero-glass">
+        <div class="bt-search-bar" id="bt-search-bar">
+            <!-- Departing From -->
+            <div class="bt-field" id="bt-field-from">
+                <span class="bt-field-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </span>
+                <input type="text" placeholder="Departing from" id="bt-input-from" autocomplete="off" />
+            </div>
+
+            <!-- Going To -->
+            <div class="bt-field" id="bt-field-to">
+                <span class="bt-field-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                </span>
+                <input type="text" placeholder="Going to" id="bt-input-to" autocomplete="off" />
+            </div>
+
+            <!-- Going Date -->
+            <div class="bt-field" id="bt-field-date">
+                <span class="bt-field-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </span>
+                <input type="text" placeholder="Going date" id="bt-input-date"
+                       onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
+            </div>
+
+            <!-- Returning Date -->
+            <div class="bt-field" id="bt-field-return">
+                <span class="bt-field-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </span>
+                <input type="text" placeholder="Returning date" id="bt-input-return"
+                       onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
+            </div>
+
+            <!-- Search -->
+            <button class="bt-search-btn" id="bt-search-btn" type="button">Search</button>
         </div>
-
-        <!-- Swap button -->
-        <button class="bt-swap-btn" id="bt-swap-btn" type="button" title="Swap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/>
-            </svg>
-        </button>
-
-        <!-- Going To -->
-        <div class="bt-field" id="bt-field-to">
-            <span class="bt-field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-                </svg>
-            </span>
-            <input type="text" placeholder="Going to" id="bt-input-to" autocomplete="off" />
-        </div>
-
-        <!-- Divider -->
-        <div class="bt-field-divider"></div>
-
-        <!-- Going Date -->
-        <div class="bt-field" id="bt-field-date">
-            <span class="bt-field-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
-            </span>
-            <input type="text" placeholder="Going date" id="bt-input-date"
-                   onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
-        </div>
-
-        <!-- Search -->
-        <button class="bt-search-btn" id="bt-search-btn" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-            </svg>
-            Search
-        </button>
     </div>
 </section>
 
@@ -95,127 +92,112 @@
 
             <!-- Ticket 1: Phnom Penh → Siem Reap -->
             <div class="bt-ticket" id="bt-ticket-1">
-                <div class="bt-ticket-seats" id="bt-ticket-1-seats">9/12 Seats</div>
-
-                <div class="bt-ticket-left">
-                    <div class="bt-van-img-wrap">
-                        <img src="~/designs/siemreap.png" alt="Siem Reap" class="bt-van-img" />
+                <span class="bt-ticket-seats" id="bt-ticket-1-seats">9/12 Seats</span>
+                <div class="bt-ticket-img">
+                    <img src="~/designs/bookticket/car.png" alt="Van" class="bt-ticket-car" />
+                </div>
+                <div class="bt-ticket-content">
+                    <div class="bt-ticket-info">
+                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" onerror="this.style.display='none'" />
+                        <span class="bt-operator-name">Luxury Van (12)</span>
+                        <span class="bt-operator-route">Direct - Road No3</span>
                     </div>
-                    <div class="bt-operator">
-                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" />
-                        <div class="bt-operator-info">
-                            <span class="bt-operator-name">Luxury Van (12)</span>
-                            <span class="bt-operator-route">Direct · Road N63</span>
+                    <div class="bt-ticket-times">
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Departure</span>
+                            <span class="bt-time-value">14:45</span>
+                        </div>
+                        <div class="bt-duration-col">
+                            <span class="bt-time-label">Duration</span>
+                            <div class="bt-duration-display">
+                                <div class="bt-duration-line"></div>
+                                <span class="bt-time-value">4:00h</span>
+                                <div class="bt-duration-line"></div>
+                            </div>
+                        </div>
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Arrival</span>
+                            <span class="bt-time-value">18:45</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="bt-ticket-times">
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Departure</span>
-                        <span class="bt-time-value">14:45</span>
+                    <div class="bt-ticket-right">
+                        <span class="bt-price">$14.5</span>
+                        <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Siem Reap', '14:45', '18:45', '$14.5')">Book now</button>
                     </div>
-                    <div class="bt-duration-col">
-                        <span class="bt-time-label">Duration</span>
-                        <div class="bt-duration-display">
-                            <div class="bt-duration-line"></div>
-                            <span class="bt-time-value">4:00h</span>
-                            <div class="bt-duration-line"></div>
-                        </div>
-                    </div>
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Arrival</span>
-                        <span class="bt-time-value">18:45</span>
-                    </div>
-                </div>
-
-                <div class="bt-ticket-right">
-                    <span class="bt-price">$14.5</span>
-                    <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Siem Reap', '14:45', '18:45', '$14.5')">Book now</button>
                 </div>
             </div>
 
             <!-- Ticket 2: Phnom Penh → Siem Reap (morning) -->
             <div class="bt-ticket" id="bt-ticket-2">
-                <div class="bt-ticket-seats" id="bt-ticket-2-seats">6/12 Seats</div>
-
-                <div class="bt-ticket-left">
-                    <div class="bt-van-img-wrap">
-                        <img src="~/designs/phnompenh.png" alt="Phnom Penh" class="bt-van-img" />
+                <span class="bt-ticket-seats" id="bt-ticket-2-seats">6/12 Seats</span>
+                <div class="bt-ticket-img">
+                    <img src="~/designs/bookticket/car.png" alt="Van" class="bt-ticket-car" />
+                </div>
+                <div class="bt-ticket-content">
+                    <div class="bt-ticket-info">
+                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" onerror="this.style.display='none'" />
+                        <span class="bt-operator-name">Luxury Van (12)</span>
+                        <span class="bt-operator-route">Direct - Road N6</span>
                     </div>
-                    <div class="bt-operator">
-                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" />
-                        <div class="bt-operator-info">
-                            <span class="bt-operator-name">Luxury Van (12)</span>
-                            <span class="bt-operator-route">Direct · Road N6</span>
+                    <div class="bt-ticket-times">
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Departure</span>
+                            <span class="bt-time-value">08:00</span>
+                        </div>
+                        <div class="bt-duration-col">
+                            <span class="bt-time-label">Duration</span>
+                            <div class="bt-duration-display">
+                                <div class="bt-duration-line"></div>
+                                <span class="bt-time-value">5:30h</span>
+                                <div class="bt-duration-line"></div>
+                            </div>
+                        </div>
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Arrival</span>
+                            <span class="bt-time-value">13:30</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="bt-ticket-times">
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Departure</span>
-                        <span class="bt-time-value">08:00</span>
+                    <div class="bt-ticket-right">
+                        <span class="bt-price">$12.0</span>
+                        <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Siem Reap', '08:00', '13:30', '$12.0')">Book now</button>
                     </div>
-                    <div class="bt-duration-col">
-                        <span class="bt-time-label">Duration</span>
-                        <div class="bt-duration-display">
-                            <div class="bt-duration-line"></div>
-                            <span class="bt-time-value">5:30h</span>
-                            <div class="bt-duration-line"></div>
-                        </div>
-                    </div>
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Arrival</span>
-                        <span class="bt-time-value">13:30</span>
-                    </div>
-                </div>
-
-                <div class="bt-ticket-right">
-                    <span class="bt-price">$12.0</span>
-                    <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Siem Reap', '08:00', '13:30', '$12.0')">Book now</button>
                 </div>
             </div>
 
             <!-- Ticket 3: Phnom Penh → Kampot -->
             <div class="bt-ticket" id="bt-ticket-3">
-                <div class="bt-ticket-seats" id="bt-ticket-3-seats">11/12 Seats</div>
-
-                <div class="bt-ticket-left">
-                    <div class="bt-van-img-wrap">
-                        <img src="~/designs/kompot.png" alt="Kampot" class="bt-van-img" />
+                <span class="bt-ticket-seats" id="bt-ticket-3-seats">11/12 Seats</span>
+                <div class="bt-ticket-img">
+                    <img src="~/designs/bookticket/car.png" alt="Van" class="bt-ticket-car" />
+                </div>
+                <div class="bt-ticket-content">
+                    <div class="bt-ticket-info">
+                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" onerror="this.style.display='none'" />
+                        <span class="bt-operator-name">Luxury Van (12)</span>
+                        <span class="bt-operator-route">1 Stop - Road N5</span>
                     </div>
-                    <div class="bt-operator">
-                        <img src="~/designs/image.png" alt="BenLan" class="bt-operator-logo" />
-                        <div class="bt-operator-info">
-                            <span class="bt-operator-name">Luxury Van (12)</span>
-                            <span class="bt-operator-route">1 Stop · Road N5</span>
+                    <div class="bt-ticket-times">
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Departure</span>
+                            <span class="bt-time-value">06:30</span>
+                        </div>
+                        <div class="bt-duration-col">
+                            <span class="bt-time-label">Duration</span>
+                            <div class="bt-duration-display">
+                                <div class="bt-duration-line"></div>
+                                <span class="bt-time-value">3:30h</span>
+                                <div class="bt-duration-line"></div>
+                            </div>
+                        </div>
+                        <div class="bt-time-col">
+                            <span class="bt-time-label">Arrival</span>
+                            <span class="bt-time-value">10:00</span>
                         </div>
                     </div>
-                </div>
-
-                <div class="bt-ticket-times">
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Departure</span>
-                        <span class="bt-time-value">06:30</span>
+                    <div class="bt-ticket-right">
+                        <span class="bt-price">$10.0</span>
+                        <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Kampot', '06:30', '10:00', '$10.0')">Book now</button>
                     </div>
-                    <div class="bt-duration-col">
-                        <span class="bt-time-label">Duration</span>
-                        <div class="bt-duration-display">
-                            <div class="bt-duration-line"></div>
-                            <span class="bt-time-value">3:30h</span>
-                            <div class="bt-duration-line"></div>
-                        </div>
-                    </div>
-                    <div class="bt-time-col">
-                        <span class="bt-time-label">Arrival</span>
-                        <span class="bt-time-value">10:00</span>
-                    </div>
-                </div>
-
-                <div class="bt-ticket-right">
-                    <span class="bt-price">$10.0</span>
-                    <button class="bt-book-btn" onclick="openBookingModal('Phnom Penh', 'Kampot', '06:30', '10:00', '$10.0')">Book now</button>
                 </div>
             </div>
 

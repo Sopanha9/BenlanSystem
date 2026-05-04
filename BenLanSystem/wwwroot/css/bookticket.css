@@ -9,8 +9,8 @@
 .bt-hero {
     position: relative;
     width: 100%;
-    height: 340px;
-    overflow: visible;
+    height: 480px;
+    overflow: hidden;
 }
 
 .bt-hero-img-wrap {
@@ -27,76 +27,62 @@
     display: block;
 }
 
-.bt-hero-overlay {
+/* Frosted glass panel */
+.bt-hero-glass {
     position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(8, 12, 32, 0.45) 0%,
-        rgba(8, 12, 32, 0.72) 100%
-    );
-}
-
-/* Search bar — floats over the hero */
-.bt-search-bar {
-    position: absolute;
-    bottom: -28px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 80px);
-    max-width: 1100px;
-    background: rgba(20, 28, 60, 0.85);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
-    padding: 14px 18px;
-    display: grid;
-    grid-template-columns: minmax(220px, 1fr) 32px minmax(220px, 1fr) 1px minmax(180px, 0.9fr) auto;
+    top: 50%;
+    left: 40px;
+    right: 40px;
+    transform: translateY(-50%);
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 260px;
+    background: rgba(255, 255, 255, 0.32);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.40);
+    display: flex;
     align-items: center;
-    gap: 8px;
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.4),
-        0 2px 8px rgba(0, 0, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    z-index: 20;
-    animation: fadeSlideIn 0.5s ease-out both;
+    padding: 28px 32px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    z-index: 10;
     box-sizing: border-box;
-    
 }
 
-/* Individual field */
+/* Search bar inside glass panel */
+.bt-search-bar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+/* Individual field — light theme */
 .bt-field {
+    flex: 1;
     min-width: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 10px;
-    padding: 10px 14px;
-    transition: border-color 0.2s, background 0.2s;
+    gap: 10px;
+    background: rgba(232, 236, 246, 0.95);
+    border: 1px solid rgba(78, 120, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
     overflow: hidden;
 }
 
-#bt-field-from,
-#bt-field-to {
-    width: 100%;
-}
-
-#bt-field-date {
-    width: 100%;
-}
-
 .bt-field:focus-within {
-    border-color: rgba(78, 120, 255, 0.5);
-    background: rgba(255, 255, 255, 0.09);
+    border-color: rgba(78, 120, 255, 0.4);
+    background: #ffffff;
     box-shadow: 0 0 0 3px rgba(78, 120, 255, 0.12);
 }
 
 .bt-field-icon {
-    color: rgba(255, 255, 255, 0.45);
+    color: rgba(60, 60, 60, 0.6);
     display: flex;
     align-items: center;
     flex-shrink: 0;
@@ -105,114 +91,78 @@
 .bt-field input {
     flex: 1;
     min-width: 0;
-    width: 100%;
     background: none;
     border: none;
     outline: none;
     font-family: 'Inter', sans-serif;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.9);
+    color: #2a2a2a;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .bt-field input::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(80, 80, 80, 0.55);
 }
 
 .bt-field input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1) opacity(0.4);
+    filter: invert(0.4);
     cursor: pointer;
 }
 
-/* Swap button */
-.bt-swap-btn {
-    width: 32px;
-    height: 32px;
-    flex-shrink: 0;
-    background: rgba(78, 120, 255, 0.15);
-    border: 1px solid rgba(78, 120, 255, 0.25);
-    border-radius: 50%;
-    color: #6f8eff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.bt-swap-btn:hover {
-    background: rgba(78, 120, 255, 0.28);
-    color: #ffffff;
-    transform: rotate(180deg);
-}
-
-/* Divider between location and date fields */
-.bt-field-divider {
-    width: 1px;
-    height: 36px;
-    background: rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
-}
-
-/* Search button */
+/* Search button — light pill */
 .bt-search-btn {
     flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 22px;
-    background: linear-gradient(135deg, #4e78ff 0%, #3f61d8 100%);
-    border: none;
-    border-radius: 10px;
-    color: #ffffff;
+    padding: 12px 32px;
+    background: rgba(232, 236, 246, 0.95);
+    border: 1px solid rgba(78, 120, 255, 0.12);
+    border-radius: 12px;
+    color: #2a2a2a;
     font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.25s ease;
-    box-shadow: 0 4px 16px rgba(78, 120, 255, 0.35);
-    letter-spacing: 0.02em;
+    -webkit-appearance: none;
+    appearance: none;
+    background-clip: padding-box;
 }
 
 .bt-search-btn:hover {
-    background: linear-gradient(135deg, #5c84ff 0%, #4a6ee8 100%);
-    box-shadow: 0 6px 20px rgba(78, 120, 255, 0.45);
+    background: #ffffff;
+    border-color: rgba(78, 120, 255, 0.35);
     transform: translateY(-1px);
 }
 
 .bt-search-btn:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(78, 120, 255, 0.3);
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1100px) {
+    .bt-hero-glass {
+        left: 24px;
+        right: 24px;
+        padding: 20px 24px;
+        height: auto;
+        min-height: 200px;
+    }
+
     .bt-search-bar {
-        width: calc(100% - 48px);
-        padding: 12px 14px;
-        gap: 10px;
-        grid-template-columns: minmax(220px, 1fr) minmax(220px, 1fr) minmax(180px, 0.9fr) auto;
-        align-items: stretch;
-    }
-
-    .bt-field-divider {
-        display: none;
-    }
-
-    .bt-swap-btn {
-        display: none;
+        flex-wrap: wrap;
     }
 
     .bt-field {
+        flex: 1 1 45%;
         min-height: 48px;
     }
 
     .bt-search-btn {
+        flex: 1 1 100%;
         min-height: 48px;
-        justify-content: center;
+        margin-top: 4px;
     }
 }
 
@@ -261,6 +211,18 @@
     white-space: nowrap;
 }
 
+/*.bt-sort-select {*/
+/*    background: rgba(255, 255, 255, 0.06);*/
+/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
+/*    border-radius: 8px;*/
+/*    color: rgba(255, 255, 255, 0.85);*/
+/*    font-family: 'Inter', sans-serif;*/
+/*    font-size: 0.8rem;*/
+/*    padding: 7px 12px;*/
+/*    outline: none;*/
+/*    cursor: pointer;*/
+/*    transition: border-color 0.2s;*/
+/*}*/
 .bt-sort-select {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -268,10 +230,21 @@
     color: rgba(255, 255, 255, 0.85);
     font-family: 'Inter', sans-serif;
     font-size: 0.8rem;
-    padding: 7px 12px;
+    padding: 7px 32px 7px 12px; /* extra right padding for arrow */
     outline: none;
     cursor: pointer;
     transition: border-color 0.2s;
+
+    /* ✅ Strip native OS styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* ✅ Custom chevron arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
 }
 
 .bt-sort-select:focus {
@@ -294,25 +267,14 @@
 
 .bt-ticket {
     position: relative;
-    background: linear-gradient(135deg, #141b3a 0%, #111630 100%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 22px 28px;
+    background: linear-gradient(135deg, #1a2240 0%, #161d35 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
     display: flex;
-    align-items: center;
-    gap: 24px;
+    align-items: stretch;
+    overflow: visible;
     transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
     animation: fadeSlideIn 0.4s ease-out both;
-    overflow: hidden;
-}
-
-.bt-ticket::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, rgba(78, 120, 255, 0.04) 0%, transparent 60%);
-    pointer-events: none;
 }
 
 .bt-ticket:nth-child(1) { animation-delay: 0.05s; }
@@ -331,67 +293,64 @@
 .bt-ticket-seats {
     position: absolute;
     top: 14px;
-    right: 28px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.45);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    right: 18px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.02em;
+    z-index: 2;
 }
 
-/* Left side: van image + operator */
-.bt-ticket-left {
+/* Left side: transparent car image */
+.bt-ticket-img {
+    width: 200px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 18px;
-    flex-shrink: 0;
-    min-width: 220px;
+    justify-content: center;
+    position: relative;
+    padding: 0 4px 0 12px;
 }
 
-.bt-van-img-wrap {
-    width: 90px;
-    height: 90px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: rgba(255, 255, 255, 0.04);
-    flex-shrink: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.35);
-}
-
-.bt-van-img {
+.bt-ticket-car {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
+    height: auto;
+    max-height: 150px;
+    object-fit: contain;
     display: block;
     transition: transform 0.35s ease;
 }
 
-.bt-ticket:hover .bt-van-img {
-    transform: scale(1.08);
+.bt-ticket:hover .bt-ticket-car {
+    transform: scale(1.04);
 }
 
-.bt-operator {
+/* Content area (info + times + price) */
+.bt-ticket-content {
+    flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 24px;
+    padding: 24px 24px 18px 8px;
+    min-width: 0;
+}
+
+.bt-ticket-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    min-width: 140px;
+    text-align: center;
 }
 
 .bt-operator-logo {
-    width: 38px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    padding: 4px;
-    flex-shrink: 0;
-}
-
-.bt-operator-info {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
+    display: block;
+    margin-bottom: 2px;
 }
 
 .bt-operator-name {
@@ -443,7 +402,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .bt-duration-display {
@@ -453,10 +412,7 @@
 }
 
 .bt-duration-line {
-    width: 36px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(78, 120, 255, 0.5), transparent);
-    flex-shrink: 0;
+    display: none;
 }
 
 /* Right: price + book */
@@ -467,11 +423,11 @@
     gap: 12px;
     flex-shrink: 0;
     min-width: 110px;
-    padding-top: 20px;
+    padding-top: 0;
 }
 
 .bt-price {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: #ffffff;
     letter-spacing: -0.02em;
@@ -479,30 +435,30 @@
 }
 
 .bt-book-btn {
-    padding: 9px 22px;
-    background: linear-gradient(135deg, #4e78ff 0%, #3f61d8 100%);
-    border: none;
-    border-radius: 20px;
+    padding: 10px 28px;
+    background: linear-gradient(135deg, #2a3760 0%, #1e2d52 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 500;
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.25s ease;
-    box-shadow: 0 4px 14px rgba(78, 120, 255, 0.35);
-    letter-spacing: 0.02em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.01em;
 }
 
 .bt-book-btn:hover {
-    background: linear-gradient(135deg, #5c84ff 0%, #4a6ee8 100%);
-    box-shadow: 0 6px 20px rgba(78, 120, 255, 0.5);
+    background: linear-gradient(135deg, #34477a 0%, #263660 100%);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
     transform: translateY(-1px);
 }
 
 .bt-book-btn:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(78, 120, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* =============================================
@@ -672,13 +628,16 @@
 .bt-modal-field-row {
     display: flex;
     gap: 12px;
+    width: 100%;
 }
 
 .bt-modal-field {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    box-sizing: border-box;
 }
 
 .bt-modal-field label {
@@ -689,6 +648,8 @@
 }
 
 .bt-modal-field input {
+    width: 100%;
+    box-sizing: border-box;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
@@ -813,55 +774,65 @@
 /* =============================================
    RESPONSIVE
    ============================================= */
-@media (max-width: 1100px) {
+@media (max-width: 992px) {
+    .bt-hero { height: 420px; }
+
+    .bt-hero-glass {
+        left: 24px;
+        right: 24px;
+        padding: 20px 24px;
+    }
+
     .bt-search-bar {
-        width: calc(100% - 48px);
-        padding: 12px 14px;
-        gap: 6px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        flex-wrap: wrap;
+    }
+
+    .bt-field {
+        flex: 1 1 45%;
+        min-height: 48px;
     }
 
     .bt-search-btn {
-        grid-column: 1 / -1;
+        flex: 1 1 100%;
+        min-height: 48px;
+        margin-top: 4px;
     }
-}
-
-@media (max-width: 992px) {
-    .bt-hero { height: 280px; }
-
-    .bt-search-bar {
-        width: calc(100% - 48px);
-        bottom: -24px;
-        padding: 12px 14px;
-        gap: 6px;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .bt-field-divider { display: none; }
-    .bt-swap-btn { display: none; }
-    .bt-search-btn { grid-column: 1 / -1; justify-content: center; margin-top: 4px; }
 
     .bt-results-inner { padding: 0 24px; }
     .bt-results-section { padding: 56px 0 60px; }
 }
 
 @media (max-width: 768px) {
-    .bt-hero { height: 220px; }
+    .bt-hero { height: 400px; }
 
-    .bt-search-bar {
-        width: calc(100% - 32px);
-        bottom: -20px;
+    .bt-hero-glass {
+        left: 16px;
+        right: 16px;
+        padding: 16px 18px;
+        border-radius: 18px;
+    }
+
+    .bt-field {
+        flex: 1 1 100%;
     }
 
     .bt-ticket {
-        flex-wrap: wrap;
-        padding: 18px 18px 16px;
-        gap: 16px;
+        flex-direction: column;
     }
 
-    .bt-ticket-left {
+    .bt-ticket-img {
+        width: 100%;
+        height: 140px;
+    }
+
+    .bt-ticket-content {
+        flex-direction: column;
+        padding: 16px 18px;
+        gap: 12px;
+    }
+
+    .bt-ticket-info {
         min-width: 0;
-        flex: 1 1 100%;
     }
 
     .bt-ticket-times {
@@ -874,26 +845,18 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding-top: 0;
-        border-top: 1px solid rgba(255, 255, 255, 0.06);
         padding-top: 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
     }
-
-    .bt-ticket-seats { right: 18px; top: 10px; }
 }
 
 @media (max-width: 540px) {
-    .bt-hero { height: 180px; }
+    .bt-hero { height: 360px; }
 
-    .bt-search-bar {
-        width: calc(100% - 24px);
-        bottom: -18px;
-        padding: 10px 12px;
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .bt-search-btn {
-        grid-column: auto;
+    .bt-hero-glass {
+        left: 12px;
+        right: 12px;
+        padding: 14px 14px;
     }
 
     .bt-results-section { padding: 52px 0 48px; }
