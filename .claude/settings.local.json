@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet ef *)",
+      "Bash(dotnet tool *)",
+      "Bash(dotnet build *)",
+      "Bash(taskkill /F /IM BenLanSystem.exe)",
+      "Bash(taskkill //F //PID 13492)",
+      "Bash(dotnet add *)",
+      "Bash(timeout 10 dotnet run)",
+      "Bash(timeout 15 dotnet run --no-build)",
+      "Bash(sqlcmd -S localhost,1433 -U sa -P \"YourStrong!Passw0rd\" -Q \"SELECT 1\")",
+      "Bash(net start *)",
+      "Bash(sc query *)",
+      "Bash(sqlcmd *)",
+      "Bash(taskkill //F //IM BenLanSystem.exe)"
+    ]
+  }
+}

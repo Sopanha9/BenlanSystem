@@ -1,4 +1,5 @@
 using BenLanSystem.Models;
+using BenLanSystem.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BenLanSystem.Controllers;
 
 [AllowAnonymous]
-public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager) : Controller
+public class AccountController(UserManager<Staff> userManager, SignInManager<Staff> signInManager) : Controller
 {
     [HttpGet]
     public IActionResult Login(string? returnUrl = null)
@@ -62,7 +63,7 @@ public class AccountController(UserManager<IdentityUser> userManager, SignInMana
             return View(model);
         }
 
-        var user = new IdentityUser
+        var user = new Staff
         {
             UserName = model.Email,
             Email = model.Email,
