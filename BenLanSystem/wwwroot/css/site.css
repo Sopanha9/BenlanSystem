@@ -4,6 +4,18 @@
    ============================================= */
 
 /* === Reset & Base === */
+:root {
+  --primary: #4e78ff;
+  --primary-dark: #3f61d8;
+  --primary-soft: #eef3ff;
+  --surface: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --danger: #ef4444;
+  --success: #16a34a;
+}
+
 *,
 *::before,
 *::after {
@@ -56,6 +68,12 @@ ul {
 
 .hidden {
   display: none !important;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
 }
 
 /* =============================================
@@ -363,6 +381,10 @@ ul {
    RESPONSIVE — NAVBAR
    ============================================= */
 @media (max-width: 992px) {
+  .section-container {
+    padding: 0 24px;
+  }
+
   .benlan-navbar {
     padding: 0 24px;
   }
@@ -407,6 +429,10 @@ ul {
 }
 
 @media (max-width: 480px) {
+  .section-container {
+    padding: 0 16px;
+  }
+
   .navbar-logo img {
     height: 42px;
   }

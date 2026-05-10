@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "My Bookings";
+    ViewData["ActivePage"] = "MyBookings";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/bookticket.css" asp-append-version="true"/>
+    <style>
+        .mb-section { padding: 40px 24px; max-width: 960px; margin: 0 auto; }
+        .mb-header { font-size: 28px; font-weight: 700; margin-bottom: 24px; color: #111827; }
+        .mb-card {
+            background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
+            padding: 20px; margin-bottom: 16px; display: flex; gap: 20px; align-items: center; justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .mb-route { font-size: 18px; font-weight: 600; color: #111827; }
+        .mb-meta { color: #6b7280; font-size: 14px; margin-top: 4px; }
+        .mb-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
+        .mb-badge-pending { background: #fef3c7; color: #92400e; }
+        .mb-badge-confirmed { background: #d1fae5; color: #065f46; }
+        .mb-badge-cancelled { background: #fee2e2; color: #991b1b; }
+        .mb-badge-completed { background: #e0e7ff; color: #3730a3; }
+        .mb-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+        .mb-btn { border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #fff; }
+        .mb-pay-btn { background: #4e78ff; }
+        .mb-cancel-btn { background: #ef4444; }
+        .mb-empty { text-align: center; color: #6b7280; padding: 60px 20px; background:#fff; border-radius:8px; }
+        .mb-pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+        .mb-page-btn { background: #f3f4f6; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .mb-page-btn.active { background: #4e78ff; color: #fff; }
+        @@media (max-width: 720px) { .mb-card { align-items: flex-start; flex-direction: column; } .mb-actions { justify-content:flex-start; } }
+    </style>
+}
+
+<section class="mb-section">
+    <h1 class="mb-header">My Bookings</h1>
+    <div id="mb-list">
+        <div class="mb-empty">Loading your bookings...</div>
+    </div>
+    <div class="mb-pagination" id="mb-pagination"></div>
+</section>
+
+@section Scripts {
+<script>
+    let currentPage = 1;
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function loadMyBookings(page = 1) {
+        currentPage = page;
+        const res = await fetch(`/api/Booking/my?page=${page}&pageSize=10`);
+        if (res.status === 401) { window.location = '/Account/Login'; return; }
+        if (!res.ok) {
+            document.getElementById('mb-list').innerHTML = '<div class="mb-empty">Unable to load bookings.</div>';
+            return;
+        }
+        const data = await res.json();
+        renderBookings(data.items || []);
+        renderPagination(data);
+    }
+
+    function renderBookings(items) {
+        const container = document.getElementById('mb-list');
+        if (!items.length) {
+            container.innerHTML = '<div class="mb-empty">You have no bookings yet.</div>';
+            return;
+        }
+        container.innerHTML = items.map(b => {
+            const status = b.bookingStatus || 'Pending';
+            const badgeClass =
+                status === 'Pending' ? 'mb-badge-pending' :
+                status === 'Confirmed' ? 'mb-badge-confirmed' :
+                status === 'Cancelled' ? 'mb-badge-cancelled' :
+                'mb-badge-completed';
+            const dep = b.departureTimeUtc ? new Date(b.departureTimeUtc).toLocaleString() : '';
+            const total = Number(b.totalAmount || b.seatsBooked * b.unitPrice || 0).toFixed(2);
+            const payBtn = status === 'Pending'
+                ? `<button class="mb-btn mb-pay-btn" onclick="window.location.href='/Home/Pay?bookingId=${b.id}'">Pay</button>` : '';
+            const cancelBtn = (status === 'Pending' || status === 'Confirmed')
+                ? `<button class="mb-btn mb-cancel-btn" onclick="cancelBooking(${b.id})">Cancel</button>` : '';
+            return `
+                <div class="mb-card">
+                    <div>
+                        <div class="mb-route">${esc(b.originName)} to ${esc(b.destinationName)}</div>
+                        <div class="mb-meta">Departure: ${esc(dep)} | Seats: ${b.seatsBooked} | Total: $${total}</div>
+                        <div style="margin-top:8px"><span class="mb-badge ${badgeClass}">${esc(status)}</span></div>
+                    </div>
+                    <div class="mb-actions">${payBtn}${cancelBtn}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderPagination(data) {
+        const container = document.getElementById('mb-pagination');
+        const pages = Math.ceil(data.totalCount / data.pageSize);
+        if (pages <= 1) { container.innerHTML = ''; return; }
+        let html = '';
+        for (let i = 1; i <= pages; i++) {
+            html += `<button class="mb-page-btn ${i === data.page ? 'active' : ''}" onclick="loadMyBookings(${i})">${i}</button>`;
+        }
+        container.innerHTML = html;
+    }
+
+    async function cancelBooking(id) {
+        if (!confirm('Cancel this booking?')) return;
+        const res = await fetch(`/api/Booking/${id}/cancel`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason: 'Cancelled by user' })
+        });
+        if (res.ok) loadMyBookings(currentPage);
+        else alert('Failed to cancel booking.');
+    }
+
+    loadMyBookings();
+</script>
+}

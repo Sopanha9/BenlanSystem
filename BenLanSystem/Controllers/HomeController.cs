@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BenLanSystem.Models;
+using BenLanSystem.Services.Interfaces;
 
 namespace BenLanSystem.Controllers;
 
@@ -10,7 +12,7 @@ public class HomeController : Controller
     {
         return View();
     }
- 
+
     public IActionResult Privacy()
     {
         return View();
@@ -33,17 +35,35 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Blog()
+    public async Task<IActionResult> Blog([FromServices] IBlogService blogService)
     {
         ViewData["ActivePage"] = "Blog";
+        var posts = await blogService.GetPublishedAsync(1, 20);
+        return View(posts);
+    }
+
+    public async Task<IActionResult> BlogDetail(long id, [FromServices] IBlogService blogService)
+    {
+        var post = await blogService.GetByIdAsync(id);
+        if (post is null) return RedirectToAction("Blog");
+        ViewData["ActivePage"] = "Blog";
+        return View(post);
+    }
+
+    [Authorize]
+    public IActionResult MyBookings()
+    {
+        ViewData["Title"] = "My Bookings";
+        ViewData["ActivePage"] = "MyBookings";
         return View();
     }
 
-    public IActionResult BlogDetail(int id = 1)
+    [Authorize]
+    public IActionResult Pay(long bookingId)
     {
-        if (id < 1 || id > 2) return RedirectToAction("Blog");
-        ViewData["ActivePage"] = "Blog";
-        ViewData["BlogId"] = id;
+        ViewData["BookingId"] = bookingId;
+        ViewData["Title"] = "Payment";
+        ViewData["ActivePage"] = "Book";
         return View();
     }
 

@@ -489,6 +489,12 @@ namespace BenLanSystem.Migrations
                     b.Property<int>("RouteId")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
                     b.Property<string>("StatusName")
                         .IsRequired()
                         .ValueGeneratedOnAdd()

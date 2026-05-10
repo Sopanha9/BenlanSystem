@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenLanSystem.Services.Implementations;
 
-public class StaffService(UserManager<Staff> userManager, ApplicationDbContext db) : IStaffService
+public class StaffService(UserManager<Staff> userManager, RoleManager<IdentityRole<long>> roleManager) : IStaffService
 {
     public async Task<IEnumerable<StaffDto>> GetAllAsync()
     {
@@ -49,6 +49,9 @@ public class StaffService(UserManager<Staff> userManager, ApplicationDbContext d
         var result = await userManager.CreateAsync(user, dto.Password);
         if (!result.Succeeded)
             throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+        if (!await roleManager.RoleExistsAsync("Staff"))
+            await roleManager.CreateAsync(new IdentityRole<long>("Staff"));
+        await userManager.AddToRoleAsync(user, "Staff");
         return (await GetByIdAsync(user.Id))!;
     }
 

@@ -98,6 +98,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             e.Property(t => t.BasePrice).HasColumnType("decimal(10,2)");
             e.Property(t => t.StatusName).HasDefaultValue("Open");
             e.Property(t => t.CreatedAtUtc).HasDefaultValueSql("SYSUTCDATETIME()");
+            e.Property(t => t.RowVersion).IsRowVersion();
             e.HasIndex(t => new { t.RouteId, t.DepartureTimeUtc });
             e.HasCheckConstraint("CK_Trips_BasePrice", "[BasePrice] >= 0");
             e.HasCheckConstraint("CK_Trips_AvailableSeats", "[AvailableSeats] >= 0");

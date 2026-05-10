@@ -3,15 +3,6 @@
    Styles for the Home / Index page only
    ============================================= */
 
-/* =============================================
-   SHARED SECTION LAYOUT (Home-specific)
-   ============================================= */
-.section-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px;
-}
-
 .section-header {
     display: flex;
     align-items: center;
@@ -637,10 +628,6 @@
         height: 420px;
     }
 
-    .section-container {
-        padding: 0 24px;
-    }
-
     .tickets-grid,
     .features-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -739,10 +726,6 @@
 
     .booking-title {
         font-size: 1.1rem;
-    }
-
-    .section-container {
-        padding: 0 16px;
     }
 
     .ticket-card,

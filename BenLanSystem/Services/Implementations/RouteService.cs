@@ -40,6 +40,8 @@ public class RouteService(ApplicationDbContext db) : IRouteService
     {
         var route = await db.Routes.FindAsync(id);
         if (route is null) return null;
+        if (dto.StartLocationId.HasValue) route.StartLocationId = dto.StartLocationId.Value;
+        if (dto.EndLocationId.HasValue) route.EndLocationId = dto.EndLocationId.Value;
         if (dto.DistanceKm.HasValue) route.DistanceKm = dto.DistanceKm;
         if (dto.EstimatedMinutes.HasValue) route.EstimatedMinutes = dto.EstimatedMinutes;
         route.IsActive = dto.IsActive;

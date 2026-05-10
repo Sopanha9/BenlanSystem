@@ -31,7 +31,7 @@
                     <div asp-validation-summary="ModelOnly" class="auth-validation"></div>
 
                     <div class="auth-field">
-                        <label asp-for="Email">Username / Email</label>
+                        <label asp-for="Email">Email</label>
                         <input asp-for="Email" class="auth-input" placeholder="Please enter your email" />
                         <span asp-validation-for="Email" class="auth-error"></span>
                     </div>
@@ -42,7 +42,7 @@
                         <span asp-validation-for="Password" class="auth-error"></span>
                     </div>
 
-                    <a href="#" class="auth-forgot">Forget password?</a>
+                    <button type="button" class="auth-forgot" onclick="alert('Coming soon')">Forget password?</button>
 
                     <button type="submit" class="auth-submit">Log in</button>
                 </form>

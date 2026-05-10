@@ -1,0 +1,93 @@
+@{
+    ViewData["Title"] = "Bookings";
+    ViewData["AdminPage"] = "Bookings";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Bookings</h2>
+    <button class="admin-btn admin-btn-secondary" type="button" onclick="loadBookings()">Refresh</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Route</th>
+                <th>Departure</th>
+                <th>Seats</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="bookings-tbody"></tbody>
+    </table>
+</div>
+
+@section Scripts {
+<script>
+    let bookings = [];
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    async function loadBookings() {
+        const res = await fetch('/api/Booking/all?pageSize=200');
+        if (!res.ok) return;
+        bookings = await res.json();
+        const items = bookings.items || bookings;
+        document.getElementById('bookings-tbody').innerHTML = items.map(b => {
+            const actions = [];
+            if (b.bookingStatus === 'Pending') actions.push(`<button class="admin-btn admin-btn-success admin-btn-sm" type="button" onclick="setBookingStatus(${b.id}, 'Confirmed')">Confirm</button>`);
+            if (b.bookingStatus === 'Confirmed') actions.push(`<button class="admin-btn admin-btn-primary admin-btn-sm" type="button" onclick="setBookingStatus(${b.id}, 'Completed')">Complete</button>`);
+            if (b.bookingStatus === 'Pending' || b.bookingStatus === 'Confirmed') actions.push(`<button class="admin-btn admin-btn-danger admin-btn-sm" type="button" onclick="setBookingStatus(${b.id}, 'Cancelled')">Cancel</button>`);
+            return `
+                <tr>
+                    <td>${b.id}</td>
+                    <td>#${b.customerId}</td>
+                    <td>${esc(b.originName)} to ${esc(b.destinationName)}</td>
+                    <td>${b.departureTimeUtc ? new Date(b.departureTimeUtc).toLocaleString() : ''}</td>
+                    <td>${b.seatsBooked}</td>
+                    <td>$${Number(b.totalAmount || b.seatsBooked * b.unitPrice || 0).toFixed(2)}</td>
+                    <td><span class="badge bg-secondary">${esc(b.bookingStatus)}</span></td>
+                    <td><div class="admin-actions">${actions.join('') || '<span class="admin-muted">No actions</span>'}</div></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="7" class="admin-muted">Passengers: ${(b.passengers || []).map(p => esc(p.passengerName + ' (' + p.seatNumber + ')')).join(', ') || 'None'}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function setBookingStatus(id, statusName) {
+        const message = statusName === 'Cancelled' ? 'Cancel this booking?' : `Set booking to ${statusName}?`;
+        if (!confirm(message)) return;
+        const res = await fetch(`/api/Booking/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ statusName, remarks: `Changed to ${statusName} from admin dashboard` })
+        });
+        if (!res.ok) {
+            alert(await readError(res));
+            return;
+        }
+        loadBookings();
+    }
+
+    loadBookings();
+</script>
+}

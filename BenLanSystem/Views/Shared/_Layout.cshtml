@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - BenLan</title>
     <meta name="description" content="@(ViewData["Description"] ?? "BenLan - Book your travel tickets easily. Explore Cambodia and beyond with our convenient booking system.")"/>
-    <script type="importmap"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,6 +17,7 @@
     @{
         var displayName = User?.Identity?.Name ?? "User";
         var profileInitial = displayName.Length > 0 ? char.ToUpperInvariant(displayName[0]).ToString() : "U";
+        var isAuthenticated = User?.Identity?.IsAuthenticated == true;
     }
     <!-- Navbar -->
     <header>
@@ -32,15 +32,15 @@
                     <li><a asp-controller="Home" asp-action="BookTicket" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Book" ? "active" : "")" id="nav-book">Book ticket</a></li>
                     <li><a asp-controller="Home" asp-action="Blog"    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Blog"    ? "active" : "")" id="nav-blog">Blog</a></li>
                     <li><a asp-controller="Home" asp-action="Contact" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">Contact</a></li>
-                    <li><a href="#"                                    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Booking" ? "active" : "")" id="nav-mybooking">My booking</a></li>
-                    @if (!User.Identity?.IsAuthenticated ?? true)
+                    <li><a asp-controller="Home" asp-action="MyBookings" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "MyBookings" ? "active" : "")" id="nav-mybooking">My booking</a></li>
+                    @if (!isAuthenticated)
                     {
                         <li class="auth-nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link-item" id="nav-login">Login</a></li>
                         <li class="auth-nav-item"><a asp-controller="Account" asp-action="Register" class="nav-link-item" id="nav-register">Register</a></li>
                     }
                 </ul>
                 <div class="navbar-profile" id="navbar-profile">
-                    @if (User.Identity?.IsAuthenticated ?? false)
+                    @if (isAuthenticated)
                     {
                         <div class="auth-badge" id="profile-button" aria-label="User profile">@profileInitial</div>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">

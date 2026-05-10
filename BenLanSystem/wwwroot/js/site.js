@@ -25,12 +25,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Prevent form submission for demo
+    // Populate location datalist
+    fetch('/api/Location')
+        .then(r => r.ok ? r.json() : [])
+        .then(locations => {
+            const list = document.getElementById('location-list');
+            if (list) {
+                list.innerHTML = locations.map(l => `<option value="${l.name}">`).join('');
+            }
+        });
+
+    // Homepage search form
     const bookingForm = document.getElementById('booking-form');
     if (bookingForm) {
         bookingForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            // Future: handle booking search
+            const from = document.getElementById('input-departing').value.trim();
+            const to = document.getElementById('input-goingto').value.trim();
+            const date = document.getElementById('input-goingdate').value;
+            if (from && to) {
+                window.location.href = `/Home/BookTicket?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date || '')}`;
+            }
         });
     }
 });

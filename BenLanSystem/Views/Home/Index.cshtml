@@ -22,7 +22,7 @@
             <form class="booking-form" id="booking-form">
                 <!-- Departing From -->
                 <div class="form-field" id="field-departing">
-                    <input type="text" placeholder="Departing from" id="input-departing" autocomplete="off" />
+                    <input type="text" placeholder="Departing from" id="input-departing" autocomplete="off" list="location-list" />
                     <span class="field-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M22 2L11 13"/>
@@ -33,7 +33,7 @@
 
                 <!-- Going To -->
                 <div class="form-field" id="field-goingto">
-                    <input type="text" placeholder="Going to" id="input-goingto" autocomplete="off" />
+                    <input type="text" placeholder="Going to" id="input-goingto" autocomplete="off" list="location-list" />
                     <span class="field-icon" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
@@ -55,22 +55,10 @@
                     </span>
                 </div>
 
-                <!-- Returning Date -->
-                <div class="form-field" id="field-returningdate">
-                    <input type="text" placeholder="Returning date" id="input-returningdate" onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
-                    <span class="field-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                    </span>
-                </div>
-
                 <!-- Search Button -->
                 <button type="submit" class="search-btn" id="search-button">Search</button>
             </form>
+            <datalist id="location-list"></datalist>
         </div>
     </div>
 </section>
@@ -90,205 +78,12 @@
                 </svg>
                 <h2 class="section-title" id="quick-check-title">Quick Check</h2>
             </div>
-            <button class="see-more-btn" id="see-more-btn" onclick="toggleQuickCheck()">See more</button>
+            <button class="see-more-btn" id="see-more-btn" onclick="toggleQuickCheck()" style="display:none;">See more</button>
         </div>
 
         <!-- Ticket Cards Grid -->
         <div class="tickets-grid" id="tickets-grid">
-
-            <!-- Card 1 (always visible) -->
-            <div class="ticket-card" id="ticket-card-1">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-1">Book now</button>
-                </div>
-            </div>
-
-            <!-- Card 2 (always visible) -->
-            <div class="ticket-card" id="ticket-card-2">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-2">Book now</button>
-                </div>
-            </div>
-
-            <!-- Card 3 (always visible) -->
-            <div class="ticket-card" id="ticket-card-3">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-3">Book now</button>
-                </div>
-            </div>
-
-            <!-- Cards 4-9 (hidden by default, shown on "See more") -->
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-4">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-4">Book now</button>
-                </div>
-            </div>
-
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-5">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-5">Book now</button>
-                </div>
-            </div>
-
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-6">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-6">Book now</button>
-                </div>
-            </div>
-
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-7">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-7">Book now</button>
-                </div>
-            </div>
-
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-8">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-8">Book now</button>
-                </div>
-            </div>
-
-            <div class="ticket-card ticket-card-extra hidden" id="ticket-card-9">
-                <div class="ticket-card-header">
-                    <div class="ticket-route-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                        </svg>
-                    </div>
-                    <h3 class="ticket-route">Phnom Penh to Siem Reap (08:30)</h3>
-                </div>
-                <p class="ticket-period">Apply Period: 2025-09-01 to 2026-04-30</p>
-                <div class="ticket-footer">
-                    <div class="ticket-price">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                            <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                        </svg>
-                        <span>$7</span>
-                    </div>
-                    <button class="book-now-btn" id="book-btn-9">Book now</button>
-                </div>
-            </div>
-
+            <div id="qc-loading" style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.5);">Loading available trips...</div>
         </div><!-- end tickets-grid -->
     </div>
 </section>
@@ -414,46 +209,46 @@
         <div class="destinations-grid" id="destinations-grid">
 
             <!-- Siem Reap -->
-            <div class="dest-card" id="dest-card-siemreap">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Siem Reap" class="dest-card" id="dest-card-siemreap">
                 <img src="~/designs/siemreap.png" alt="Siem Reap" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Siem Reap</span>
-            </div>
+            </a>
 
             <!-- Phnom Penh -->
-            <div class="dest-card" id="dest-card-phnompenh">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-from="Phnom Penh" class="dest-card" id="dest-card-phnompenh">
                 <img src="~/designs/phnompenh.png" alt="Phnom Penh" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Phnom Penh</span>
-            </div>
+            </a>
 
             <!-- Kompot -->
-            <div class="dest-card" id="dest-card-kompot">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampot" class="dest-card" id="dest-card-kompot">
                 <img src="~/designs/kompot.png" alt="Kompot" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Kompot</span>
-            </div>
+            </a>
 
             <!-- Battambang -->
-            <div class="dest-card" id="dest-card-battambang">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Battambang" class="dest-card" id="dest-card-battambang">
                 <img src="~/designs/btb.png" alt="Battambang" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Battambang</span>
-            </div>
+            </a>
 
             <!-- Kompong Thom -->
-            <div class="dest-card" id="dest-card-kpc">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampong Thom" class="dest-card" id="dest-card-kpc">
                 <img src="~/designs/kpc.png" alt="Kompong Thom" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Kompong thom</span>
-            </div>
+            </a>
 
             <!-- Bonteay Meanchey -->
-            <div class="dest-card" id="dest-card-bmc">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Banteay Meanchey" class="dest-card" id="dest-card-bmc">
                 <img src="~/designs/bmc.png" alt="Bonteay Meanchey" class="dest-img" loading="lazy" />
                 <div class="dest-overlay"></div>
                 <span class="dest-name">Bonteay Meanchey</span>
-            </div>
+            </a>
 
         </div><!-- end destinations-grid -->
     </div>
@@ -513,11 +308,11 @@
                     <div class="faq-content">
                         <p>Our Branch Locations:</p>
                         <ul class="faq-list">
-                            <li>Phnom Penh: <a href="#" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Siem Reap: <a href="#" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Sihanoukville: <a href="#" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Battambang: <a href="#" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Poi Pet: <a href="#" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Phnom Penh: <a href="https://maps.google.com/?q=Phnom+Penh+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Siem Reap: <a href="https://maps.google.com/?q=Siem+Reap+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Sihanoukville: <a href="https://maps.google.com/?q=Sihanoukville+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Battambang: <a href="https://maps.google.com/?q=Battambang+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
+                            <li>Poi Pet: <a href="https://maps.google.com/?q=Poipet+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
                         </ul>
                     </div>
                 </div>
@@ -577,9 +372,9 @@
                     <div class="faq-content">
                         <p>Find directions to our stations:</p>
                         <ul class="faq-list">
-                            <li>Phnom Penh Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
-                            <li>Siem Reap Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
-                            <li>Battambang Station: <a href="#" target="_blank" rel="noopener">Get Directions</a></li>
+                            <li>Phnom Penh Station: <a href="https://maps.google.com/?q=Phnom+Penh+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
+                            <li>Siem Reap Station: <a href="https://maps.google.com/?q=Siem+Reap+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
+                            <li>Battambang Station: <a href="https://maps.google.com/?q=Battambang+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
                         </ul>
                     </div>
                 </div>
@@ -591,6 +386,92 @@
 
 @section Scripts {
 <script>
+    let quickCheckTrips = [];
+
+    function escHtml(value) {
+        return String(value ?? '').replace(/[&<>"']/g, function(c) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+    }
+
+    function formatTime(utcString) {
+        if (!utcString) return '';
+        return new Date(utcString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    async function loadQuickCheck() {
+        try {
+            const res = await fetch('/api/Trip?StatusName=Open&PageSize=9');
+            if (!res.ok) {
+                document.getElementById('qc-loading').textContent = 'Unable to load trips right now.';
+                return;
+            }
+            const data = await res.json();
+            quickCheckTrips = data.items || [];
+            renderQuickCheckCards(quickCheckTrips);
+        } catch {
+            document.getElementById('qc-loading').textContent = 'Unable to load trips right now.';
+        }
+    }
+
+    function renderQuickCheckCards(trips) {
+        const grid = document.getElementById('tickets-grid');
+        const seeMoreBtn = document.getElementById('see-more-btn');
+
+        if (!trips.length) {
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.5);">No trips available at the moment. Check back soon.</div>';
+            if (seeMoreBtn) seeMoreBtn.style.display = 'none';
+            return;
+        }
+
+        grid.innerHTML = trips.map(function(t, i) {
+            const depTime = formatTime(t.departureTimeUtc);
+            const routeLabel = escHtml(t.originName) + ' to ' + escHtml(t.destinationName) + (depTime ? ' (' + depTime + ')' : '');
+            const departureDate = t.departureTimeUtc ? new Date(t.departureTimeUtc).toLocaleDateString() : '';
+            const price = '$' + Number(t.basePrice || 0).toFixed(2);
+            const isExtra = i >= 3 ? ' ticket-card-extra hidden' : '';
+            const seatsLeft = Number(t.availableSeats || 0);
+
+            return `
+                <div class="ticket-card${isExtra}" id="qc-card-${i}">
+                    <div class="ticket-card-header">
+                        <div class="ticket-route-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
+                            </svg>
+                        </div>
+                        <h3 class="ticket-route">${routeLabel}</h3>
+                    </div>
+                    <p class="ticket-period">Departure: ${escHtml(departureDate)} | ${seatsLeft} seat${seatsLeft !== 1 ? 's' : ''} left</p>
+                    <div class="ticket-footer">
+                        <div class="ticket-price">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
+                                <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+                            </svg>
+                            <span>${price}</span>
+                        </div>
+                        <button class="book-now-btn" onclick="quickBook('${escHtml(t.originName)}','${escHtml(t.destinationName)}')">Book now</button>
+                    </div>
+                </div>`;
+        }).join('');
+
+        if (seeMoreBtn) {
+            seeMoreBtn.style.display = trips.length > 3 ? '' : 'none';
+            seeMoreBtn.textContent = 'See more';
+        }
+    }
+
+    function quickBook(from, to) {
+        window.location.href = '/Home/BookTicket?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
+    }
+
+    // Call on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('tickets-grid')) {
+            loadQuickCheck();
+        }
+    });
+
     function toggleQuickCheck() {
         const extras = document.querySelectorAll('.ticket-card-extra');
         const btn = document.getElementById('see-more-btn');

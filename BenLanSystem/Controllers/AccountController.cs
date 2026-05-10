@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BenLanSystem.Controllers;
 
-[AllowAnonymous]
-public class AccountController(UserManager<Staff> userManager, SignInManager<Staff> signInManager) : Controller
+public class AccountController(UserManager<Staff> userManager, SignInManager<Staff> signInManager, RoleManager<IdentityRole<long>> roleManager) : Controller
 {
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Login(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -19,6 +19,7 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -29,7 +30,7 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
             return View(model);
         }
 
-        var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+        var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
 
         if (result.Succeeded)
         {
@@ -46,6 +47,7 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public IActionResult Register()
     {
         ViewData["ActivePage"] = "Register";
@@ -54,6 +56,7 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [AllowAnonymous]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
         ViewData["ActivePage"] = "Register";
@@ -63,11 +66,14 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
             return View(model);
         }
 
+        var nameParts = model.FullName?.Trim().Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
         var user = new Staff
         {
             UserName = model.Email,
             Email = model.Email,
             PhoneNumber = model.PhoneNumber,
+            FirstName = nameParts is { Length: > 0 } ? nameParts[0] : "",
+            LastName = nameParts is { Length: > 1 } ? nameParts[1] : "",
             EmailConfirmed = true
         };
 
@@ -75,6 +81,13 @@ public class AccountController(UserManager<Staff> userManager, SignInManager<Sta
 
         if (result.Succeeded)
         {
+            // Ensure Customer role exists
+            if (!await roleManager.RoleExistsAsync("Customer"))
+            {
+                await roleManager.CreateAsync(new IdentityRole<long>("Customer"));
+            }
+            await userManager.AddToRoleAsync(user, "Customer");
+
             await signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Index", "Home");
         }

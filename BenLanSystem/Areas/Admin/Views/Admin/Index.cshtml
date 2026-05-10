@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewData["AdminPage"] = "Dashboard";
+    Layout = "_LayoutAdmin";
+}
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+    <a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
+        <div class="admin-muted">Trips</div>
+        <div id="dash-trips" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
+    </a>
+    <a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
+        <div class="admin-muted">Vehicles</div>
+        <div id="dash-vehicles" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
+    </a>
+    <a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
+        <div class="admin-muted">Bookings</div>
+        <div id="dash-bookings" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
+    </a>
+    <a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
+        <div class="admin-muted">Payments</div>
+        <div id="dash-payments" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
+    </a>
+    <a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
+        <div class="admin-muted">Locations</div>
+        <div id="dash-locations" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
+    </a>
+</div>
+
+<div class="admin-panel" style="margin-top:24px; padding:20px;">
+    <h2 style="font-size:18px; color:#111827; margin:0 0 12px;">Quick actions</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+        <a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Trips</a>
+        <a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Vehicles</a>
+        <a asp-area="Admin" asp-controller="Routes" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Routes</a>
+        <a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Locations</a>
+        <a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Bookings</a>
+        <a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Payments</a>
+        <a asp-area="Admin" asp-controller="Staff" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Staff</a>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    async function loadCounts() {
+        try {
+            const [trips, vehicles, bookings, payments, locations] = await Promise.all([
+                fetch('/api/Trip?StatusName=All&PageSize=200').then(r => r.ok ? r.json() : { items: [] }),
+                fetch('/api/Vehicle').then(r => r.ok ? r.json() : []),
+                fetch('/api/Booking/all').then(r => r.ok ? r.json() : []),
+                fetch('/api/Payment').then(r => r.ok ? r.json() : []),
+                fetch('/api/Location').then(r => r.ok ? r.json() : [])
+            ]);
+            document.getElementById('dash-trips').textContent = (trips.items || trips).length;
+            document.getElementById('dash-vehicles').textContent = vehicles.length;
+            document.getElementById('dash-bookings').textContent = (bookings.items || bookings).length;
+            document.getElementById('dash-payments').textContent = payments.length;
+            document.getElementById('dash-locations').textContent = locations.length;
+        } catch {
+        }
+    }
+    loadCounts();
+</script>
+}

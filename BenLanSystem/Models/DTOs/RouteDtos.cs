@@ -32,6 +32,10 @@ public class RouteCreateDto
 
 public class RouteUpdateDto
 {
+    public int? StartLocationId { get; set; }
+
+    public int? EndLocationId { get; set; }
+
     [Range(0, double.MaxValue)]
     public decimal? DistanceKm { get; set; }
 

@@ -42,3 +42,12 @@ public class BookingCancelDto
     [StringLength(300)]
     public string? Reason { get; set; }
 }
+
+public class BookingStatusUpdateDto
+{
+    [Required, StringLength(20)]
+    public string StatusName { get; set; } = string.Empty;
+
+    [StringLength(300)]
+    public string? Remarks { get; set; }
+}

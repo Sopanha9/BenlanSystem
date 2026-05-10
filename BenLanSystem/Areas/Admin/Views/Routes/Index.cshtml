@@ -1,0 +1,172 @@
+@{
+    ViewData["Title"] = "Routes";
+    ViewData["AdminPage"] = "Routes";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Routes</h2>
+    <button class="admin-btn admin-btn-primary" type="button" onclick="openRouteModal()">Add route</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Origin</th>
+                <th>Destination</th>
+                <th>Distance</th>
+                <th>Duration</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="routes-tbody"></tbody>
+    </table>
+</div>
+
+<div class="admin-modal-backdrop" id="route-modal">
+    <div class="admin-modal">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title" id="route-modal-title">Add route</h3>
+            <button class="admin-btn admin-btn-secondary" type="button" onclick="closeRouteModal()">Close</button>
+        </div>
+        <form id="route-form">
+            <div class="admin-modal-body">
+                <input type="hidden" id="route-id" />
+                <div class="admin-form-grid">
+                    <div class="admin-form-field">
+                        <label for="route-origin">Origin</label>
+                        <select id="route-origin" required></select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="route-destination">Destination</label>
+                        <select id="route-destination" required></select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="route-distance">Distance (km)</label>
+                        <input id="route-distance" type="number" min="0" step="0.01" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="route-minutes">Duration (minutes)</label>
+                        <input id="route-minutes" type="number" min="0" step="1" />
+                    </div>
+                    <label style="display:flex; gap:8px; align-items:center; color:#111827;">
+                        <input id="route-active" type="checkbox" checked />
+                        Active
+                    </label>
+                </div>
+                <div class="admin-status" id="route-status"></div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-btn admin-btn-secondary" type="button" onclick="closeRouteModal()">Cancel</button>
+                <button class="admin-btn admin-btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let routes = [];
+    let locations = [];
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    function fillLocationSelects() {
+        const options = locations.map(l => `<option value="${l.id}">${esc(l.name)}</option>`).join('');
+        document.getElementById('route-origin').innerHTML = options;
+        document.getElementById('route-destination').innerHTML = options;
+    }
+
+    async function loadRoutes() {
+        const [locRes, routeRes] = await Promise.all([fetch('/api/Location'), fetch('/api/Route')]);
+        if (locRes.ok) locations = await locRes.json();
+        if (routeRes.ok) routes = await routeRes.json();
+        fillLocationSelects();
+        document.getElementById('routes-tbody').innerHTML = routes.map(r => `
+            <tr>
+                <td>${r.id}</td>
+                <td>${esc(r.originName)}</td>
+                <td>${esc(r.destinationName)}</td>
+                <td>${r.distanceKm ?? ''}</td>
+                <td>${r.estimatedMinutes ? r.estimatedMinutes + ' min' : ''}</td>
+                <td>${r.isActive ? 'Yes' : 'No'}</td>
+                <td>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-secondary admin-btn-sm" type="button" onclick="openRouteModal(${r.id})">Edit</button>
+                        <button class="admin-btn admin-btn-danger admin-btn-sm" type="button" onclick="deleteRoute(${r.id})">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openRouteModal(id) {
+        const route = routes.find(r => r.id === id);
+        document.getElementById('route-modal-title').textContent = route ? 'Edit route' : 'Add route';
+        document.getElementById('route-id').value = route?.id || '';
+        document.getElementById('route-origin').value = route?.startLocationId || locations[0]?.id || '';
+        document.getElementById('route-destination').value = route?.endLocationId || locations[1]?.id || '';
+        document.getElementById('route-distance').value = route?.distanceKm ?? '';
+        document.getElementById('route-minutes').value = route?.estimatedMinutes ?? '';
+        document.getElementById('route-active').checked = route ? route.isActive : true;
+        document.getElementById('route-status').textContent = '';
+        document.getElementById('route-modal').classList.add('open');
+    }
+
+    function closeRouteModal() {
+        document.getElementById('route-modal').classList.remove('open');
+    }
+
+    document.getElementById('route-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('route-id').value;
+        const startLocationId = Number(document.getElementById('route-origin').value);
+        const endLocationId = Number(document.getElementById('route-destination').value);
+        if (startLocationId === endLocationId) {
+            document.getElementById('route-status').textContent = 'Origin and destination must be different.';
+            return;
+        }
+        const dto = {
+            startLocationId,
+            endLocationId,
+            distanceKm: document.getElementById('route-distance').value ? Number(document.getElementById('route-distance').value) : null,
+            estimatedMinutes: document.getElementById('route-minutes').value ? Number(document.getElementById('route-minutes').value) : null,
+            isActive: document.getElementById('route-active').checked
+        };
+        const res = await fetch(id ? `/api/Route/${id}` : '/api/Route', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dto)
+        });
+        if (!res.ok) {
+            document.getElementById('route-status').textContent = await readError(res);
+            return;
+        }
+        closeRouteModal();
+        loadRoutes();
+    });
+
+    async function deleteRoute(id) {
+        if (!confirm('Delete this route?')) return;
+        const res = await fetch(`/api/Route/${id}`, { method: 'DELETE' });
+        if (!res.ok) alert(await readError(res));
+        loadRoutes();
+    }
+
+    loadRoutes();
+</script>
+}

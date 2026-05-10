@@ -20,10 +20,17 @@ public class BookingController(IBookingService bookingService) : ControllerBase
     }
 
     [HttpGet("{id:long}")]
+    [Authorize]
     public async Task<ActionResult<BookingDto>> GetById(long id)
     {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return Unauthorized();
+
         var booking = await bookingService.GetByIdAsync(id);
         if (booking is null) return NotFound();
+        if (!User.IsInRole("Admin") && !User.IsInRole("Staff") && booking.CustomerId != long.Parse(userId))
+            return Forbid();
+
         return Ok(booking);
     }
 
@@ -33,8 +40,15 @@ public class BookingController(IBookingService bookingService) : ControllerBase
     {
         var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
         if (userId is null) return Unauthorized();
-        var booking = await bookingService.CreateAsync(long.Parse(userId), dto);
-        return CreatedAtAction(nameof(GetById), new { id = booking.Id }, booking);
+        try
+        {
+            var booking = await bookingService.CreateAsync(long.Parse(userId), dto);
+            return CreatedAtAction(nameof(GetById), new { id = booking.Id }, booking);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpPost("{id:long}/cancel")]
@@ -46,6 +60,25 @@ public class BookingController(IBookingService bookingService) : ControllerBase
         var booking = await bookingService.CancelAsync(id, long.Parse(userId), cancelDto);
         if (booking is null) return NotFound();
         return Ok(booking);
+    }
+
+    [HttpPut("{id:long}")]
+    [Authorize(Roles = "Admin,Staff")]
+    public async Task<ActionResult<BookingDto>> UpdateStatus(long id, BookingStatusUpdateDto dto)
+    {
+        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null) return Unauthorized();
+
+        try
+        {
+            var booking = await bookingService.UpdateStatusAsync(id, long.Parse(userId), dto);
+            if (booking is null) return NotFound();
+            return Ok(booking);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
     }
 
     [HttpGet("all")]

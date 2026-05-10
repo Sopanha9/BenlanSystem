@@ -8,5 +8,6 @@ public interface IBookingService
     Task<BookingDto?> GetByIdAsync(long id);
     Task<BookingDto> CreateAsync(long customerId, BookingCreateDto dto);
     Task<BookingDto?> CancelAsync(long id, long customerId, BookingCancelDto? cancelDto);
+    Task<BookingDto?> UpdateStatusAsync(long id, long changedByUserId, BookingStatusUpdateDto dto);
     Task<IEnumerable<BookingDto>> GetAllAsync(int page = 1, int pageSize = 20);
 }

@@ -1,0 +1,191 @@
+@{
+    ViewData["Title"] = "Vehicles";
+    ViewData["AdminPage"] = "Vehicles";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Vehicles</h2>
+    <button class="admin-btn admin-btn-primary" type="button" onclick="openVehicleModal()">Add vehicle</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Plate Number</th>
+                <th>Vehicle</th>
+                <th>Seats</th>
+                <th>Transmission</th>
+                <th>Fuel</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="vehicles-tbody"></tbody>
+    </table>
+</div>
+
+<div class="admin-modal-backdrop" id="vehicle-modal">
+    <div class="admin-modal">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title" id="vehicle-modal-title">Add vehicle</h3>
+            <button class="admin-btn admin-btn-secondary" type="button" onclick="closeVehicleModal()">Close</button>
+        </div>
+        <form id="vehicle-form">
+            <div class="admin-modal-body">
+                <input type="hidden" id="vehicle-id" />
+                <div class="admin-form-grid">
+                    <div class="admin-form-field">
+                        <label for="vehicle-plate">Plate number</label>
+                        <input id="vehicle-plate" required maxlength="20" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-seats">Seat capacity</label>
+                        <input id="vehicle-seats" type="number" min="1" max="200" required />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-brand">Brand</label>
+                        <input id="vehicle-brand" maxlength="50" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-model">Model</label>
+                        <input id="vehicle-model" maxlength="50" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-transmission">Transmission</label>
+                        <select id="vehicle-transmission">
+                            <option value="">Not set</option>
+                            <option>Auto</option>
+                            <option>Manual</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-fuel">Fuel type</label>
+                        <select id="vehicle-fuel">
+                            <option value="">Not set</option>
+                            <option>Gas</option>
+                            <option>EV</option>
+                            <option>Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-status">Status</label>
+                        <select id="vehicle-status">
+                            <option>Active</option>
+                            <option>Maintenance</option>
+                            <option>Retired</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="vehicle-image">Image URL</label>
+                        <input id="vehicle-image" maxlength="300" />
+                    </div>
+                </div>
+                <div class="admin-status" id="vehicle-status-message"></div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-btn admin-btn-secondary" type="button" onclick="closeVehicleModal()">Cancel</button>
+                <button class="admin-btn admin-btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let vehicles = [];
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    async function loadVehicles() {
+        const res = await fetch('/api/Vehicle');
+        if (!res.ok) return;
+        vehicles = await res.json();
+        document.getElementById('vehicles-tbody').innerHTML = vehicles.map(v => `
+            <tr>
+                <td>${v.id}</td>
+                <td>${esc(v.plateNumber)}</td>
+                <td>${esc([v.brand, v.model].filter(Boolean).join(' '))}</td>
+                <td>${v.seatCapacity}</td>
+                <td>${esc(v.transmission)}</td>
+                <td>${esc(v.fuelType)}</td>
+                <td><span class="badge bg-secondary">${esc(v.statusName)}</span></td>
+                <td>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-secondary admin-btn-sm" type="button" onclick="openVehicleModal(${v.id})">Edit</button>
+                        <button class="admin-btn admin-btn-danger admin-btn-sm" type="button" onclick="deleteVehicle(${v.id})">Retire</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openVehicleModal(id) {
+        const v = vehicles.find(item => item.id === id);
+        document.getElementById('vehicle-modal-title').textContent = v ? 'Edit vehicle' : 'Add vehicle';
+        document.getElementById('vehicle-id').value = v?.id || '';
+        document.getElementById('vehicle-plate').value = v?.plateNumber || '';
+        document.getElementById('vehicle-seats').value = v?.seatCapacity || 12;
+        document.getElementById('vehicle-brand').value = v?.brand || '';
+        document.getElementById('vehicle-model').value = v?.model || '';
+        document.getElementById('vehicle-transmission').value = v?.transmission || '';
+        document.getElementById('vehicle-fuel').value = v?.fuelType || '';
+        document.getElementById('vehicle-status').value = v?.statusName || 'Active';
+        document.getElementById('vehicle-image').value = v?.imageUrl || '/designs/bookticket/car.png';
+        document.getElementById('vehicle-status-message').textContent = '';
+        document.getElementById('vehicle-modal').classList.add('open');
+    }
+
+    function closeVehicleModal() {
+        document.getElementById('vehicle-modal').classList.remove('open');
+    }
+
+    document.getElementById('vehicle-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('vehicle-id').value;
+        const dto = {
+            plateNumber: document.getElementById('vehicle-plate').value.trim(),
+            brand: document.getElementById('vehicle-brand').value.trim() || null,
+            model: document.getElementById('vehicle-model').value.trim() || null,
+            seatCapacity: Number(document.getElementById('vehicle-seats').value),
+            transmission: document.getElementById('vehicle-transmission').value || null,
+            fuelType: document.getElementById('vehicle-fuel').value || null,
+            statusName: document.getElementById('vehicle-status').value,
+            imageUrl: document.getElementById('vehicle-image').value.trim() || null
+        };
+        const res = await fetch(id ? `/api/Vehicle/${id}` : '/api/Vehicle', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dto)
+        });
+        if (!res.ok) {
+            document.getElementById('vehicle-status-message').textContent = await readError(res);
+            return;
+        }
+        closeVehicleModal();
+        loadVehicles();
+    });
+
+    async function deleteVehicle(id) {
+        if (!confirm('Retire this vehicle?')) return;
+        const res = await fetch(`/api/Vehicle/${id}`, { method: 'DELETE' });
+        if (!res.ok) alert(await readError(res));
+        loadVehicles();
+    }
+
+    loadVehicles();
+</script>
+}

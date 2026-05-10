@@ -1,0 +1,212 @@
+@{
+    ViewData["Title"] = "Trips";
+    ViewData["AdminPage"] = "Trips";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Trips</h2>
+    <button class="admin-btn admin-btn-primary" type="button" onclick="openTripModal()">Add trip</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Route</th>
+                <th>Vehicle</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Price</th>
+                <th>Seats</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="trips-tbody"></tbody>
+    </table>
+</div>
+
+<div class="admin-modal-backdrop" id="trip-modal">
+    <div class="admin-modal">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title" id="trip-modal-title">Add trip</h3>
+            <button class="admin-btn admin-btn-secondary" type="button" onclick="closeTripModal()">Close</button>
+        </div>
+        <form id="trip-form">
+            <div class="admin-modal-body">
+                <input type="hidden" id="trip-id" />
+                <div class="admin-form-grid">
+                    <div class="admin-form-field">
+                        <label for="trip-route">Route</label>
+                        <select id="trip-route" required></select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-vehicle">Vehicle</label>
+                        <select id="trip-vehicle" required></select>
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-departure">Departure</label>
+                        <input id="trip-departure" type="datetime-local" required />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-arrival">Arrival</label>
+                        <input id="trip-arrival" type="datetime-local" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-price">Base price</label>
+                        <input id="trip-price" type="number" min="0" step="0.01" required />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-seats">Available seats</label>
+                        <input id="trip-seats" type="number" min="0" step="1" required />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="trip-status">Status</label>
+                        <select id="trip-status">
+                            <option>Open</option>
+                            <option>Closed</option>
+                            <option>Cancelled</option>
+                            <option>Completed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin-status" id="trip-status-message"></div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-btn admin-btn-secondary" type="button" onclick="closeTripModal()">Cancel</button>
+                <button class="admin-btn admin-btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let trips = [];
+    let routes = [];
+    let vehicles = [];
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    function toInputDate(value) {
+        if (!value) return '';
+        const date = new Date(value);
+        return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    }
+
+    function fromInputDate(value) {
+        return value ? new Date(value).toISOString() : null;
+    }
+
+    function fillSelects() {
+        document.getElementById('trip-route').innerHTML = routes.map(r =>
+            `<option value="${r.id}">${esc(r.originName)} to ${esc(r.destinationName)}</option>`
+        ).join('');
+        document.getElementById('trip-vehicle').innerHTML = vehicles.map(v =>
+            `<option value="${v.id}">${esc(v.plateNumber)} - ${esc([v.brand, v.model].filter(Boolean).join(' '))} (${v.seatCapacity})</option>`
+        ).join('');
+    }
+
+    async function loadTrips() {
+        const [routeRes, vehicleRes, tripRes] = await Promise.all([
+            fetch('/api/Route'),
+            fetch('/api/Vehicle'),
+            fetch('/api/Trip?StatusName=All&PageSize=200')
+        ]);
+        if (routeRes.ok) routes = await routeRes.json();
+        if (vehicleRes.ok) vehicles = await vehicleRes.json();
+        if (tripRes.ok) trips = (await tripRes.json()).items || [];
+        fillSelects();
+        document.getElementById('trips-tbody').innerHTML = trips.map(t => `
+            <tr>
+                <td>${t.id}</td>
+                <td>${esc(t.originName)} to ${esc(t.destinationName)}</td>
+                <td>${esc(t.vehicleInfo)}</td>
+                <td>${t.departureTimeUtc ? new Date(t.departureTimeUtc).toLocaleString() : ''}</td>
+                <td>${t.arrivalTimeUtc ? new Date(t.arrivalTimeUtc).toLocaleString() : ''}</td>
+                <td>$${Number(t.basePrice || 0).toFixed(2)}</td>
+                <td>${t.availableSeats}</td>
+                <td><span class="badge bg-secondary">${esc(t.statusName)}</span></td>
+                <td>
+                    <div class="admin-actions">
+                        <button class="admin-btn admin-btn-secondary admin-btn-sm" type="button" onclick="openTripModal(${t.id})">Edit</button>
+                        <button class="admin-btn admin-btn-danger admin-btn-sm" type="button" onclick="deleteTrip(${t.id})">Cancel</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    async function openTripModal(id) {
+        document.getElementById('trip-status-message').textContent = '';
+        let trip = null;
+        if (id) {
+            const res = await fetch(`/api/Trip/${id}`);
+            if (!res.ok) return alert(await readError(res));
+            trip = await res.json();
+        }
+
+        document.getElementById('trip-modal-title').textContent = trip ? 'Edit trip' : 'Add trip';
+        document.getElementById('trip-id').value = trip?.id || '';
+        document.getElementById('trip-route').value = trip?.routeId || routes[0]?.id || '';
+        document.getElementById('trip-vehicle').value = trip?.vehicleId || vehicles[0]?.id || '';
+        document.getElementById('trip-departure').value = trip ? toInputDate(trip.departureTimeUtc) : toInputDate(new Date(Date.now() + 86400000));
+        document.getElementById('trip-arrival').value = trip?.arrivalTimeUtc ? toInputDate(trip.arrivalTimeUtc) : '';
+        document.getElementById('trip-price').value = trip?.basePrice ?? 12;
+        document.getElementById('trip-seats').value = trip?.availableSeats ?? 12;
+        document.getElementById('trip-status').value = trip?.statusName || 'Open';
+        document.getElementById('trip-modal').classList.add('open');
+    }
+
+    function closeTripModal() {
+        document.getElementById('trip-modal').classList.remove('open');
+    }
+
+    document.getElementById('trip-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('trip-id').value;
+        const dto = {
+            routeId: Number(document.getElementById('trip-route').value),
+            vehicleId: Number(document.getElementById('trip-vehicle').value),
+            departureTimeUtc: fromInputDate(document.getElementById('trip-departure').value),
+            arrivalTimeUtc: fromInputDate(document.getElementById('trip-arrival').value),
+            basePrice: Number(document.getElementById('trip-price').value),
+            availableSeats: Number(document.getElementById('trip-seats').value),
+            statusName: document.getElementById('trip-status').value
+        };
+        const res = await fetch(id ? `/api/Trip/${id}` : '/api/Trip', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dto)
+        });
+        if (!res.ok) {
+            document.getElementById('trip-status-message').textContent = await readError(res);
+            return;
+        }
+        closeTripModal();
+        loadTrips();
+    });
+
+    async function deleteTrip(id) {
+        if (!confirm('Cancel this trip?')) return;
+        const res = await fetch(`/api/Trip/${id}`, { method: 'DELETE' });
+        if (!res.ok) alert(await readError(res));
+        loadTrips();
+    }
+
+    loadTrips();
+</script>
+}

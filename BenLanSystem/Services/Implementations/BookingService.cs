@@ -56,40 +56,62 @@ public class BookingService(ApplicationDbContext db) : IBookingService
 
     public async Task<BookingDto> CreateAsync(long customerId, BookingCreateDto dto)
     {
-        var booking = new Booking
-        {
-            TripId = dto.TripId, CustomerId = customerId, SeatsBooked = dto.SeatsBooked,
-            UnitPrice = dto.UnitPrice, BookingStatus = "Pending", Notes = dto.Notes
-        };
-        db.Bookings.Add(booking);
-        await db.SaveChangesAsync();
+        await using var tx = await db.Database.BeginTransactionAsync();
 
-        foreach (var p in dto.Passengers)
+        try
         {
-            db.BookingPassengers.Add(new BookingPassenger
+            var trip = await db.Trips.FindAsync(dto.TripId)
+                ?? throw new InvalidOperationException("Trip not found");
+
+            if (trip.StatusName != "Open")
+                throw new InvalidOperationException("Trip is not open for booking");
+
+            if (trip.AvailableSeats < dto.SeatsBooked)
+                throw new InvalidOperationException($"Only {trip.AvailableSeats} seats available");
+
+            if (dto.Passengers.Count != dto.SeatsBooked)
+                throw new InvalidOperationException("Passenger count must match seat count");
+
+            var booking = new Booking
             {
-                BookingId = booking.Id, PassengerName = p.PassengerName, SeatNumber = p.SeatNumber
+                TripId = dto.TripId, CustomerId = customerId, SeatsBooked = dto.SeatsBooked,
+                UnitPrice = dto.UnitPrice, BookingStatus = "Pending", Notes = dto.Notes
+            };
+            db.Bookings.Add(booking);
+            await db.SaveChangesAsync();
+
+            foreach (var p in dto.Passengers)
+            {
+                db.BookingPassengers.Add(new BookingPassenger
+                {
+                    BookingId = booking.Id, PassengerName = p.PassengerName, SeatNumber = p.SeatNumber
+                });
+            }
+
+            db.BookingHistories.Add(new BookingHistory
+            {
+                BookingId = booking.Id, ChangeDate = DateTime.UtcNow, ChangedBy = customerId.ToString(),
+                OldStatus = "None", NewStatus = "Pending", Remarks = "Booking created"
             });
-        }
 
-        db.BookingHistories.Add(new BookingHistory
-        {
-            BookingId = booking.Id, ChangeDate = DateTime.UtcNow, ChangedBy = customerId.ToString(),
-            OldStatus = "None", NewStatus = "Pending", Remarks = "Booking created"
-        });
+            await db.Entry(trip).ReloadAsync();
+            if (trip.StatusName != "Open")
+                throw new InvalidOperationException("Trip is no longer open for booking");
+            if (trip.AvailableSeats < dto.SeatsBooked)
+                throw new InvalidOperationException($"Seats no longer available. Only {trip.AvailableSeats} left.");
 
-        await db.SaveChangesAsync();
-
-        // Decrease available seats
-        var trip = await db.Trips.FindAsync(dto.TripId);
-        if (trip is not null)
-        {
             trip.AvailableSeats -= dto.SeatsBooked;
             trip.UpdatedAtUtc = DateTime.UtcNow;
-            await db.SaveChangesAsync();
-        }
 
-        return (await GetByIdAsync(booking.Id))!;
+            await db.SaveChangesAsync();
+            await tx.CommitAsync();
+
+            return (await GetByIdAsync(booking.Id))!;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new InvalidOperationException("Seats changed while booking. Please search again and retry.", ex);
+        }
     }
 
     public async Task<BookingDto?> CancelAsync(long id, long customerId, BookingCancelDto? cancelDto)
@@ -114,6 +136,49 @@ public class BookingService(ApplicationDbContext db) : IBookingService
         {
             trip.AvailableSeats += booking.SeatsBooked;
             trip.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        await db.SaveChangesAsync();
+        return await GetByIdAsync(id);
+    }
+
+    public async Task<BookingDto?> UpdateStatusAsync(long id, long changedByUserId, BookingStatusUpdateDto dto)
+    {
+        var booking = await db.Bookings.FindAsync(id);
+        if (booking is null) return null;
+
+        var allowedStatuses = new[] { "Pending", "Confirmed", "Cancelled", "Completed" };
+        if (!allowedStatuses.Contains(dto.StatusName))
+            throw new InvalidOperationException("Invalid booking status.");
+
+        var oldStatus = booking.BookingStatus;
+        if (oldStatus == dto.StatusName) return await GetByIdAsync(id);
+        if (oldStatus is "Cancelled" or "Completed")
+            throw new InvalidOperationException($"Cannot change a {oldStatus.ToLowerInvariant()} booking.");
+        if (oldStatus == "Pending" && dto.StatusName == "Completed")
+            throw new InvalidOperationException("Confirm the booking before completing it.");
+
+        booking.BookingStatus = dto.StatusName;
+        booking.UpdatedAtUtc = DateTime.UtcNow;
+
+        db.BookingHistories.Add(new BookingHistory
+        {
+            BookingId = booking.Id,
+            ChangeDate = DateTime.UtcNow,
+            ChangedBy = changedByUserId.ToString(),
+            OldStatus = oldStatus,
+            NewStatus = dto.StatusName,
+            Remarks = dto.Remarks ?? "Status changed by staff"
+        });
+
+        if (dto.StatusName == "Cancelled" && oldStatus != "Cancelled")
+        {
+            var trip = await db.Trips.FindAsync(booking.TripId);
+            if (trip is not null)
+            {
+                trip.AvailableSeats += booking.SeatsBooked;
+                trip.UpdatedAtUtc = DateTime.UtcNow;
+            }
         }
 
         await db.SaveChangesAsync();

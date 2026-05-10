@@ -14,7 +14,16 @@ public class TripService(ApplicationDbContext db) : ITripService
             .Include(t => t.Route).ThenInclude(r => r.StartLocation)
             .Include(t => t.Route).ThenInclude(r => r.EndLocation)
             .Include(t => t.Vehicle)
-            .Where(t => t.StatusName == "Open");
+            .AsQueryable();
+
+        if (string.IsNullOrWhiteSpace(search.StatusName))
+        {
+            query = query.Where(t => t.StatusName == "Open");
+        }
+        else if (!search.StatusName.Equals("All", StringComparison.OrdinalIgnoreCase))
+        {
+            query = query.Where(t => t.StatusName == search.StatusName);
+        }
 
         if (search.OriginId.HasValue) query = query.Where(t => t.Route.StartLocationId == search.OriginId);
         if (search.DestinationId.HasValue) query = query.Where(t => t.Route.EndLocationId == search.DestinationId);
@@ -25,7 +34,6 @@ public class TripService(ApplicationDbContext db) : ITripService
         }
         if (search.MinPrice.HasValue) query = query.Where(t => t.BasePrice >= search.MinPrice);
         if (search.MaxPrice.HasValue) query = query.Where(t => t.BasePrice <= search.MaxPrice);
-        if (!string.IsNullOrEmpty(search.StatusName)) query = query.Where(t => t.StatusName == search.StatusName);
 
         var totalCount = await query.CountAsync();
         var items = await query

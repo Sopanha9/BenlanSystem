@@ -1,0 +1,163 @@
+@{
+    ViewData["Title"] = "Staff";
+    ViewData["AdminPage"] = "Staff";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Staff</h2>
+    <button class="admin-btn admin-btn-primary" type="button" onclick="openStaffModal()">Add staff</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Position</th>
+                <th>Employee ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="staff-tbody"></tbody>
+    </table>
+</div>
+
+<div class="admin-modal-backdrop" id="staff-modal">
+    <div class="admin-modal">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title" id="staff-modal-title">Add staff</h3>
+            <button class="admin-btn admin-btn-secondary" type="button" onclick="closeStaffModal()">Close</button>
+        </div>
+        <form id="staff-form">
+            <div class="admin-modal-body">
+                <input type="hidden" id="staff-id" />
+                <div class="admin-form-grid">
+                    <div class="admin-form-field">
+                        <label for="staff-first">First name</label>
+                        <input id="staff-first" required maxlength="100" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-last">Last name</label>
+                        <input id="staff-last" required maxlength="100" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-email">Email</label>
+                        <input id="staff-email" type="email" required />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-password">Password</label>
+                        <input id="staff-password" type="password" minlength="6" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-phone">Phone</label>
+                        <input id="staff-phone" maxlength="20" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-position">Position</label>
+                        <input id="staff-position" maxlength="20" />
+                    </div>
+                    <div class="admin-form-field">
+                        <label for="staff-employee">Employee ID</label>
+                        <input id="staff-employee" maxlength="20" />
+                    </div>
+                </div>
+                <div class="admin-status" id="staff-status"></div>
+            </div>
+            <div class="admin-modal-footer">
+                <button class="admin-btn admin-btn-secondary" type="button" onclick="closeStaffModal()">Cancel</button>
+                <button class="admin-btn admin-btn-primary" type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    let staff = [];
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    async function loadStaff() {
+        const res = await fetch('/api/Staff');
+        if (!res.ok) return;
+        staff = await res.json();
+        document.getElementById('staff-tbody').innerHTML = staff.map(s => `
+            <tr>
+                <td>${s.id}</td>
+                <td>${esc(s.firstName)} ${esc(s.lastName)}</td>
+                <td>${esc(s.email)}</td>
+                <td>${esc(s.phoneNumber)}</td>
+                <td>${esc(s.position)}</td>
+                <td>${esc(s.employeeId)}</td>
+                <td><button class="admin-btn admin-btn-secondary admin-btn-sm" type="button" onclick="openStaffModal(${s.id})">Edit</button></td>
+            </tr>
+        `).join('');
+    }
+
+    function openStaffModal(id) {
+        const s = staff.find(item => item.id === id);
+        document.getElementById('staff-modal-title').textContent = s ? 'Edit staff' : 'Add staff';
+        document.getElementById('staff-id').value = s?.id || '';
+        document.getElementById('staff-first').value = s?.firstName || '';
+        document.getElementById('staff-last').value = s?.lastName || '';
+        document.getElementById('staff-email').value = s?.email || '';
+        document.getElementById('staff-email').disabled = Boolean(s);
+        document.getElementById('staff-password').value = '';
+        document.getElementById('staff-password').required = !s;
+        document.getElementById('staff-password').closest('.admin-form-field').style.display = s ? 'none' : 'flex';
+        document.getElementById('staff-phone').value = s?.phoneNumber || '';
+        document.getElementById('staff-position').value = s?.position || '';
+        document.getElementById('staff-employee').value = s?.employeeId || '';
+        document.getElementById('staff-status').textContent = '';
+        document.getElementById('staff-modal').classList.add('open');
+    }
+
+    function closeStaffModal() {
+        document.getElementById('staff-modal').classList.remove('open');
+    }
+
+    document.getElementById('staff-form').addEventListener('submit', async e => {
+        e.preventDefault();
+        const id = document.getElementById('staff-id').value;
+        const dto = {
+            firstName: document.getElementById('staff-first').value.trim(),
+            lastName: document.getElementById('staff-last').value.trim(),
+            position: document.getElementById('staff-position').value.trim() || null,
+            employeeId: document.getElementById('staff-employee').value.trim() || null,
+            phoneNumber: document.getElementById('staff-phone').value.trim() || null
+        };
+        if (!id) {
+            dto.email = document.getElementById('staff-email').value.trim();
+            dto.password = document.getElementById('staff-password').value;
+        }
+        const res = await fetch(id ? `/api/Staff/${id}` : '/api/Staff', {
+            method: id ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dto)
+        });
+        if (!res.ok) {
+            document.getElementById('staff-status').textContent = await readError(res);
+            return;
+        }
+        closeStaffModal();
+        loadStaff();
+    });
+
+    loadStaff();
+</script>
+}

@@ -1,0 +1,99 @@
+@{
+    ViewData["Title"] = "Payments";
+    ViewData["AdminPage"] = "Payments";
+    Layout = "_LayoutAdmin";
+}
+
+<div class="admin-toolbar">
+    <h2>Payments</h2>
+    <button class="admin-btn admin-btn-secondary" type="button" onclick="loadPayments()">Refresh</button>
+</div>
+
+<div class="admin-table">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Booking</th>
+                <th>Amount</th>
+                <th>Method</th>
+                <th>Status</th>
+                <th>Reference</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="payments-tbody"></tbody>
+    </table>
+</div>
+
+@section Scripts {
+<script>
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function readError(res) {
+        try {
+            const data = await res.json();
+            return data.message || JSON.stringify(data);
+        } catch {
+            return await res.text();
+        }
+    }
+
+    async function loadPayments() {
+        const res = await fetch('/api/Payment?pageSize=200');
+        if (!res.ok) return;
+        const items = await res.json();
+        document.getElementById('payments-tbody').innerHTML = items.length ? items.map(p => {
+            const actions = [];
+            if (p.paymentStatus === 'Pending') actions.push(`<button class="admin-btn admin-btn-success admin-btn-sm" type="button" onclick="markPaid(${p.id})">Mark paid</button>`);
+            if (p.paymentStatus === 'Paid') actions.push(`<button class="admin-btn admin-btn-warning admin-btn-sm" type="button" onclick="refundPayment(${p.id})">Refund</button>`);
+            return `
+                <tr>
+                    <td>${p.id}</td>
+                    <td>#${p.bookingId}</td>
+                    <td>$${Number(p.amount || 0).toFixed(2)}</td>
+                    <td>${esc(p.paymentMethod)}</td>
+                    <td><span class="badge bg-secondary">${esc(p.paymentStatus)}</span></td>
+                    <td>${esc(p.transactionRef)}</td>
+                    <td>${p.createdAtUtc ? new Date(p.createdAtUtc).toLocaleString() : ''}</td>
+                    <td><div class="admin-actions">${actions.join('') || '<span class="admin-muted">No actions</span>'}</div></td>
+                </tr>
+            `;
+        }).join('') : '<tr><td colspan="8" class="admin-muted" style="text-align:center; padding:24px;">No payments yet.</td></tr>';
+    }
+
+    async function markPaid(id) {
+        const transactionRef = prompt('Transaction reference (optional):') || null;
+        const res = await fetch(`/api/Payment/${id}/mark-paid`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ transactionRef })
+        });
+        if (!res.ok) {
+            alert(await readError(res));
+            return;
+        }
+        loadPayments();
+    }
+
+    async function refundPayment(id) {
+        const reason = prompt('Refund reason:');
+        if (reason === null) return;
+        const res = await fetch(`/api/Payment/${id}/refund`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reason })
+        });
+        if (!res.ok) {
+            alert(await readError(res));
+            return;
+        }
+        loadPayments();
+    }
+
+    loadPayments();
+</script>
+}

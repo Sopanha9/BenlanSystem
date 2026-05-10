@@ -31,6 +31,9 @@ public class Trip
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAtUtc { get; set; }
 
+    [Timestamp]
+    public byte[] RowVersion { get; set; } = null!;
+
     // Navigation properties
     public Route Route { get; set; } = null!;
     public Vehicle Vehicle { get; set; } = null!;

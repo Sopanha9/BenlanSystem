@@ -34,13 +34,12 @@ public class BlogService(ApplicationDbContext db) : IBlogService
         };
     }
 
-    public async Task<BlogPostDto> CreateAsync(BlogPostCreateDto dto)
+    public async Task<BlogPostDto> CreateAsync(BlogPostCreateDto dto, long authorId)
     {
-        // AuthorId will be set by the controller from the authenticated user
         var post = new BlogPost
         {
             Title = dto.Title, Content = dto.Content, Summary = dto.Summary,
-            ImageUrl = dto.ImageUrl, IsPublished = dto.IsPublished
+            ImageUrl = dto.ImageUrl, IsPublished = dto.IsPublished, AuthorId = authorId
         };
         db.Set<BlogPost>().Add(post);
         await db.SaveChangesAsync();
