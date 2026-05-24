@@ -24,6 +24,7 @@ public class TripSearchResultDto
     public int AvailableSeats { get; set; }
     public string StatusName { get; set; } = "Open";
     public string? VehicleInfo { get; set; }
+    public int? VehicleSeatCapacity { get; set; }
     public int? EstimatedMinutes { get; set; }
     public decimal? DistanceKm { get; set; }
 }

@@ -37,6 +37,25 @@ async function loadLocations() {
     }
 }
 
+async function loadAllTrips() {
+    const list = document.getElementById('bt-ticket-list');
+    if (list) {
+        list.innerHTML = '<div style="padding:40px;text-align:center;color:#6b7280;">Loading available trips...</div>';
+    }
+
+    try {
+        const res = await fetch('/api/Trip?StatusName=Open&PageSize=20');
+        if (!res.ok) {
+            renderEmptyState('Unable to load trips right now.');
+        } else {
+            const data = await res.json();
+            renderTrips(data.items || []);
+        }
+    } catch {
+        renderEmptyState('Unable to load trips right now.');
+    }
+}
+
 function prefillFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const from = params.get('from');
@@ -49,7 +68,7 @@ function prefillFromUrl() {
     if (from && to) {
         searchTrips();
     } else {
-        renderEmptyState('Choose a route and date to search available trips.');
+        loadAllTrips();
     }
 }
 
@@ -125,7 +144,11 @@ function renderTrips(trips) {
     const from = document.getElementById('bt-input-from').value.trim();
     const to = document.getElementById('bt-input-to').value.trim();
     if (countEl) {
-        countEl.innerHTML = `Showing <strong>${currentTrips.length}</strong> results for <strong>${escapeHtml(from)} to ${escapeHtml(to)}</strong>`;
+        if (from && to) {
+            countEl.innerHTML = `Showing <strong>${currentTrips.length}</strong> results for <strong>${escapeHtml(from)} to ${escapeHtml(to)}</strong>`;
+        } else {
+            countEl.innerHTML = `Showing <strong>${currentTrips.length}</strong> results`;
+        }
     }
 
     list.innerHTML = currentTrips.map(function (t, i) {
@@ -174,7 +197,7 @@ function renderTrips(trips) {
                     </div>
                     <div class="bt-ticket-right">
                         <span class="bt-price">${price}</span>
-                        <button class="bt-book-btn" type="button" ${disabled} onclick="openBookingModal(${Number(t.id)})">Book now</button>
+                        <button class="bt-book-btn" type="button" ${disabled} onclick="goToSelectSeat(${Number(t.id)})">Book now</button>
                     </div>
                 </div>
             </div>`;
@@ -208,117 +231,8 @@ function shakeField(id) {
     }, 1400);
 }
 
-function openBookingModal(tripId) {
-    const trip = window.__tripCache.get(Number(tripId));
-    if (!trip) return;
-
-    selectedTripId = Number(tripId);
-    selectedTripPrice = Number(trip.basePrice || 0);
-    selectedTripAvailableSeats = Math.max(1, Number(trip.availableSeats || 1));
-    seatCount = 1;
-
-    const dep = trip.departureTimeUtc ? new Date(trip.departureTimeUtc).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-    const arr = trip.arrivalTimeUtc ? new Date(trip.arrivalTimeUtc).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
-
-    document.getElementById('bt-modal-from').textContent = trip.originName || '';
-    document.getElementById('bt-modal-to').textContent = trip.destinationName || '';
-    document.getElementById('bt-modal-dep').textContent = dep;
-    document.getElementById('bt-modal-arr').textContent = arr || '-';
-    document.getElementById('bt-modal-price').textContent = `$${selectedTripPrice.toFixed(2)}`;
-    document.getElementById('bt-seat-count').textContent = '1';
-
-    const confirmBtn = document.getElementById('bt-modal-confirm-btn');
-    if (confirmBtn) {
-        confirmBtn.textContent = 'Confirm Booking';
-        confirmBtn.classList.remove('success');
-        confirmBtn.disabled = false;
-    }
-
-    document.getElementById('bt-modal-backdrop').classList.add('open');
-    document.getElementById('bt-modal').classList.add('open');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeBookingModal() {
-    document.getElementById('bt-modal-backdrop').classList.remove('open');
-    document.getElementById('bt-modal').classList.remove('open');
-    document.body.style.overflow = '';
-}
-
-function changeSeat(delta) {
-    seatCount = Math.max(1, Math.min(selectedTripAvailableSeats, seatCount + delta));
-    document.getElementById('bt-seat-count').textContent = seatCount;
-}
-
-async function confirmBooking() {
-    const firstname = document.getElementById('bt-modal-firstname').value.trim();
-    const lastname = document.getElementById('bt-modal-lastname').value.trim();
-    const phone = document.getElementById('bt-modal-phone').value.trim();
-
-    if (!firstname || !phone) {
-        if (!firstname) shakeModal('bt-modal-firstname');
-        if (!phone) shakeModal('bt-modal-phone');
-        return;
-    }
-
-    const btn = document.getElementById('bt-modal-confirm-btn');
-    btn.textContent = 'Processing...';
-    btn.disabled = true;
-
-    const passengerName = `${firstname} ${lastname}`.trim();
-    const dto = {
-        tripId: selectedTripId,
-        seatsBooked: seatCount,
-        unitPrice: selectedTripPrice,
-        notes: phone ? `Phone: ${phone}` : null,
-        passengers: Array.from({ length: seatCount }, function (_, i) {
-            return { passengerName, seatNumber: `A${i + 1}` };
-        })
-    };
-
-    try {
-        const res = await fetch('/api/Booking', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dto)
-        });
-
-        if (res.status === 401) {
-            window.location = '/Account/Login';
-            return;
-        }
-        if (!res.ok) {
-            alert('Booking failed: ' + await readResponseError(res));
-            btn.textContent = 'Confirm Booking';
-            btn.disabled = false;
-            return;
-        }
-
-        const booking = await res.json();
-        btn.textContent = 'Booked';
-        btn.classList.add('success');
-        setTimeout(function () {
-            window.location.href = `/Home/Pay?bookingId=${encodeURIComponent(booking.id)}`;
-        }, 800);
-    } catch (e) {
-        alert('Booking failed: ' + e.message);
-        btn.textContent = 'Confirm Booking';
-        btn.disabled = false;
-    }
-}
-
-function shakeModal(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.style.borderColor = 'rgba(239, 68, 68, 0.6)';
-    el.animate([
-        { transform: 'translateX(0)' },
-        { transform: 'translateX(-4px)' },
-        { transform: 'translateX(4px)' },
-        { transform: 'translateX(-3px)' },
-        { transform: 'translateX(0)' }
-    ], { duration: 280 });
-    setTimeout(function () { el.style.borderColor = ''; }, 1200);
+function goToSelectSeat(tripId) {
+    window.location.href = `/Home/SelectSeat?tripId=${encodeURIComponent(tripId)}`;
 }
 
 function sortTrips(mode) {

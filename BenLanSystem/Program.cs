@@ -42,6 +42,7 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IBlogService, BlogService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -209,8 +210,11 @@ async Task SeedApplicationDataAsync(ApplicationDbContext db, long adminUserId)
     }
     await db.SaveChangesAsync();
 
-    if (!await db.Trips.AnyAsync())
+    // Remove past trips and re-seed so trips always have upcoming dates
+    var pastTrips = await db.Trips.Where(t => t.DepartureTimeUtc < DateTime.UtcNow).ToListAsync();
+    if (pastTrips.Count > 0 || !await db.Trips.AnyAsync())
     {
+        db.Trips.RemoveRange(pastTrips);
         var routes = await db.Routes.Include(r => r.StartLocation).Include(r => r.EndLocation).Where(r => r.IsActive).ToListAsync();
         var vehicles = await db.Vehicles.Where(v => v.StatusName == "Active").ToListAsync();
         var day = DateTime.UtcNow.Date.AddDays(1);

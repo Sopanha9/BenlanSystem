@@ -30,7 +30,8 @@ public class TripService(ApplicationDbContext db) : ITripService
         if (search.DepartureDate.HasValue)
         {
             var date = search.DepartureDate.Value.Date;
-            query = query.Where(t => t.DepartureTimeUtc.Date == date);
+            var nextDay = date.AddDays(1);
+            query = query.Where(t => t.DepartureTimeUtc >= date && t.DepartureTimeUtc < nextDay);
         }
         if (search.MinPrice.HasValue) query = query.Where(t => t.BasePrice >= search.MinPrice);
         if (search.MaxPrice.HasValue) query = query.Where(t => t.BasePrice <= search.MaxPrice);
@@ -47,6 +48,7 @@ public class TripService(ApplicationDbContext db) : ITripService
                 DepartureTimeUtc = t.DepartureTimeUtc, ArrivalTimeUtc = t.ArrivalTimeUtc,
                 BasePrice = t.BasePrice, AvailableSeats = t.AvailableSeats, StatusName = t.StatusName,
                 VehicleInfo = t.Vehicle.Brand != null ? $"{t.Vehicle.Brand} {t.Vehicle.Model}" : t.Vehicle.PlateNumber,
+                VehicleSeatCapacity = t.Vehicle.SeatCapacity,
                 EstimatedMinutes = t.Route.EstimatedMinutes, DistanceKm = t.Route.DistanceKm
             })
             .ToListAsync();
@@ -66,7 +68,8 @@ public class TripService(ApplicationDbContext db) : ITripService
             DepartureTimeUtc = t.DepartureTimeUtc, ArrivalTimeUtc = t.ArrivalTimeUtc,
             BasePrice = t.BasePrice, AvailableSeats = t.AvailableSeats, StatusName = t.StatusName,
             OriginName = t.Route.StartLocation.Name, DestinationName = t.Route.EndLocation.Name,
-            VehiclePlateNumber = t.Vehicle.PlateNumber, VehicleBrand = t.Vehicle.Brand, VehicleModel = t.Vehicle.Model
+            VehiclePlateNumber = t.Vehicle.PlateNumber, VehicleBrand = t.Vehicle.Brand, VehicleModel = t.Vehicle.Model,
+            VehicleSeatCapacity = t.Vehicle.SeatCapacity
         };
     }
 

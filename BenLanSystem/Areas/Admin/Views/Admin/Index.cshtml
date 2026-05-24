@@ -4,61 +4,408 @@
     Layout = "_LayoutAdmin";
 }
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
-    <a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
-        <div class="admin-muted">Trips</div>
-        <div id="dash-trips" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
-    </a>
-    <a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
-        <div class="admin-muted">Vehicles</div>
-        <div id="dash-vehicles" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
-    </a>
-    <a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
-        <div class="admin-muted">Bookings</div>
-        <div id="dash-bookings" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
-    </a>
-    <a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
-        <div class="admin-muted">Payments</div>
-        <div id="dash-payments" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
-    </a>
-    <a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="admin-panel" style="padding:20px; text-decoration:none;">
-        <div class="admin-muted">Locations</div>
-        <div id="dash-locations" style="font-size:28px; font-weight:700; margin-top:8px; color:#111827;">0</div>
-    </a>
+@section Styles {
+<style>
+.dash-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.dash-toolbar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.dash-toolbar-left h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color: #111827;
+}
+.dash-toolbar-left p {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0;
+}
+.dash-toolbar-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.dash-toolbar-right input,
+.dash-toolbar-right select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #374151;
+    background: #fff;
+    outline: none;
+}
+.dash-toolbar-right input::placeholder {
+    color: #9ca3af;
+}
+.dash-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.dash-stat-card {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.dash-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+.dash-stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 4px;
+}
+.dash-stat-sub {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+.dash-stat-sub.positive {
+    color: #16a34a;
+}
+.dash-stat-sub.negative {
+    color: #ef4444;
+}
+.dash-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+}
+.dash-panel {
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    padding: 20px;
+}
+.dash-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.dash-panel-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+.dash-panel-header p {
+    font-size: 12px;
+    color: #6b7280;
+    margin: 4px 0 0;
+}
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.dash-table th {
+    text-align: left;
+    padding: 10px 12px;
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+.dash-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f3f4f6;
+    color: #374151;
+}
+.dash-table tr:last-child td {
+    border-bottom: none;
+}
+.dash-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.dash-badge-green {
+    background: #dcfce7;
+    color: #166534;
+}
+.dash-badge-yellow {
+    background: #fef9c3;
+    color: #854d0e;
+}
+.dash-badge-red {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.dash-alert-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.dash-alert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: #fafafa;
+}
+.dash-alert-item.danger {
+    border-color: #fecaca;
+    background: #fef2f2;
+}
+.dash-alert-item.warning {
+    border-color: #fde047;
+    background: #fefce8;
+}
+.dash-alert-item.info {
+    border-color: #bfdbfe;
+    background: #eff6ff;
+}
+.dash-alert-text {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.4;
+}
+.dash-alert-action {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+}
+.dash-alert-action.danger {
+    background: #ef4444;
+    color: #fff;
+}
+.dash-alert-action.warning {
+    background: #6b7280;
+    color: #fff;
+}
+.dash-alert-action.info {
+    background: #4e78ff;
+    color: #fff;
+}
+@@media (max-width: 992px) {
+    .dash-content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@@media (max-width: 760px) {
+    .dash-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .dash-stat-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@@media (max-width: 480px) {
+    .dash-stat-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+}
+
+<div class="dash-toolbar">
+    <div class="dash-toolbar-left">
+        <h1>Dashboard</h1>
+        <p>Live operational overview with real system data</p>
+    </div>
+    <div class="dash-toolbar-right">
+        <input type="text" id="dash-search" placeholder="Search booking ID, user, route" />
+        <select id="dash-period">
+            <option>Last 7 days</option>
+            <option>Last 30 days</option>
+            <option>This month</option>
+            <option>All time</option>
+        </select>
+        <button class="admin-btn admin-btn-primary" onclick="exportDashboard()">Export</button>
+    </div>
 </div>
 
-<div class="admin-panel" style="margin-top:24px; padding:20px;">
-    <h2 style="font-size:18px; color:#111827; margin:0 0 12px;">Quick actions</h2>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
-        <a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Trips</a>
-        <a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Vehicles</a>
-        <a asp-area="Admin" asp-controller="Routes" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Routes</a>
-        <a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Locations</a>
-        <a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Bookings</a>
-        <a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Payments</a>
-        <a asp-area="Admin" asp-controller="Staff" asp-action="Index" class="admin-btn admin-btn-primary" style="text-decoration:none; text-align:center;">Manage Staff</a>
+<div class="dash-stat-grid">
+    <div class="dash-stat-card">
+        <div class="dash-stat-label">Total Bookings</div>
+        <div class="dash-stat-value" id="stat-total-bookings">0</div>
+        <div class="dash-stat-sub" id="stat-bookings-month">0 this month</div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-label">Active Fleet</div>
+        <div class="dash-stat-value" id="stat-active-fleet">0</div>
+        <div class="dash-stat-sub" id="stat-fleet-maintenance">0 in maintenance</div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-label">Bookings Today</div>
+        <div class="dash-stat-value" id="stat-bookings-today">0</div>
+        <div class="dash-stat-sub" id="stat-confirmed-percent">0% confirmed</div>
+    </div>
+    <div class="dash-stat-card">
+        <div class="dash-stat-label">Gross Revenue</div>
+        <div class="dash-stat-value" id="stat-revenue">$0</div>
+        <div class="dash-stat-sub" id="stat-revenue-target">Target: $150,000</div>
+    </div>
+</div>
+
+<div class="dash-content-grid">
+    <div class="dash-panel">
+        <div class="dash-panel-header">
+            <div>
+                <h2>Today Route Load</h2>
+                <p>Top performing routes and utilization</p>
+            </div>
+            <button class="admin-btn admin-btn-secondary" onclick="loadRouteLoad()">Refresh</button>
+        </div>
+        <div style="overflow-x:auto;">
+            <table class="dash-table">
+                <thead>
+                    <tr>
+                        <th>Route</th>
+                        <th>Trips</th>
+                        <th>Passengers</th>
+                        <th>Load</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="route-load-body">
+                    <tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="dash-panel">
+        <div class="dash-panel-header">
+            <div>
+                <h2>Critical Alerts</h2>
+                <p>Action items for operations team</p>
+            </div>
+        </div>
+        <div class="dash-alert-list" id="alerts-list">
+            <div style="text-align:center; color:#9ca3af; padding:20px;">Loading...</div>
+        </div>
     </div>
 </div>
 
 @section Scripts {
 <script>
-    async function loadCounts() {
+    async function loadSummary() {
         try {
-            const [trips, vehicles, bookings, payments, locations] = await Promise.all([
-                fetch('/api/Trip?StatusName=All&PageSize=200').then(r => r.ok ? r.json() : { items: [] }),
-                fetch('/api/Vehicle').then(r => r.ok ? r.json() : []),
-                fetch('/api/Booking/all').then(r => r.ok ? r.json() : []),
-                fetch('/api/Payment').then(r => r.ok ? r.json() : []),
-                fetch('/api/Location').then(r => r.ok ? r.json() : [])
-            ]);
-            document.getElementById('dash-trips').textContent = (trips.items || trips).length;
-            document.getElementById('dash-vehicles').textContent = vehicles.length;
-            document.getElementById('dash-bookings').textContent = (bookings.items || bookings).length;
-            document.getElementById('dash-payments').textContent = payments.length;
-            document.getElementById('dash-locations').textContent = locations.length;
-        } catch {
+            const res = await fetch('/api/Dashboard/summary');
+            if (!res.ok) return;
+            const data = await res.json();
+
+            document.getElementById('stat-total-bookings').textContent = data.totalBookings.toLocaleString();
+            document.getElementById('stat-bookings-month').textContent = `${data.bookingsThisMonth} this month`;
+            document.getElementById('stat-active-fleet').textContent = data.activeFleet;
+            document.getElementById('stat-fleet-maintenance').textContent = `${data.fleetInMaintenance} in maintenance`;
+            document.getElementById('stat-bookings-today').textContent = data.bookingsToday;
+            document.getElementById('stat-confirmed-percent').textContent = `${data.bookingsConfirmedPercent}% confirmed`;
+            document.getElementById('stat-revenue').textContent = `$${data.grossRevenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+            document.getElementById('stat-revenue-target').textContent = `Target: $${data.revenueTarget.toLocaleString()}`;
+        } catch (e) {
+            console.error('Failed to load dashboard summary', e);
         }
     }
-    loadCounts();
+
+    async function loadRouteLoad() {
+        const tbody = document.getElementById('route-load-body');
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Loading...</td></tr>';
+        try {
+            const res = await fetch('/api/Dashboard/route-load');
+            if (!res.ok) return;
+            const data = await res.json();
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">No route data for today</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = data.map(r => {
+                let badgeClass = 'dash-badge-green';
+                if (r.loadPercent < 50) badgeClass = 'dash-badge-red';
+                else if (r.loadPercent < 80) badgeClass = 'dash-badge-yellow';
+                return `<tr>
+                    <td>${escapeHtml(r.routeName)}</td>
+                    <td>${r.trips}</td>
+                    <td>${r.passengers.toLocaleString()}</td>
+                    <td><span class="dash-badge ${badgeClass}">${r.loadPercent}%</span></td>
+                    <td>$${r.revenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                </tr>`;
+            }).join('');
+        } catch (e) {
+            console.error('Failed to load route load', e);
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Failed to load</td></tr>';
+        }
+    }
+
+    async function loadAlerts() {
+        const container = document.getElementById('alerts-list');
+        container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">Loading...</div>';
+        try {
+            const res = await fetch('/api/Dashboard/alerts');
+            if (!res.ok) return;
+            const data = await res.json();
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">No critical alerts</div>';
+                return;
+            }
+
+            container.innerHTML = data.map(a => {
+                const severityClass = a.severity; // info, warning, danger
+                const actionClass = a.severity === 'danger' ? 'danger' : a.severity === 'warning' ? 'warning' : 'info';
+                return `<div class="dash-alert-item ${severityClass}">
+                    <div class="dash-alert-text">${escapeHtml(a.message)}</div>
+                    ${a.actionUrl ? `<a href="${a.actionUrl}" class="dash-alert-action ${actionClass}">${escapeHtml(a.actionLabel || 'Action')}</a>` : ''}
+                </div>`;
+            }).join('');
+        } catch (e) {
+            console.error('Failed to load alerts', e);
+            container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">Failed to load alerts</div>';
+        }
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function exportDashboard() {
+        alert('Export functionality will be implemented soon.');
+    }
+
+    loadSummary();
+    loadRouteLoad();
+    loadAlerts();
 </script>
 }

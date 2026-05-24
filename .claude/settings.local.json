@@ -13,7 +13,18 @@
       "Bash(net start *)",
       "Bash(sc query *)",
       "Bash(sqlcmd *)",
-      "Bash(taskkill //F //IM BenLanSystem.exe)"
+      "Bash(taskkill //F //IM BenLanSystem.exe)",
+      "Bash(dotnet run *)",
+      "Bash(powershell *)",
+      "PowerShell(Start-Sleep -Seconds 5; Invoke-RestMethod -Uri 'http://localhost:5216/api/Trip?PageSize=10' | ConvertTo-Json -Depth 5)",
+      "PowerShell(Invoke-WebRequest -Uri 'http://localhost:5216/api/Location' | Select-Object -ExpandProperty Content | ConvertFrom-Json | ConvertTo-Json)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri 'http://localhost:5216/designs/bookticket/car.png' -Method Head -ErrorAction Stop; \"Status: $\\($r.StatusCode\\), ContentLength: $\\($r.Headers['Content-Length']\\), ContentType: $\\($r.Headers['Content-Type']\\)\" } catch { \"Error: $\\($_.Exception.Message\\)\" })",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:5216)",
+      "Bash(curl -s http://localhost:5216/api/Trip?StatusName=Open)",
+      "Bash(curl *)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:5216/api/Trip?StatusName=Open&PageSize=1\" -UseBasicParsing; \"Status: \" + $r.StatusCode; $r.Content.Substring\\(0, [Math]::Min\\(300, $r.Content.Length\\)\\))",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:5216/api/Booking/trip/7/seats\" -UseBasicParsing; \"Status: \" + $r.StatusCode; $r.Content)",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost:5216/Home/SelectSeat?tripId=7\" -UseBasicParsing; \"Status: \" + $r.StatusCode; $r.Content.Substring\\(0, [Math]::Min\\(500, $r.Content.Length\\)\\))"
     ]
   }
 }

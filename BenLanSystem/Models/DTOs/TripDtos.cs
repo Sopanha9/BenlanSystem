@@ -17,6 +17,7 @@ public class TripDto
     public string? VehiclePlateNumber { get; set; }
     public string? VehicleBrand { get; set; }
     public string? VehicleModel { get; set; }
+    public int? VehicleSeatCapacity { get; set; }
 }
 
 public class TripCreateDto

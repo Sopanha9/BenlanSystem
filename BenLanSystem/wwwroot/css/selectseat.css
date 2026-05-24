@@ -1,0 +1,361 @@
+/* =============================================
+   BenLan — Select Seat page styles
+   ============================================= */
+
+.ss-section {
+    padding: 40px 24px 80px;
+    min-height: calc(100vh - 200px);
+}
+
+.ss-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* Header */
+.ss-header {
+    margin-bottom: 28px;
+}
+
+.ss-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 10px;
+    letter-spacing: 0.01em;
+}
+
+.ss-route-info {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.ss-departs {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.ss-departs span {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.ss-date {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Legend */
+.ss-legend {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.ss-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ss-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.ss-legend-dot.ss-available { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.25); }
+.ss-legend-dot.ss-booked     { background: #ef4444; border: 1px solid #ef4444; }
+.ss-legend-dot.ss-selected   { background: #22c55e; border: 1px solid #22c55e; }
+
+/* Body layout */
+.ss-body {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    align-items: start;
+}
+
+/* Seat grid */
+.ss-seat-grid {
+    background: linear-gradient(160deg, #1a2240 0%, #161d35 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 32px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.ss-loading {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+.ss-seat-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ss-seat {
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.ss-seat:hover {
+    background: rgba(78, 120, 255, 0.15);
+    border-color: rgba(78, 120, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.ss-seat.ss-booked {
+    background: #ef4444;
+    border-color: #ef4444;
+    color: #ffffff;
+    cursor: not-allowed;
+    opacity: 0.85;
+}
+
+.ss-seat.ss-booked:hover {
+    transform: none;
+    background: #ef4444;
+    border-color: #ef4444;
+}
+
+.ss-seat.ss-selected {
+    background: #22c55e;
+    border-color: #22c55e;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.35);
+}
+
+.ss-seat.ss-selected:hover {
+    background: #16a34a;
+    border-color: #16a34a;
+}
+
+/* Driver icon placeholder */
+.ss-driver {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.4rem;
+}
+
+/* Passenger fields */
+.ss-passenger-fields {
+    margin-top: 20px;
+    background: linear-gradient(160deg, #1a2240 0%, #161d35 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.ss-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.ss-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ss-field label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.03em;
+}
+
+.ss-field input {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.ss-field input::placeholder {
+    color: rgba(255, 255, 255, 0.28);
+}
+
+.ss-field input:focus {
+    border-color: rgba(78, 120, 255, 0.5);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 0 0 3px rgba(78, 120, 255, 0.12);
+}
+
+/* Details card */
+.ss-details-card {
+    background: linear-gradient(160deg, #1a2240 0%, #161d35 100%);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    position: sticky;
+    top: 24px;
+}
+
+.ss-details-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 4px;
+}
+
+.ss-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ss-detail-row:last-of-type {
+    border-bottom: none;
+}
+
+.ss-detail-label {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.ss-detail-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.ss-detail-value.ss-price {
+    color: #6f8eff;
+    font-size: 1rem;
+}
+
+/* Actions */
+.ss-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.ss-btn-checkout {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #4e78ff 0%, #3f61d8 100%);
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px rgba(78, 120, 255, 0.35);
+}
+
+.ss-btn-checkout:hover {
+    background: linear-gradient(135deg, #5c84ff 0%, #4a6ee8 100%);
+    box-shadow: 0 6px 20px rgba(78, 120, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+.ss-btn-checkout:active {
+    transform: translateY(0);
+}
+
+.ss-btn-checkout:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ss-btn-back {
+    width: 100%;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: rgba(255, 255, 255, 0.7);
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.ss-btn-back:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .ss-body {
+        grid-template-columns: 1fr;
+    }
+
+    .ss-details-card {
+        position: static;
+    }
+}
+
+@media (max-width: 540px) {
+    .ss-section {
+        padding: 24px 16px 60px;
+    }
+
+    .ss-seat-grid {
+        padding: 20px;
+    }
+
+    .ss-seat {
+        width: 44px;
+        height: 44px;
+        font-size: 0.7rem;
+    }
+
+    .ss-field-row {
+        grid-template-columns: 1fr;
+    }
+}

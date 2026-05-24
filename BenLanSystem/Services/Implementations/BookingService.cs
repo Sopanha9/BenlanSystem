@@ -205,4 +205,16 @@ public class BookingService(ApplicationDbContext db) : IBookingService
                 }).ToList()
             }).ToListAsync();
     }
+
+    public async Task<IEnumerable<string>> GetOccupiedSeatNumbersAsync(long tripId)
+    {
+        var raw = await db.BookingPassengers
+            .Where(bp => bp.Booking.TripId == tripId && bp.Booking.BookingStatus != "Cancelled")
+            .Select(bp => bp.SeatNumber)
+            .Distinct()
+            .ToListAsync();
+
+        // Normalize legacy "A1" format to "1" for the new numeric seat grid
+        return raw.Select(s => s.StartsWith("A", StringComparison.OrdinalIgnoreCase) && s.Length > 1 ? s[1..] : s).ToList();
+    }
 }

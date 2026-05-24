@@ -22,9 +22,14 @@
         .admin-sidebar .admin-btn { color: #9ca3af; }
         .admin-sidebar { width: 260px; background: var(--admin-sidebar); color: #fff; display: flex; flex-direction: column; }
         .admin-sidebar-header { padding: 20px; font-weight: 700; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .admin-nav { list-style: none; padding: 12px 0; margin: 0; }
-        .admin-nav li a { display: block; padding: 10px 20px; color: #d1d5db; text-decoration: none; font-size: 14px; }
-        .admin-nav li a:hover, .admin-nav li a.active { color: #fff; background: rgba(255,255,255,0.06); }
+        .admin-nav { list-style: none; padding: 0; margin: 0; }
+        .admin-nav li a { display: block; padding: 8px 16px; margin: 2px 12px; color: #d1d5db; text-decoration: none; font-size: 14px; border-radius: 6px; }
+        .admin-nav li a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+        .admin-nav li a.active { color: #fff; background: var(--admin-accent); }
+        .admin-nav-section { padding: 16px 20px 4px; font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
+        .admin-sidebar-brand { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+        .admin-sidebar-brand-title { color: #fff; font-weight: 700; font-size: 18px; margin: 0; }
+        .admin-sidebar-brand-sub { color: #6b7280; font-size: 12px; margin-top: 2px; }
         .admin-main { flex: 1; display: flex; flex-direction: column; background: #f3f4f6; }
         .admin-topbar { background: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
         .admin-content { padding: 24px; flex: 1; }
@@ -70,15 +75,23 @@
 <body>
     <div class="admin-wrapper">
         <aside class="admin-sidebar">
-            <div class="admin-sidebar-header">BenLan Admin</div>
+            <div class="admin-sidebar-brand">
+                <div class="admin-sidebar-brand-title">Admin</div>
+                <div class="admin-sidebar-brand-sub">BenLan Operations Portal</div>
+            </div>
             <ul class="admin-nav">
                 <li><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Dashboard" ? "active" : "")">Dashboard</a></li>
+                <li class="admin-nav-section">Fleet Management</li>
                 <li><a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Trips" ? "active" : "")">Trips</a></li>
                 <li><a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Vehicles" ? "active" : "")">Vehicles</a></li>
+                <li class="admin-nav-section">Route &amp; Location</li>
                 <li><a asp-area="Admin" asp-controller="Routes" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Routes" ? "active" : "")">Routes</a></li>
                 <li><a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Locations" ? "active" : "")">Locations</a></li>
+                <li class="admin-nav-section">Booking System</li>
                 <li><a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Bookings" ? "active" : "")">Bookings</a></li>
+                <li class="admin-nav-section">Finance</li>
                 <li><a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Payments" ? "active" : "")">Payments</a></li>
+                <li class="admin-nav-section">System</li>
                 <li><a asp-area="Admin" asp-controller="Staff" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Staff" ? "active" : "")">Staff</a></li>
             </ul>
             <div style="margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); font-size:12px; color:#9ca3af;">
@@ -92,7 +105,10 @@
         <main class="admin-main">
             <div class="admin-topbar">
                 <span style="font-weight:600;">@ViewData["Title"]</span>
-                <a asp-area="" asp-controller="Home" asp-action="Index" style="font-size:14px; color:#4b5563; text-decoration:none;">← Back to Site</a>
+                <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#374151;">
+                    <div style="width:28px; height:28px; border-radius:50%; background:var(--admin-accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">@displayName.Substring(0,1).ToUpper()</div>
+                    <span style="font-weight:600;">@displayName</span>
+                </div>
             </div>
             <div class="admin-content">
                 @RenderBody()

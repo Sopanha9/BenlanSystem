@@ -10,4 +10,5 @@ public interface IBookingService
     Task<BookingDto?> CancelAsync(long id, long customerId, BookingCancelDto? cancelDto);
     Task<BookingDto?> UpdateStatusAsync(long id, long changedByUserId, BookingStatusUpdateDto dto);
     Task<IEnumerable<BookingDto>> GetAllAsync(int page = 1, int pageSize = 20);
+    Task<IEnumerable<string>> GetOccupiedSeatNumbersAsync(long tripId);
 }

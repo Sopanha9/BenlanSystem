@@ -1,0 +1,84 @@
+@{
+    ViewData["Title"] = "Select Seats";
+    ViewData["ActivePage"] = "Book";
+    var tripId = (long)(ViewData["TripId"] ?? 0);
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/selectseat.css" asp-append-version="true"/>
+}
+
+<section class="ss-section">
+    <div class="ss-container">
+        <div class="ss-header">
+            <h1 class="ss-title">Please select seats</h1>
+            <div class="ss-route-info">
+                <span class="ss-departs">Departs <span id="ss-from">...</span> &rarr; <span id="ss-to">...</span></span>
+                <span class="ss-date" id="ss-date">...</span>
+            </div>
+            <div class="ss-legend">
+                <div class="ss-legend-item"><span class="ss-legend-dot ss-available"></span>Available</div>
+                <div class="ss-legend-item"><span class="ss-legend-dot ss-booked"></span>Booked</div>
+                <div class="ss-legend-item"><span class="ss-legend-dot ss-selected"></span>Selected</div>
+            </div>
+        </div>
+
+        <div class="ss-body">
+            <div class="ss-left">
+                <div class="ss-seat-grid" id="ss-seat-grid">
+                    <div class="ss-loading">Loading seat map...</div>
+                </div>
+                <div class="ss-passenger-fields">
+                    <div class="ss-field-row">
+                        <div class="ss-field">
+                            <label>First Name</label>
+                            <input type="text" id="ss-firstname" placeholder="Sopanha" />
+                        </div>
+                        <div class="ss-field">
+                            <label>Last Name</label>
+                            <input type="text" id="ss-lastname" placeholder="Soo" />
+                        </div>
+                    </div>
+                    <div class="ss-field">
+                        <label>Phone Number</label>
+                        <input type="tel" id="ss-phone" placeholder="012 345 678" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="ss-right">
+                <div class="ss-details-card">
+                    <h3 class="ss-details-title">Details</h3>
+                    <div class="ss-detail-row">
+                        <span class="ss-detail-label">Vehicle Name</span>
+                        <span class="ss-detail-value" id="ss-vehicle">...</span>
+                    </div>
+                    <div class="ss-detail-row">
+                        <span class="ss-detail-label">Departure Time</span>
+                        <span class="ss-detail-value" id="ss-dep">...</span>
+                    </div>
+                    <div class="ss-detail-row">
+                        <span class="ss-detail-label">Arrival Time</span>
+                        <span class="ss-detail-value" id="ss-arr">...</span>
+                    </div>
+                    <div class="ss-detail-row">
+                        <span class="ss-detail-label">Seat Number</span>
+                        <span class="ss-detail-value" id="ss-seat-count">0</span>
+                    </div>
+                    <div class="ss-detail-row">
+                        <span class="ss-detail-label">Total Price</span>
+                        <span class="ss-detail-value ss-price" id="ss-total">$0.00</span>
+                    </div>
+                    <div class="ss-actions">
+                        <button class="ss-btn-back" onclick="history.back()">Back</button>
+                        <button class="ss-btn-checkout" id="ss-checkout-btn" onclick="checkout()">Check out, $0.00</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/selectseat.js" asp-append-version="true"></script>
+}

@@ -88,4 +88,12 @@ public class BookingController(IBookingService bookingService) : ControllerBase
         var result = await bookingService.GetAllAsync(page, pageSize);
         return Ok(result);
     }
+
+    [HttpGet("trip/{tripId:long}/seats")]
+    [AllowAnonymous]
+    public async Task<ActionResult<IEnumerable<string>>> GetOccupiedSeats(long tripId)
+    {
+        var seats = await bookingService.GetOccupiedSeatNumbersAsync(tripId);
+        return Ok(seats);
+    }
 }

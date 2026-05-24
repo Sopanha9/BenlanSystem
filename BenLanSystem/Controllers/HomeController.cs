@@ -67,6 +67,14 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult SelectSeat(long tripId)
+    {
+        ViewData["TripId"] = tripId;
+        ViewData["Title"] = "Select Seats";
+        ViewData["ActivePage"] = "Book";
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
