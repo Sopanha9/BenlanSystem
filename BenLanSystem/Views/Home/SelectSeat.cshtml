@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Select Seats";
+    ViewData["Title"] = "Select Bus Seats";
     ViewData["ActivePage"] = "Book";
     var tripId = (long)(ViewData["TripId"] ?? 0);
 }
@@ -8,70 +8,117 @@
     <link rel="stylesheet" href="~/css/selectseat.css" asp-append-version="true"/>
 }
 
-<section class="ss-section">
-    <div class="ss-container">
-        <div class="ss-header">
-            <h1 class="ss-title">Please select seats</h1>
-            <div class="ss-route-info">
-                <span class="ss-departs">Departs <span id="ss-from">...</span> &rarr; <span id="ss-to">...</span></span>
-                <span class="ss-date" id="ss-date">...</span>
+<section class="ss-page-section">
+    <div class="luxe-container">
+        <!-- Header Strip -->
+        <div class="ss-header-strip luxe-card" data-aos="fade-down">
+            <div class="ss-route-overview">
+                <span class="ss-badge"><i data-lucide="ticket"></i> Seat Reservation</span>
+                <h1 class="ss-route-title"><span id="ss-from">...</span> <i data-lucide="arrow-right"></i> <span id="ss-to">...</span></h1>
+                <div class="ss-meta-pills">
+                    <span class="ss-pill"><i data-lucide="calendar"></i> <span id="ss-date">...</span></span>
+                    <span class="ss-pill"><i data-lucide="clock"></i> <span id="ss-time-range">...</span></span>
+                    <span class="ss-pill"><i data-lucide="bus"></i> <span id="ss-vehicle-type">...</span></span>
+                </div>
             </div>
-            <div class="ss-legend">
-                <div class="ss-legend-item"><span class="ss-legend-dot ss-available"></span>Available</div>
-                <div class="ss-legend-item"><span class="ss-legend-dot ss-booked"></span>Booked</div>
-                <div class="ss-legend-item"><span class="ss-legend-dot ss-selected"></span>Selected</div>
+
+            <!-- Seat Legend -->
+            <div class="ss-legend-box">
+                <div class="legend-item"><span class="legend-seat seat-sample-avail"></span><span>Available</span></div>
+                <div class="legend-item"><span class="legend-seat seat-sample-sel"></span><span>Selected</span></div>
+                <div class="legend-item"><span class="legend-seat seat-sample-occ"></span><span>Booked</span></div>
             </div>
         </div>
 
-        <div class="ss-body">
-            <div class="ss-left">
-                <div class="ss-seat-grid" id="ss-seat-grid">
-                    <div class="ss-loading">Loading seat map...</div>
-                </div>
-                <div class="ss-passenger-fields">
-                    <div class="ss-field-row">
-                        <div class="ss-field">
-                            <label>First Name</label>
-                            <input type="text" id="ss-firstname" placeholder="Sopanha" />
+        <!-- Main Interactive Layout Grid -->
+        <div class="ss-layout-grid">
+            <!-- Left: Interactive Vehicle Deck & Passenger Form -->
+            <div class="ss-interactive-col">
+                <!-- Bus Cabin Deck -->
+                <div class="ss-cabin-card luxe-card" data-aos="fade-up">
+                    <div class="cabin-header">
+                        <div class="cabin-driver">
+                            <i data-lucide="steering-wheel" class="driver-wheel"></i>
+                            <span class="driver-tag">Front Cabin</span>
                         </div>
-                        <div class="ss-field">
-                            <label>Last Name</label>
-                            <input type="text" id="ss-lastname" placeholder="Soo" />
+                        <span class="entry-door-tag"><i data-lucide="door-open"></i> Entry</span>
+                    </div>
+
+                    <div class="cabin-seat-grid" id="ss-seat-grid">
+                        <div class="ss-loading">
+                            <div class="spinner-border text-light" role="status"></div>
+                            <p>Loading interactive seat configuration...</p>
                         </div>
                     </div>
-                    <div class="ss-field">
-                        <label>Phone Number</label>
-                        <input type="tel" id="ss-phone" placeholder="012 345 678" />
+                </div>
+
+                <!-- Passenger Details Card -->
+                <div class="ss-passenger-card luxe-card" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="passenger-card-title"><i data-lucide="user-check"></i> Lead Passenger Details</h3>
+                    <div class="passenger-form-grid">
+                        <div class="p-input-group">
+                            <label class="p-label">First Name *</label>
+                            <input type="text" id="ss-firstname" placeholder="e.g. Sopanha" required />
+                        </div>
+                        <div class="p-input-group">
+                            <label class="p-label">Last Name</label>
+                            <input type="text" id="ss-lastname" placeholder="e.g. Sok" />
+                        </div>
+                        <div class="p-input-group full-width">
+                            <label class="p-label">Phone Number (For Boarding Pass SMS / WhatsApp) *</label>
+                            <input type="tel" id="ss-phone" placeholder="e.g. 012 345 678" required />
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="ss-right">
-                <div class="ss-details-card">
-                    <h3 class="ss-details-title">Details</h3>
-                    <div class="ss-detail-row">
-                        <span class="ss-detail-label">Vehicle Name</span>
-                        <span class="ss-detail-value" id="ss-vehicle">...</span>
+            <!-- Right: Order Summary Sidebar -->
+            <div class="ss-summary-col">
+                <div class="ss-summary-card luxe-card" data-aos="fade-left">
+                    <h3 class="summary-title"><i data-lucide="receipt"></i> Booking Breakdown</h3>
+
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span class="sum-label">Coach</span>
+                            <span class="sum-val" id="ss-vehicle">...</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="sum-label">Departure</span>
+                            <span class="sum-val" id="ss-dep">...</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="sum-label">Arrival</span>
+                            <span class="sum-val" id="ss-arr">...</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="sum-label">Selected Seats</span>
+                            <span class="sum-val sum-highlight" id="ss-selected-list">None</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="sum-label">Seat Count</span>
+                            <span class="sum-val" id="ss-seat-count">0</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row total-row">
+                            <span class="sum-label">Total Amount</span>
+                            <span class="sum-total-price" id="ss-total">$0.00</span>
+                        </div>
                     </div>
-                    <div class="ss-detail-row">
-                        <span class="ss-detail-label">Departure Time</span>
-                        <span class="ss-detail-value" id="ss-dep">...</span>
+
+                    <div class="summary-actions">
+                        <button class="btn-luxe-primary btn-checkout-action" id="ss-checkout-btn" onclick="checkout()">
+                            <span>Proceed to Payment</span>
+                            <i data-lucide="credit-card"></i>
+                        </button>
+                        <button class="btn-luxe-ghost btn-back-action" onclick="history.back()">
+                            <i data-lucide="arrow-left"></i>
+                            <span>Back to Schedules</span>
+                        </button>
                     </div>
-                    <div class="ss-detail-row">
-                        <span class="ss-detail-label">Arrival Time</span>
-                        <span class="ss-detail-value" id="ss-arr">...</span>
-                    </div>
-                    <div class="ss-detail-row">
-                        <span class="ss-detail-label">Seat Number</span>
-                        <span class="ss-detail-value" id="ss-seat-count">0</span>
-                    </div>
-                    <div class="ss-detail-row">
-                        <span class="ss-detail-label">Total Price</span>
-                        <span class="ss-detail-value ss-price" id="ss-total">$0.00</span>
-                    </div>
-                    <div class="ss-actions">
-                        <button class="ss-btn-back" onclick="history.back()">Back</button>
-                        <button class="ss-btn-checkout" id="ss-checkout-btn" onclick="checkout()">Check out, $0.00</button>
+
+                    <div class="trust-guarantee-note">
+                        <i data-lucide="shield-check"></i>
+                        <span>Guaranteed seat reservation with instant confirmation.</span>
                     </div>
                 </div>
             </div>

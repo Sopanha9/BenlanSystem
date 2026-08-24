@@ -1,78 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - BenLan</title>
-    <meta name="description" content="@(ViewData["Description"] ?? "BenLan - Book your travel tickets easily. Explore Cambodia and beyond with our convenient booking system.")"/>
+    <title>@ViewData["Title"] - BenLan Luxury Transit</title>
+    <meta name="description" content="@(ViewData["Description"] ?? "BenLan - Modern, safe and premium intercity bus and luxury transport across Cambodia.")"/>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Vendor Stylesheets -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://npmcdn.com/flatpickr/dist/themes/dark.css" id="flatpickr-dark-theme">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    
+    <!-- Core Application Design System -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     <link rel="stylesheet" href="~/BenLanSystem.styles.css" asp-append-version="true"/>
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
+<body class="luxe-body">
     @{
         var displayName = User?.Identity?.Name ?? "User";
         var profileInitial = displayName.Length > 0 ? char.ToUpperInvariant(displayName[0]).ToString() : "U";
         var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+        var isAdminOrStaff = User?.IsInRole("Admin") == true || User?.IsInRole("Staff") == true;
     }
-    <!-- Navbar -->
-    <header>
-        <nav class="benlan-navbar" id="main-navbar">
-            <div class="navbar-inner">
-                <a class="navbar-logo" asp-area="" asp-controller="Home" asp-action="Index" id="navbar-logo">
-                    <img src="~/designs/image.png" alt="BenLan Logo" />
+    
+    <!-- Top Announcement Bar -->
+    <div class="top-announcement" id="top-announcement">
+        <div class="announcement-content">
+            <span class="announcement-badge"><i data-lucide="sparkles"></i> New</span>
+            <span>Premium Sleeper & Express Routes now available between Phnom Penh, Siem Reap & Sihanoukville!</span>
+        </div>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <header class="luxe-header" id="main-header">
+        <nav class="luxe-navbar" id="main-navbar">
+            <div class="navbar-container">
+                <!-- Brand Logo -->
+                <a class="brand-logo" asp-area="" asp-controller="Home" asp-action="Index" id="navbar-logo">
+                    <span class="logo-mark"><i data-lucide="bus-front"></i></span>
+                    <span class="logo-text">BEN<span class="logo-accent">LAN</span></span>
                 </a>
-                <ul class="navbar-links" id="navbar-links">
-                    <li><a asp-controller="Home" asp-action="Index"   class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Home"    ? "active" : "")" id="nav-home">Home</a></li>
-                    <li><a asp-controller="Home" asp-action="About"   class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "About"   ? "active" : "")" id="nav-about">About us</a></li>
-                    <li><a asp-controller="Home" asp-action="BookTicket" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Book" ? "active" : "")" id="nav-book">Book ticket</a></li>
-                    <li><a asp-controller="Home" asp-action="Blog"    class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Blog"    ? "active" : "")" id="nav-blog">Blog</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">Contact</a></li>
-                    <li><a asp-controller="Home" asp-action="MyBookings" class="nav-link-item @(ViewData["ActivePage"]?.ToString() == "MyBookings" ? "active" : "")" id="nav-mybooking">My booking</a></li>
-                    @if (!isAuthenticated)
-                    {
-                        <li class="auth-nav-item"><a asp-controller="Account" asp-action="Login" class="nav-link-item" id="nav-login">Login</a></li>
-                        <li class="auth-nav-item"><a asp-controller="Account" asp-action="Register" class="nav-link-item" id="nav-register">Register</a></li>
-                    }
+
+                <!-- Desktop Navigation Links -->
+                <ul class="nav-menu" id="navbar-links">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")" id="nav-home">
+                            <i data-lucide="home" class="nav-icon"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="BookTicket" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Book" ? "active" : "")" id="nav-book">
+                            <i data-lucide="ticket" class="nav-icon"></i>
+                            <span>Book Ticket</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="MyBookings" class="nav-item @(ViewData["ActivePage"]?.ToString() == "MyBookings" ? "active" : "")" id="nav-mybooking">
+                            <i data-lucide="calendar-check" class="nav-icon"></i>
+                            <span>My Bookings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="Blog" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Blog" ? "active" : "")" id="nav-blog">
+                            <i data-lucide="newspaper" class="nav-icon"></i>
+                            <span>Travel Blog</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="About" class="nav-item @(ViewData["ActivePage"]?.ToString() == "About" ? "active" : "")" id="nav-about">
+                            <i data-lucide="shield-check" class="nav-icon"></i>
+                            <span>About</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Home" asp-action="Contact" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">
+                            <i data-lucide="map-pin" class="nav-icon"></i>
+                            <span>Contact</span>
+                        </a>
+                    </li>
                 </ul>
-                <div class="navbar-profile" id="navbar-profile">
+
+                <!-- Action Controls (Theme Switch + Auth) -->
+                <div class="navbar-actions">
+                    <!-- Dark / Light Mode Switch -->
+                    <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle dark/light theme" title="Toggle Theme">
+                        <i data-lucide="sun" class="theme-icon-light"></i>
+                        <i data-lucide="moon" class="theme-icon-dark"></i>
+                    </button>
+
+                    @if (isAdminOrStaff)
+                    {
+                        <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="btn-admin-portal" title="Admin Operations Portal">
+                            <i data-lucide="layout-dashboard"></i>
+                            <span>Admin</span>
+                        </a>
+                    }
+
                     @if (isAuthenticated)
                     {
-                        <div class="auth-badge" id="profile-button" aria-label="User profile">@profileInitial</div>
+                        <div class="user-pill">
+                            <div class="user-avatar" title="@displayName">@profileInitial</div>
+                            <span class="user-name">@displayName.Split('@')[0]</span>
+                        </div>
                         <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
                             @Html.AntiForgeryToken()
-                            <button type="submit" class="auth-link-btn">Logout</button>
+                            <button type="submit" class="btn-logout" title="Sign Out">
+                                <i data-lucide="log-out"></i>
+                            </button>
                         </form>
                     }
                     else
                     {
-                        <a asp-controller="Account" asp-action="Login" class="auth-link-btn auth-link-ghost">Login</a>
-                        <a asp-controller="Account" asp-action="Register" class="auth-link-btn auth-link-solid">Register</a>
+                        <a asp-controller="Account" asp-action="Login" class="btn-luxe-ghost">Sign in</a>
+                        <a asp-controller="Account" asp-action="Register" class="btn-luxe-primary">Get Started</a>
                     }
+
+                    <!-- Mobile Drawer Toggle -->
+                    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">
+                        <i data-lucide="menu" class="menu-open-icon"></i>
+                        <i data-lucide="x" class="menu-close-icon hidden"></i>
+                    </button>
                 </div>
-                <!-- Mobile hamburger -->
-                <button class="navbar-hamburger" id="navbar-hamburger" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+            </div>
+
+            <!-- Mobile Navigation Drawer -->
+            <div class="mobile-drawer" id="mobile-drawer">
+                <ul class="mobile-nav-list">
+                    <li><a asp-controller="Home" asp-action="Index" class="mobile-nav-item"><i data-lucide="home"></i> Home</a></li>
+                    <li><a asp-controller="Home" asp-action="BookTicket" class="mobile-nav-item"><i data-lucide="ticket"></i> Book Ticket</a></li>
+                    <li><a asp-controller="Home" asp-action="MyBookings" class="mobile-nav-item"><i data-lucide="calendar-check"></i> My Bookings</a></li>
+                    <li><a asp-controller="Home" asp-action="Blog" class="mobile-nav-item"><i data-lucide="newspaper"></i> Travel Blog</a></li>
+                    <li><a asp-controller="Home" asp-action="About" class="mobile-nav-item"><i data-lucide="shield-check"></i> About Us</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact" class="mobile-nav-item"><i data-lucide="map-pin"></i> Contact & Stations</a></li>
+                    @if (isAdminOrStaff)
+                    {
+                        <li><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="mobile-nav-item admin-link"><i data-lucide="layout-dashboard"></i> Admin Operations</a></li>
+                    }
+                    @if (!isAuthenticated)
+                    {
+                        <li class="mobile-auth-divider"></li>
+                        <li><a asp-controller="Account" asp-action="Login" class="mobile-nav-item"><i data-lucide="log-in"></i> Sign In</a></li>
+                        <li><a asp-controller="Account" asp-action="Register" class="mobile-nav-item highlight"><i data-lucide="user-plus"></i> Create Account</a></li>
+                    }
+                </ul>
             </div>
         </nav>
     </header>
 
-    <main role="main">
+    <!-- Main View Content -->
+    <main role="main" class="luxe-main-content">
         @RenderBody()
     </main>
 
+    <!-- Footer Partial -->
     @await Html.PartialAsync("_Footer")
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/site.js" asp-append-version="true"></script>
-@await RenderSectionAsync("Scripts", required: false)
+    <!-- JS Scripts & Libraries -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Flatpickr Datepicker -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Swiper Carousel -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- SweetAlert2 Modals -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- AOS Animate On Scroll -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

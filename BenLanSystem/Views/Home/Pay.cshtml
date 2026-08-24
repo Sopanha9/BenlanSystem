@@ -1,45 +1,261 @@
 @{
-    ViewData["Title"] = "Payment";
+    ViewData["Title"] = "Checkout & Payment";
     ViewData["ActivePage"] = "Book";
     var bookingId = (long)(ViewData["BookingId"] ?? 0);
 }
 
 @section Styles {
     <style>
-        .pay-section { padding: 40px 24px; max-width: 560px; margin: 0 auto; }
-        .pay-header { font-size: 24px; font-weight: 700; margin-bottom: 20px; color:#111827; }
-        .pay-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-        .pay-summary { margin-bottom: 20px; }
-        .pay-summary-row { display: flex; justify-content: space-between; gap: 16px; padding: 6px 0; font-size: 14px; color:#374151; }
-        .pay-total { font-weight: 700; font-size: 18px; border-top: 1px solid #e5e7eb; padding-top: 10px; margin-top: 8px; color:#111827; }
-        .pay-methods { display: grid; gap: 10px; margin-bottom: 20px; }
-        .pay-method { display: flex; align-items: center; gap: 12px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: border-color .2s; color:#111827; }
-        .pay-method:hover, .pay-method.selected { border-color: #4e78ff; background: #f5f7ff; }
-        .pay-method input { accent-color: #4e78ff; }
-        .pay-btn { width: 100%; background: #4e78ff; color: #fff; border: none; padding: 14px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
-        .pay-btn:disabled { opacity: .6; cursor: not-allowed; }
-        .pay-status { margin-top: 12px; text-align: center; font-weight: 500; min-height: 22px; }
+        .pay-page-section {
+            padding: 50px 0 80px;
+        }
+        .pay-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 32px;
+            align-items: start;
+        }
+        
+        .pay-methods-card, .pay-order-summary {
+            padding: 32px;
+        }
+        
+        .pay-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.35rem;
+            margin-bottom: 24px;
+        }
+        .pay-section-title i { width: 22px; height: 22px; }
+
+        .payment-options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .pay-option-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-radius: 14px;
+            border: 2px solid var(--border-medium);
+            background: var(--bg-surface);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .pay-option-card:hover {
+            border-color: var(--text-primary);
+            background: var(--bg-pill);
+        }
+        .pay-option-card.selected {
+            border-color: var(--text-primary);
+            background: var(--bg-pill);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.08);
+        }
+
+        .pay-option-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .pay-radio {
+            accent-color: var(--text-primary);
+            width: 18px;
+            height: 18px;
+        }
+        .pay-method-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .pay-method-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--brand-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        /* KHQR Simulation Area */
+        .khqr-preview-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 16px;
+        }
+        .qr-placeholder {
+            width: 160px;
+            height: 160px;
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+        .qr-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .qr-instruction {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Summary Card */
+        .pay-order-summary {
+            position: sticky;
+            top: 96px;
+        }
+        .pay-summary-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .pay-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9375rem;
+        }
+        .pay-summary-row .label { color: var(--text-secondary); }
+        .pay-summary-row .val { font-weight: 600; color: var(--text-primary); }
+        .pay-divider { height: 1px; background: var(--border-subtle); margin: 6px 0; }
+        .pay-total-row { font-size: 1.125rem; }
+        .pay-total-val { font-size: 1.75rem; font-weight: 800; color: var(--text-primary); }
+
+        .btn-submit-pay {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+        }
+        
+        .pay-status-message {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        @@media (max-width: 960px) {
+            .pay-grid-layout { grid-template-columns: 1fr; }
+            .pay-order-summary { position: static; }
+        }
     </style>
 }
 
-<section class="pay-section">
-    <h1 class="pay-header">Complete Payment</h1>
-    <div class="pay-card">
-        <div id="pay-summary" class="pay-summary">
-            <div class="pay-summary-row"><span>Booking ID</span><span>#@bookingId</span></div>
-            <div class="pay-summary-row"><span>Loading...</span><span></span></div>
-        </div>
+<section class="pay-page-section">
+    <div class="luxe-container">
+        <div class="pay-grid-layout">
+            <!-- Left: Method Selection -->
+            <div class="pay-methods-card luxe-card" data-aos="fade-right">
+                <h2 class="pay-section-title"><i data-lucide="credit-card"></i> Select Payment Method</h2>
 
-        <div class="pay-methods" id="pay-methods">
-            <label class="pay-method selected"><input type="radio" name="payMethod" value="ABA" checked /><span>ABA Bank</span></label>
-            <label class="pay-method"><input type="radio" name="payMethod" value="ACLEDA" /><span>ACLEDA Bank</span></label>
-            <label class="pay-method"><input type="radio" name="payMethod" value="Wing" /><span>Wing</span></label>
-            <label class="pay-method"><input type="radio" name="payMethod" value="Cash" /><span>Cash at station</span></label>
-            <label class="pay-method"><input type="radio" name="payMethod" value="Card" /><span>Credit/Debit Card</span></label>
-        </div>
+                <div class="payment-options-grid" id="pay-methods">
+                    <label class="pay-option-card selected">
+                        <div class="pay-option-left">
+                            <input type="radio" name="payMethod" value="ABA" class="pay-radio" checked />
+                            <div>
+                                <div class="pay-method-name">ABA KHQR</div>
+                                <span class="qr-instruction">Scan with ABA Mobile or any Bakong bank app</span>
+                            </div>
+                        </div>
+                        <span class="pay-method-tag">Instant</span>
+                    </label>
 
-        <button class="pay-btn" id="pay-btn" onclick="submitPayment()">Submit Payment</button>
-        <div class="pay-status" id="pay-status"></div>
+                    <label class="pay-option-card">
+                        <div class="pay-option-left">
+                            <input type="radio" name="payMethod" value="ACLEDA" class="pay-radio" />
+                            <div>
+                                <div class="pay-method-name">ACLEDA Mobile / QR</div>
+                                <span class="qr-instruction">Direct ACLEDA KHQR digital transfer</span>
+                            </div>
+                        </div>
+                        <span class="pay-method-tag">Instant</span>
+                    </label>
+
+                    <label class="pay-option-card">
+                        <div class="pay-option-left">
+                            <input type="radio" name="payMethod" value="Wing" class="pay-radio" />
+                            <div>
+                                <div class="pay-method-name">Wing Bank / WingPay</div>
+                                <span class="qr-instruction">Wing digital wallet payment</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="pay-option-card">
+                        <div class="pay-option-left">
+                            <input type="radio" name="payMethod" value="Card" class="pay-radio" />
+                            <div>
+                                <div class="pay-method-name">Credit or Debit Card</div>
+                                <span class="qr-instruction">Visa, Mastercard, UnionPay</span>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label class="pay-option-card">
+                        <div class="pay-option-left">
+                            <input type="radio" name="payMethod" value="Cash" class="pay-radio" />
+                            <div>
+                                <div class="pay-method-name">Pay at Station Counter</div>
+                                <span class="qr-instruction">Present booking reference at terminal</span>
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <!-- KHQR Preview Area -->
+                <div class="khqr-preview-box" id="khqr-box">
+                    <div class="qr-placeholder">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BENLAN-BOOKING-@bookingId" alt="KHQR Code" />
+                    </div>
+                    <p class="qr-instruction">Scan to complete payment via any Cambodian Mobile Banking App</p>
+                </div>
+            </div>
+
+            <!-- Right: Order Summary Sidebar -->
+            <div class="pay-order-summary luxe-card" data-aos="fade-left">
+                <h3 class="pay-section-title"><i data-lucide="receipt"></i> Booking Summary</h3>
+
+                <div class="pay-summary-rows" id="pay-summary">
+                    <div class="pay-summary-row">
+                        <span class="label">Booking Ref</span>
+                        <span class="val">#@bookingId</span>
+                    </div>
+                    <div class="pay-summary-row">
+                        <span class="label">Loading details...</span>
+                        <span class="val"></span>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-luxe-primary btn-submit-pay" id="pay-btn" onclick="submitPayment()">
+                    <span>Confirm &amp; Pay Now</span>
+                    <i data-lucide="check-circle-2"></i>
+                </button>
+
+                <div class="pay-status-message" id="pay-status"></div>
+
+                <div class="trust-guarantee-note" style="margin-top:20px;">
+                    <i data-lucide="lock" style="width:16px;height:16px;color:var(--brand-emerald);"></i>
+                    <span>256-bit encrypted checkout. Boarding pass generated automatically upon payment.</span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -52,55 +268,70 @@
         return String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     }
 
-    async function readError(res) {
-        try {
-            const data = await res.json();
-            return data.message || JSON.stringify(data);
-        } catch {
-            return await res.text();
-        }
-    }
-
     async function loadBooking() {
         if (!bookingId) {
-            document.getElementById('pay-summary').innerHTML = '<div class="pay-summary-row"><span>Missing booking ID</span></div>';
+            document.getElementById('pay-summary').innerHTML = '<div class="pay-summary-row"><span class="label">Missing booking ID</span></div>';
             document.getElementById('pay-btn').disabled = true;
             return;
         }
 
-        const res = await fetch(`/api/Booking/${bookingId}`);
-        if (res.status === 401) { window.location = '/Account/Login'; return; }
-        if (!res.ok) {
-            document.getElementById('pay-summary').innerHTML = '<div class="pay-summary-row"><span>Booking not found</span></div>';
-            document.getElementById('pay-btn').disabled = true;
-            return;
-        }
-
-        booking = await res.json();
-        const total = Number(booking.totalAmount || booking.seatsBooked * booking.unitPrice || 0).toFixed(2);
-        document.getElementById('pay-summary').innerHTML = `
-            <div class="pay-summary-row"><span>Booking ID</span><span>#${booking.id}</span></div>
-            <div class="pay-summary-row"><span>Route</span><span>${esc(booking.originName)} to ${esc(booking.destinationName)}</span></div>
-            <div class="pay-summary-row"><span>Seats</span><span>${booking.seatsBooked}</span></div>
-            <div class="pay-summary-row pay-total"><span>Total</span><span>$${total}</span></div>
-        `;
-
-        const existingRes = await fetch(`/api/Payment/booking/${booking.id}`);
-        if (existingRes.ok) {
-            const payments = await existingRes.json();
-            const paid = payments.find(p => p.paymentStatus === 'Paid');
-            if (paid) {
-                document.getElementById('pay-status').textContent = 'This booking is already paid.';
-                document.getElementById('pay-status').style.color = '#065f46';
+        try {
+            const res = await fetch(`/api/Booking/${bookingId}`);
+            if (res.status === 401) { window.location.href = '/Account/Login'; return; }
+            if (!res.ok) {
+                document.getElementById('pay-summary').innerHTML = '<div class="pay-summary-row"><span class="label">Booking reference not found</span></div>';
                 document.getElementById('pay-btn').disabled = true;
+                return;
             }
+
+            booking = await res.json();
+            const total = Number(booking.totalAmount || booking.seatsBooked * booking.unitPrice || 0).toFixed(2);
+            
+            document.getElementById('pay-summary').innerHTML = `
+                <div class="pay-summary-row">
+                    <span class="label">Booking Reference</span>
+                    <span class="val">#${booking.id}</span>
+                </div>
+                <div class="pay-summary-row">
+                    <span class="label">Route</span>
+                    <span class="val">${esc(booking.originName)} &rarr; ${esc(booking.destinationName)}</span>
+                </div>
+                <div class="pay-summary-row">
+                    <span class="label">Seats Reserved</span>
+                    <span class="val">${booking.seatsBooked} seat(s)</span>
+                </div>
+                <div class="pay-summary-row">
+                    <span class="label">Price per seat</span>
+                    <span class="val">$${Number(booking.unitPrice || 0).toFixed(2)}</span>
+                </div>
+                <div class="pay-divider"></div>
+                <div class="pay-summary-row pay-total-row">
+                    <span class="label">Total Payable</span>
+                    <span class="pay-total-val">$${total}</span>
+                </div>
+            `;
+
+            // Check if already paid
+            const existingRes = await fetch(`/api/Payment/booking/${booking.id}`);
+            if (existingRes.ok) {
+                const payments = await existingRes.json();
+                const paid = payments.find(p => p.paymentStatus === 'Paid');
+                if (paid) {
+                    document.getElementById('pay-status').innerHTML = '<span class="badge-luxe badge-success"><i data-lucide="check"></i> Booking Paid &amp; Confirmed</span>';
+                    document.getElementById('pay-btn').disabled = true;
+                }
+            }
+
+            if (window.lucide) window.lucide.createIcons();
+        } catch (e) {
+            document.getElementById('pay-summary').innerHTML = '<div class="pay-summary-row"><span class="label">Failed to load booking.</span></div>';
         }
     }
 
     document.querySelectorAll('input[name="payMethod"]').forEach(r => {
         r.addEventListener('change', function() {
-            document.querySelectorAll('.pay-method').forEach(l => l.classList.remove('selected'));
-            this.closest('.pay-method').classList.add('selected');
+            document.querySelectorAll('.pay-option-card').forEach(l => l.classList.remove('selected'));
+            this.closest('.pay-option-card').classList.add('selected');
         });
     });
 
@@ -109,28 +340,47 @@
         const method = document.querySelector('input[name="payMethod"]:checked').value;
         const amount = Number(booking.totalAmount || booking.seatsBooked * booking.unitPrice || 0);
         const btn = document.getElementById('pay-btn');
-        const status = document.getElementById('pay-status');
+        
         btn.disabled = true;
-        status.textContent = 'Submitting...';
-        status.style.color = '#374151';
+        btn.innerHTML = '<div class="spinner-border spinner-border-sm text-dark" role="status"></div> <span>Processing payment...</span>';
 
-        const res = await fetch('/api/Payment', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ bookingId: booking.id, amount, paymentMethod: method, transactionRef: null })
-        });
+        try {
+            const res = await fetch('/api/Payment', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    bookingId: booking.id,
+                    amount: amount,
+                    paymentMethod: method,
+                    transactionRef: 'TXN-' + Math.random().toString(36).substring(2, 9).toUpperCase()
+                })
+            });
 
-        if (res.ok) {
-            status.textContent = method === 'Cash' ? 'Cash payment noted. Please pay at the station.' : 'Payment submitted for staff verification.';
-            status.style.color = '#065f46';
-            setTimeout(() => window.location.href = '/Home/MyBookings', 1200);
-        } else {
-            status.textContent = await readError(res);
-            status.style.color = '#991b1b';
+            if (res.ok) {
+                window.BenLanToast?.success(
+                    'Payment Confirmed!',
+                    method === 'Cash' ? 'Cash payment noted. Please pay at the counter.' : 'Your booking has been successfully paid!'
+                );
+                setTimeout(() => window.location.href = '/Home/MyBookings', 1500);
+            } else {
+                let err = 'Payment could not be processed.';
+                try {
+                    const data = await res.json();
+                    err = data.message || JSON.stringify(data);
+                } catch { }
+                window.BenLanToast?.error('Payment Failed', err);
+                btn.disabled = false;
+                btn.innerHTML = '<span>Confirm &amp; Pay Now</span> <i data-lucide="check-circle-2"></i>';
+                if (window.lucide) window.lucide.createIcons();
+            }
+        } catch (e) {
+            window.BenLanToast?.error('Network Error', e.message);
             btn.disabled = false;
+            btn.innerHTML = '<span>Confirm &amp; Pay Now</span> <i data-lucide="check-circle-2"></i>';
+            if (window.lucide) window.lucide.createIcons();
         }
     }
 
-    loadBooking();
+    document.addEventListener('DOMContentLoaded', loadBooking);
 </script>
 }

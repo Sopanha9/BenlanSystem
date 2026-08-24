@@ -1,321 +1,360 @@
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Operations Dashboard";
     ViewData["AdminPage"] = "Dashboard";
     Layout = "_LayoutAdmin";
 }
 
 @section Styles {
 <style>
-.dash-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
-    flex-wrap: wrap;
-}
-.dash-toolbar-left {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.dash-toolbar-left h1 {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-    color: #111827;
-}
-.dash-toolbar-left p {
-    font-size: 13px;
-    color: #6b7280;
-    margin: 0;
-}
-.dash-toolbar-right {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-.dash-toolbar-right input,
-.dash-toolbar-right select {
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 13px;
-    color: #374151;
-    background: #fff;
-    outline: none;
-}
-.dash-toolbar-right input::placeholder {
-    color: #9ca3af;
-}
-.dash-stat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 24px;
-}
-.dash-stat-card {
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-.dash-stat-label {
-    font-size: 12px;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-.dash-stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #111827;
-    margin-top: 4px;
-}
-.dash-stat-sub {
-    font-size: 12px;
-    color: #6b7280;
-    margin-top: 2px;
-}
-.dash-stat-sub.positive {
-    color: #16a34a;
-}
-.dash-stat-sub.negative {
-    color: #ef4444;
-}
-.dash-content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 16px;
-}
-.dash-panel {
-    background: #fff;
-    border-radius: 8px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    padding: 20px;
-}
-.dash-panel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-}
-.dash-panel-header h2 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #111827;
-    margin: 0;
-}
-.dash-panel-header p {
-    font-size: 12px;
-    color: #6b7280;
-    margin: 4px 0 0;
-}
-.dash-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-}
-.dash-table th {
-    text-align: left;
-    padding: 10px 12px;
-    background: #f9fafb;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 1px solid #e5e7eb;
-}
-.dash-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #f3f4f6;
-    color: #374151;
-}
-.dash-table tr:last-child td {
-    border-bottom: none;
-}
-.dash-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-}
-.dash-badge-green {
-    background: #dcfce7;
-    color: #166534;
-}
-.dash-badge-yellow {
-    background: #fef9c3;
-    color: #854d0e;
-}
-.dash-badge-red {
-    background: #fee2e2;
-    color: #991b1b;
-}
-.dash-alert-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.dash-alert-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #e5e7eb;
-    background: #fafafa;
-}
-.dash-alert-item.danger {
-    border-color: #fecaca;
-    background: #fef2f2;
-}
-.dash-alert-item.warning {
-    border-color: #fde047;
-    background: #fefce8;
-}
-.dash-alert-item.info {
-    border-color: #bfdbfe;
-    background: #eff6ff;
-}
-.dash-alert-text {
-    font-size: 13px;
-    color: #374151;
-    line-height: 1.4;
-}
-.dash-alert-action {
-    padding: 5px 12px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    text-decoration: none;
-    display: inline-block;
-}
-.dash-alert-action.danger {
-    background: #ef4444;
-    color: #fff;
-}
-.dash-alert-action.warning {
-    background: #6b7280;
-    color: #fff;
-}
-.dash-alert-action.info {
-    background: #4e78ff;
-    color: #fff;
-}
-@@media (max-width: 992px) {
-    .dash-content-grid {
-        grid-template-columns: 1fr;
+    .dash-header-strip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 16px;
     }
-}
-@@media (max-width: 760px) {
-    .dash-toolbar {
+    .dash-title-group h1 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        margin: 0;
+    }
+    .dash-title-group p {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        margin: 4px 0 0;
+    }
+
+    /* KPI Metrics Grid */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 32px;
+    }
+    .kpi-card {
+        padding: 24px;
+        display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
     }
-    .dash-stat-grid {
-        grid-template-columns: 1fr 1fr;
+    .kpi-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
-}
-@@media (max-width: 480px) {
-    .dash-stat-grid {
-        grid-template-columns: 1fr;
+    .kpi-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
     }
-}
+    .kpi-icon-box {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: var(--bg-pill);
+        border: 1px solid var(--border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-primary);
+    }
+    .kpi-icon-box i { width: 18px; height: 18px; }
+    .kpi-val {
+        font-size: 2rem;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--text-primary);
+    }
+    .kpi-sub {
+        font-size: 0.8125rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .kpi-sub.positive { color: var(--brand-emerald); font-weight: 600; }
+
+    /* Analytics Chart Grid */
+    .charts-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        margin-bottom: 32px;
+    }
+    .chart-card {
+        padding: 28px;
+    }
+    .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+    .chart-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 0;
+    }
+    .chart-container {
+        position: relative;
+        height: 280px;
+        width: 100%;
+    }
+
+    /* Tables & Activity Grid */
+    .data-grid-section {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+    }
+    .data-card {
+        padding: 28px;
+    }
+    
+    .luxe-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 0.875rem;
+    }
+    .luxe-table th {
+        padding: 12px 16px;
+        background: var(--bg-pill);
+        color: var(--text-muted);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-subtle);
+    }
+    .luxe-table td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+    }
+    .luxe-table tr:hover td {
+        background: var(--bg-pill);
+        color: var(--text-primary);
+    }
+
+    .alert-item-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        border-radius: 12px;
+        background: var(--bg-pill);
+        border: 1px solid var(--border-subtle);
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+    .alert-text {
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    @@media (max-width: 1100px) {
+        .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        .charts-grid, .data-grid-section { grid-template-columns: 1fr; }
+    }
+    @@media (max-width: 600px) {
+        .kpi-grid { grid-template-columns: 1fr; }
+    }
 </style>
 }
 
-<div class="dash-toolbar">
-    <div class="dash-toolbar-left">
-        <h1>Dashboard</h1>
-        <p>Live operational overview with real system data</p>
+<div class="dash-header-strip">
+    <div class="dash-title-group">
+        <h1>Operations Dashboard</h1>
+        <p>Live revenue metrics, vehicle utilization, and booking performance</p>
     </div>
-    <div class="dash-toolbar-right">
-        <input type="text" id="dash-search" placeholder="Search booking ID, user, route" />
-        <select id="dash-period">
-            <option>Last 7 days</option>
-            <option>Last 30 days</option>
-            <option>This month</option>
-            <option>All time</option>
-        </select>
-        <button class="admin-btn admin-btn-primary" onclick="exportDashboard()">Export</button>
+
+    <div>
+        <button class="btn-luxe-outline" onclick="loadAllDashboardData()">
+            <i data-lucide="refresh-cw"></i>
+            <span>Refresh Telemetry</span>
+        </button>
     </div>
 </div>
 
-<div class="dash-stat-grid">
-    <div class="dash-stat-card">
-        <div class="dash-stat-label">Total Bookings</div>
-        <div class="dash-stat-value" id="stat-total-bookings">0</div>
-        <div class="dash-stat-sub" id="stat-bookings-month">0 this month</div>
+<!-- KPI Summary Cards -->
+<div class="kpi-grid">
+    <div class="kpi-card luxe-card">
+        <div class="kpi-card-top">
+            <span class="kpi-label">Gross Revenue</span>
+            <div class="kpi-icon-box"><i data-lucide="dollar-sign"></i></div>
+        </div>
+        <div class="kpi-val" id="stat-revenue">$0</div>
+        <div class="kpi-sub positive"><i data-lucide="trending-up"></i> <span id="stat-revenue-target">Target: $150k</span></div>
     </div>
-    <div class="dash-stat-card">
-        <div class="dash-stat-label">Active Fleet</div>
-        <div class="dash-stat-value" id="stat-active-fleet">0</div>
-        <div class="dash-stat-sub" id="stat-fleet-maintenance">0 in maintenance</div>
+
+    <div class="kpi-card luxe-card">
+        <div class="kpi-card-top">
+            <span class="kpi-label">Total Bookings</span>
+            <div class="kpi-icon-box"><i data-lucide="ticket"></i></div>
+        </div>
+        <div class="kpi-val" id="stat-total-bookings">0</div>
+        <div class="kpi-sub" id="stat-bookings-month">0 this month</div>
     </div>
-    <div class="dash-stat-card">
-        <div class="dash-stat-label">Bookings Today</div>
-        <div class="dash-stat-value" id="stat-bookings-today">0</div>
-        <div class="dash-stat-sub" id="stat-confirmed-percent">0% confirmed</div>
+
+    <div class="kpi-card luxe-card">
+        <div class="kpi-card-top">
+            <span class="kpi-label">Active Fleet</span>
+            <div class="kpi-icon-box"><i data-lucide="bus"></i></div>
+        </div>
+        <div class="kpi-val" id="stat-active-fleet">0</div>
+        <div class="kpi-sub" id="stat-fleet-maintenance">0 in maintenance</div>
     </div>
-    <div class="dash-stat-card">
-        <div class="dash-stat-label">Gross Revenue</div>
-        <div class="dash-stat-value" id="stat-revenue">$0</div>
-        <div class="dash-stat-sub" id="stat-revenue-target">Target: $150,000</div>
+
+    <div class="kpi-card luxe-card">
+        <div class="kpi-card-top">
+            <span class="kpi-label">Bookings Today</span>
+            <div class="kpi-icon-box"><i data-lucide="calendar-check"></i></div>
+        </div>
+        <div class="kpi-val" id="stat-bookings-today">0</div>
+        <div class="kpi-sub positive" id="stat-confirmed-percent">0% confirmed</div>
     </div>
 </div>
 
-<div class="dash-content-grid">
-    <div class="dash-panel">
-        <div class="dash-panel-header">
-            <div>
-                <h2>Today Route Load</h2>
-                <p>Top performing routes and utilization</p>
-            </div>
-            <button class="admin-btn admin-btn-secondary" onclick="loadRouteLoad()">Refresh</button>
+<!-- Charts Row with Chart.js -->
+<div class="charts-grid">
+    <div class="chart-card luxe-card">
+        <div class="chart-header">
+            <h2 class="chart-title">Revenue &amp; Booking Trends (2026)</h2>
+            <span class="badge-luxe badge-neutral">Weekly Revenue</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
+
+    <div class="chart-card luxe-card">
+        <div class="chart-header">
+            <h2 class="chart-title">Route Passenger Share</h2>
+            <span class="badge-luxe badge-neutral">Top Routes</span>
+        </div>
+        <div class="chart-container">
+            <canvas id="routeShareChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Route Load Table & Alerts -->
+<div class="data-grid-section">
+    <div class="data-card luxe-card">
+        <div class="chart-header">
+            <h2 class="chart-title">Live Route Fleet Load</h2>
+            <span class="badge-luxe badge-neutral">Today's Performance</span>
         </div>
         <div style="overflow-x:auto;">
-            <table class="dash-table">
+            <table class="luxe-table">
                 <thead>
                     <tr>
                         <th>Route</th>
                         <th>Trips</th>
                         <th>Passengers</th>
-                        <th>Load</th>
+                        <th>Load %</th>
                         <th>Revenue</th>
                     </tr>
                 </thead>
                 <tbody id="route-load-body">
-                    <tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Loading...</td></tr>
+                    <tr><td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">Loading route metrics...</td></tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="dash-panel">
-        <div class="dash-panel-header">
-            <div>
-                <h2>Critical Alerts</h2>
-                <p>Action items for operations team</p>
-            </div>
+    <div class="data-card luxe-card">
+        <div class="chart-header">
+            <h2 class="chart-title">System Status &amp; Alerts</h2>
+            <span class="badge-luxe badge-success"><i data-lucide="check"></i> Normal</span>
         </div>
-        <div class="dash-alert-list" id="alerts-list">
-            <div style="text-align:center; color:#9ca3af; padding:20px;">Loading...</div>
+        <div id="alerts-list">
+            <div style="text-align:center; padding:30px; color:var(--text-muted);">Loading system alerts...</div>
         </div>
     </div>
 </div>
 
 @section Scripts {
 <script>
+    let revenueChartInstance = null;
+    let routeShareChartInstance = null;
+
+    function initCharts() {
+        // Line chart for Revenue
+        const ctxRevenue = document.getElementById('revenueChart')?.getContext('2d');
+        if (ctxRevenue) {
+            revenueChartInstance = new Chart(ctxRevenue, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Gross Revenue ($)',
+                        data: [1200, 1900, 1700, 2400, 3100, 4200, 3800],
+                        borderColor: '#ffffff',
+                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#0b0f19',
+                        pointBorderWidth: 2,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Doughnut chart for Route Share
+        const ctxShare = document.getElementById('routeShareChart')?.getContext('2d');
+        if (ctxShare) {
+            routeShareChartInstance = new Chart(ctxShare, {
+                type: 'doughnut',
+                data: {
+                    labels: ['PP - Siem Reap', 'PP - Sihanoukville', 'PP - Battambang', 'Other'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: ['#ffffff', '#94a3b8', '#475569', '#1e293b'],
+                        borderColor: '#0b0f19',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', boxWidth: 12, padding: 16 }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+        }
+    }
+
     async function loadSummary() {
         try {
             const res = await fetch('/api/Dashboard/summary');
@@ -337,75 +376,76 @@
 
     async function loadRouteLoad() {
         const tbody = document.getElementById('route-load-body');
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Loading...</td></tr>';
         try {
             const res = await fetch('/api/Dashboard/route-load');
             if (!res.ok) return;
             const data = await res.json();
 
             if (!data || data.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">No route data for today</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">No route load data recorded today</td></tr>';
                 return;
             }
 
             tbody.innerHTML = data.map(r => {
-                let badgeClass = 'dash-badge-green';
-                if (r.loadPercent < 50) badgeClass = 'dash-badge-red';
-                else if (r.loadPercent < 80) badgeClass = 'dash-badge-yellow';
+                let badgeClass = 'badge-success';
+                if (r.loadPercent < 50) badgeClass = 'badge-danger';
+                else if (r.loadPercent < 80) badgeClass = 'badge-warning';
+
                 return `<tr>
-                    <td>${escapeHtml(r.routeName)}</td>
+                    <td style="font-weight:700; color:var(--text-primary);">${esc(r.routeName)}</td>
                     <td>${r.trips}</td>
                     <td>${r.passengers.toLocaleString()}</td>
-                    <td><span class="dash-badge ${badgeClass}">${r.loadPercent}%</span></td>
-                    <td>$${r.revenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
+                    <td><span class="badge-luxe ${badgeClass}">${r.loadPercent}%</span></td>
+                    <td style="font-weight:700; color:var(--text-primary);">$${r.revenue.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</td>
                 </tr>`;
             }).join('');
         } catch (e) {
-            console.error('Failed to load route load', e);
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#9ca3af; padding:20px;">Failed to load</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:var(--text-muted); padding:20px;">Failed to load data</td></tr>';
         }
     }
 
     async function loadAlerts() {
         const container = document.getElementById('alerts-list');
-        container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">Loading...</div>';
         try {
             const res = await fetch('/api/Dashboard/alerts');
             if (!res.ok) return;
             const data = await res.json();
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">No critical alerts</div>';
+                container.innerHTML = '<div class="alert-item-box"><span class="alert-text"><i data-lucide="check-circle-2" style="color:var(--brand-emerald);"></i> All systems operational. No active critical alerts.</span></div>';
+                if (window.lucide) window.lucide.createIcons();
                 return;
             }
 
-            container.innerHTML = data.map(a => {
-                const severityClass = a.severity; // info, warning, danger
-                const actionClass = a.severity === 'danger' ? 'danger' : a.severity === 'warning' ? 'warning' : 'info';
-                return `<div class="dash-alert-item ${severityClass}">
-                    <div class="dash-alert-text">${escapeHtml(a.message)}</div>
-                    ${a.actionUrl ? `<a href="${a.actionUrl}" class="dash-alert-action ${actionClass}">${escapeHtml(a.actionLabel || 'Action')}</a>` : ''}
-                </div>`;
-            }).join('');
+            container.innerHTML = data.map(a => `
+                <div class="alert-item-box">
+                    <div class="alert-text">${esc(a.message)}</div>
+                    ${a.actionUrl ? `<a href="${a.actionUrl}" class="btn-luxe-outline" style="padding:4px 10px;font-size:0.75rem;">${esc(a.actionLabel || 'View')}</a>` : ''}
+                </div>
+            `).join('');
+
+            if (window.lucide) window.lucide.createIcons();
         } catch (e) {
-            console.error('Failed to load alerts', e);
-            container.innerHTML = '<div style="text-align:center; color:#9ca3af; padding:20px;">Failed to load alerts</div>';
+            container.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:20px;">Failed to load alerts</div>';
         }
     }
 
-    function escapeHtml(text) {
+    function esc(text) {
         if (!text) return '';
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    function exportDashboard() {
-        alert('Export functionality will be implemented soon.');
+    function loadAllDashboardData() {
+        loadSummary();
+        loadRouteLoad();
+        loadAlerts();
     }
 
-    loadSummary();
-    loadRouteLoad();
-    loadAlerts();
+    document.addEventListener('DOMContentLoaded', function () {
+        initCharts();
+        loadAllDashboardData();
+    });
 </script>
 }

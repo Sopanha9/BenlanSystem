@@ -1,122 +1,345 @@
 @{
     var displayName = User?.Identity?.Name ?? "Admin";
+    var profileInitial = displayName.Length > 0 ? char.ToUpperInvariant(displayName[0]).ToString() : "A";
 }
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>@ViewData["Title"] - BenLan Admin</title>
+    <title>@ViewData["Title"] - BenLan Operations Control</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
     @await RenderSectionAsync("Styles", required: false)
+    
     <style>
-        :root { --admin-sidebar: #1f2937; --admin-accent: #4e78ff; }
-        body { color: #111827; }
-        .admin-wrapper { display: flex; min-height: 100vh; }
-        .admin-main, .admin-main * { color: #111827; }
-        .admin-table td, .admin-table th { color: #111827; }
-        .admin-panel, .admin-panel * { color: #111827; }
-        .admin-sidebar, .admin-sidebar * { color: #d1d5db; }
-        .admin-sidebar-header { color: #fff !important; }
-        .admin-sidebar .admin-btn { color: #9ca3af; }
-        .admin-sidebar { width: 260px; background: var(--admin-sidebar); color: #fff; display: flex; flex-direction: column; }
-        .admin-sidebar-header { padding: 20px; font-weight: 700; font-size: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .admin-nav { list-style: none; padding: 0; margin: 0; }
-        .admin-nav li a { display: block; padding: 8px 16px; margin: 2px 12px; color: #d1d5db; text-decoration: none; font-size: 14px; border-radius: 6px; }
-        .admin-nav li a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-        .admin-nav li a.active { color: #fff; background: var(--admin-accent); }
-        .admin-nav-section { padding: 16px 20px 4px; font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; }
-        .admin-sidebar-brand { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-        .admin-sidebar-brand-title { color: #fff; font-weight: 700; font-size: 18px; margin: 0; }
-        .admin-sidebar-brand-sub { color: #6b7280; font-size: 12px; margin-top: 2px; }
-        .admin-main { flex: 1; display: flex; flex-direction: column; background: #f3f4f6; }
-        .admin-topbar { background: #fff; padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; }
-        .admin-content { padding: 24px; flex: 1; }
-        .admin-panel { background: #fff; border-radius: 8px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .admin-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .admin-toolbar h2 { font-size: 20px; font-weight: 700; margin: 0; color: #111827; }
-        .admin-table { background: #fff; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .admin-table table { width: 100%; border-collapse: collapse; }
-        .admin-table th, .admin-table td { padding: 12px 16px; text-align: left; font-size: 14px; border-bottom: 1px solid #f3f4f6; }
-        .admin-table th { background: #f9fafb; font-weight: 600; color: #374151; }
-        .admin-btn { padding: 6px 12px; border-radius: 6px; border: none; font-size: 13px; cursor: pointer; }
-        .admin-btn-primary { background: var(--admin-accent); color: #fff; }
-        .admin-btn-secondary { background: #e5e7eb; color: #111827; }
-        .admin-btn-success { background: #16a34a; color: #fff; }
-        .admin-btn-warning { background: #f59e0b; color: #111827; }
-        .admin-btn-danger { background: #ef4444; color: #fff; }
-        .admin-btn-sm { padding: 4px 10px; }
-        .admin-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .admin-form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-        .admin-form-field { display: flex; flex-direction: column; gap: 5px; }
-        .admin-form-field label { color: #374151; font-size: 13px; font-weight: 600; }
-        .admin-form-field input, .admin-form-field select, .admin-form-field textarea {
-            border: 1px solid #d1d5db; border-radius: 6px; padding: 9px 10px; font-size: 14px; color: #111827; background: #fff;
+        :root {
+            --admin-sidebar-bg: #0b0f19;
+            --admin-sidebar-border: rgba(255, 255, 255, 0.08);
+            --admin-active-bg: rgba(255, 255, 255, 0.12);
         }
-        .admin-form-field.full { grid-column: 1 / -1; }
-        .admin-modal-backdrop { position: fixed; inset: 0; background: rgba(17,24,39,0.48); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
-        .admin-modal-backdrop.open { display: flex; }
-        .admin-modal { width: min(720px, 100%); max-height: 90vh; overflow: auto; background: #fff; border-radius: 8px; box-shadow: 0 20px 45px rgba(0,0,0,0.22); }
-        .admin-modal-header, .admin-modal-footer { padding: 16px 18px; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-        .admin-modal-footer { border-top: 1px solid #e5e7eb; border-bottom: 0; justify-content: flex-end; }
-        .admin-modal-title { color: #111827; font-weight: 700; font-size: 18px; margin: 0; }
-        .admin-modal-body { padding: 18px; }
-        .admin-muted { color: #6b7280; font-size: 13px; }
-        .admin-status { margin-top: 12px; min-height: 20px; color: #991b1b; font-size: 13px; }
-        @@media (max-width: 760px) {
-            .admin-wrapper { flex-direction: column; }
+
+        body {
+            background-color: var(--bg-app);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .admin-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 280px;
+            background: var(--admin-sidebar-bg);
+            border-right: 1px solid var(--admin-sidebar-border);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .admin-brand {
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--admin-sidebar-border);
+        }
+        .admin-logo-mark {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--text-primary);
+            color: var(--text-inverse);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-logo-mark i { width: 20px; height: 20px; }
+        .admin-brand-info h2 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .admin-brand-info span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .admin-menu {
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .menu-section-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 12px 14px 4px;
+        }
+        .admin-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+        .admin-nav-link i { width: 18px; height: 18px; opacity: 0.75; }
+        .admin-nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .admin-nav-link.active {
+            color: var(--text-inverse);
+            background: var(--text-primary);
+            font-weight: 600;
+        }
+        .admin-nav-link.active i { opacity: 1; }
+
+        .admin-sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--admin-sidebar-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .admin-user-summary {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--text-primary);
+            color: var(--text-inverse);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* Main Workspace */
+        .admin-workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-app);
+            overflow-x: hidden;
+        }
+
+        .admin-top-bar {
+            height: 70px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .admin-search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-pill);
+            border: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            width: 320px;
+        }
+        .admin-search-box i { width: 16px; height: 16px; color: var(--text-muted); }
+        .admin-search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            width: 100%;
+        }
+
+        .admin-top-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .btn-view-site {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+        .btn-view-site:hover {
+            color: var(--text-primary);
+            border-color: var(--border-medium);
+        }
+        .btn-view-site i { width: 14px; height: 14px; }
+
+        .admin-view-body {
+            padding: 32px;
+            flex: 1;
+        }
+
+        @@media (max-width: 900px) {
+            .admin-shell { flex-direction: column; }
             .admin-sidebar { width: 100%; }
-            .admin-form-grid { grid-template-columns: 1fr; }
-            .admin-table { overflow-x: auto; }
+            .admin-search-box { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="admin-wrapper">
+    <div class="admin-shell">
+        <!-- Sidebar -->
         <aside class="admin-sidebar">
-            <div class="admin-sidebar-brand">
-                <div class="admin-sidebar-brand-title">Admin</div>
-                <div class="admin-sidebar-brand-sub">BenLan Operations Portal</div>
+            <div class="admin-brand">
+                <div class="admin-logo-mark"><i data-lucide="bus-front"></i></div>
+                <div class="admin-brand-info">
+                    <h2>BenLan</h2>
+                    <span>Operations Control</span>
+                </div>
             </div>
-            <ul class="admin-nav">
-                <li><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Dashboard" ? "active" : "")">Dashboard</a></li>
-                <li class="admin-nav-section">Fleet Management</li>
-                <li><a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Trips" ? "active" : "")">Trips</a></li>
-                <li><a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Vehicles" ? "active" : "")">Vehicles</a></li>
-                <li class="admin-nav-section">Route &amp; Location</li>
-                <li><a asp-area="Admin" asp-controller="Routes" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Routes" ? "active" : "")">Routes</a></li>
-                <li><a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Locations" ? "active" : "")">Locations</a></li>
-                <li class="admin-nav-section">Booking System</li>
-                <li><a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Bookings" ? "active" : "")">Bookings</a></li>
-                <li class="admin-nav-section">Finance</li>
-                <li><a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Payments" ? "active" : "")">Payments</a></li>
-                <li class="admin-nav-section">System</li>
-                <li><a asp-area="Admin" asp-controller="Staff" asp-action="Index" class="@(ViewData["AdminPage"]?.ToString() == "Staff" ? "active" : "")">Staff</a></li>
+
+            <ul class="admin-menu">
+                <li>
+                    <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Dashboard" ? "active" : "")">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="menu-section-label">Operations &amp; Fleet</li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Trips" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Trips" ? "active" : "")">
+                        <i data-lucide="calendar"></i>
+                        <span>Trip Schedules</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Vehicles" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Vehicles" ? "active" : "")">
+                        <i data-lucide="bus"></i>
+                        <span>Vehicle Fleet</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Routes" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Routes" ? "active" : "")">
+                        <i data-lucide="git-fork"></i>
+                        <span>Intercity Routes</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Locations" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Locations" ? "active" : "")">
+                        <i data-lucide="map-pin"></i>
+                        <span>Terminals &amp; Stations</span>
+                    </a>
+                </li>
+
+                <li class="menu-section-label">Finance &amp; Customers</li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Bookings" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Bookings" ? "active" : "")">
+                        <i data-lucide="ticket"></i>
+                        <span>Passenger Bookings</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Payments" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Payments" ? "active" : "")">
+                        <i data-lucide="credit-card"></i>
+                        <span>Transactions &amp; KHQR</span>
+                    </a>
+                </li>
+
+                <li class="menu-section-label">System Control</li>
+                <li>
+                    <a asp-area="Admin" asp-controller="Staff" asp-action="Index" class="admin-nav-link @(ViewData["AdminPage"]?.ToString() == "Staff" ? "active" : "")">
+                        <i data-lucide="shield-check"></i>
+                        <span>Staff Directory</span>
+                    </a>
+                </li>
             </ul>
-            <div style="margin-top:auto; padding:16px 20px; border-top:1px solid rgba(255,255,255,0.08); font-size:12px; color:#9ca3af;">
-                <div>@displayName</div>
-                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" style="margin-top:8px;">
+
+            <div class="admin-sidebar-footer">
+                <div class="admin-user-summary">
+                    <div class="admin-avatar">@profileInitial</div>
+                    <div>
+                        <div style="font-size:0.8125rem;font-weight:700;">@displayName.Split('@')[0]</div>
+                        <div style="font-size:0.6875rem;color:var(--text-muted);">Operator</div>
+                    </div>
+                </div>
+
+                <form asp-area="" asp-controller="Account" asp-action="Logout" method="post">
                     @Html.AntiForgeryToken()
-                    <button type="submit" class="admin-btn admin-btn-sm" style="background:transparent; color:#9ca3af; border:1px solid rgba(255,255,255,0.15);">Logout</button>
+                    <button type="submit" class="btn-logout" title="Log Out">
+                        <i data-lucide="log-out"></i>
+                    </button>
                 </form>
             </div>
         </aside>
-        <main class="admin-main">
-            <div class="admin-topbar">
-                <span style="font-weight:600;">@ViewData["Title"]</span>
-                <div style="display:flex; align-items:center; gap:8px; font-size:14px; color:#374151;">
-                    <div style="width:28px; height:28px; border-radius:50%; background:var(--admin-accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700;">@displayName.Substring(0,1).ToUpper()</div>
-                    <span style="font-weight:600;">@displayName</span>
+
+        <!-- Main Workspace -->
+        <main class="admin-workspace">
+            <header class="admin-top-bar">
+                <div class="admin-search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Quick find trips, bookings, vehicles..." />
                 </div>
-            </div>
-            <div class="admin-content">
+
+                <div class="admin-top-actions">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="btn-view-site" target="_blank">
+                        <i data-lucide="external-link"></i>
+                        <span>Public Portal</span>
+                    </a>
+                    
+                    <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle theme">
+                        <i data-lucide="sun" class="theme-icon-light"></i>
+                        <i data-lucide="moon" class="theme-icon-dark"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="admin-view-body">
                 @RenderBody()
             </div>
         </main>
     </div>
+
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

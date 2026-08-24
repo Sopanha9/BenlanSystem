@@ -1,43 +1,204 @@
 @{
-    ViewData["Title"] = "My Bookings";
+    ViewData["Title"] = "My Boarding Passes";
     ViewData["ActivePage"] = "MyBookings";
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/bookticket.css" asp-append-version="true"/>
     <style>
-        .mb-section { padding: 40px 24px; max-width: 960px; margin: 0 auto; }
-        .mb-header { font-size: 28px; font-weight: 700; margin-bottom: 24px; color: #111827; }
-        .mb-card {
-            background: #fff; border: 1px solid #e5e7eb; border-radius: 8px;
-            padding: 20px; margin-bottom: 16px; display: flex; gap: 20px; align-items: center; justify-content: space-between;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        .my-bookings-section {
+            padding: 50px 0 80px;
         }
-        .mb-route { font-size: 18px; font-weight: 600; color: #111827; }
-        .mb-meta { color: #6b7280; font-size: 14px; margin-top: 4px; }
-        .mb-badge { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; text-transform: uppercase; }
-        .mb-badge-pending { background: #fef3c7; color: #92400e; }
-        .mb-badge-confirmed { background: #d1fae5; color: #065f46; }
-        .mb-badge-cancelled { background: #fee2e2; color: #991b1b; }
-        .mb-badge-completed { background: #e0e7ff; color: #3730a3; }
-        .mb-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
-        .mb-btn { border: none; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; color: #fff; }
-        .mb-pay-btn { background: #4e78ff; }
-        .mb-cancel-btn { background: #ef4444; }
-        .mb-empty { text-align: center; color: #6b7280; padding: 60px 20px; background:#fff; border-radius:8px; }
-        .mb-pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
-        .mb-page-btn { background: #f3f4f6; border: none; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; }
-        .mb-page-btn.active { background: #4e78ff; color: #fff; }
-        @@media (max-width: 720px) { .mb-card { align-items: flex-start; flex-direction: column; } .mb-actions { justify-content:flex-start; } }
+        .mb-page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .mb-header-title {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .passes-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .boarding-pass-card {
+            display: grid;
+            grid-template-columns: 1fr 240px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease;
+        }
+        .boarding-pass-card:hover {
+            border-color: var(--border-medium);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .pass-main-section {
+            padding: 28px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .pass-top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .pass-ref-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--brand-accent);
+            text-transform: uppercase;
+        }
+        .pass-ref-pill i { width: 14px; height: 14px; }
+
+        .pass-route-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 6px 0 12px;
+        }
+        .pass-route-title i { width: 20px; height: 20px; color: var(--text-muted); }
+
+        .pass-details-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            background: var(--bg-pill);
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+        }
+        .pass-detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .detail-item-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .detail-item-val {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Right Stub Column */
+        .pass-stub-section {
+            background: var(--bg-surface);
+            border-left: 2px dashed var(--border-medium);
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+            gap: 16px;
+        }
+        .stub-qr-code {
+            width: 100px;
+            height: 100px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 6px;
+        }
+        .stub-qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .stub-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+        }
+        .btn-stub-pay {
+            width: 100%;
+            padding: 8px 14px;
+            font-size: 0.8125rem;
+        }
+        .btn-stub-cancel {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .btn-stub-cancel:hover {
+            color: var(--brand-rose);
+            border-color: var(--brand-rose);
+        }
+
+        .mb-empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        @@media (max-width: 840px) {
+            .boarding-pass-card {
+                grid-template-columns: 1fr;
+            }
+            .pass-stub-section {
+                border-left: none;
+                border-top: 2px dashed var(--border-medium);
+                flex-direction: row;
+            }
+            .stub-actions { width: auto; }
+        }
     </style>
 }
 
-<section class="mb-section">
-    <h1 class="mb-header">My Bookings</h1>
-    <div id="mb-list">
-        <div class="mb-empty">Loading your bookings...</div>
+<section class="my-bookings-section">
+    <div class="luxe-container">
+        <div class="mb-page-header">
+            <div>
+                <h1 class="mb-header-title">My Boarding Passes</h1>
+                <p class="section-subtext">View your digital travel passes, confirmed schedules, and receipts.</p>
+            </div>
+            <a asp-controller="Home" asp-action="BookTicket" class="btn-luxe-primary">
+                <i data-lucide="plus"></i>
+                <span>Book New Trip</span>
+            </a>
+        </div>
+
+        <div class="passes-container" id="mb-list">
+            <div class="mb-empty-state luxe-card">
+                <div class="spinner-border text-light" role="status"></div>
+                <p>Loading your active boarding passes...</p>
+            </div>
+        </div>
+
+        <div class="pagination-wrapper mt-4 d-flex justify-content-center" id="mb-pagination"></div>
     </div>
-    <div class="mb-pagination" id="mb-pagination"></div>
 </section>
 
 @section Scripts {
@@ -50,71 +211,139 @@
 
     async function loadMyBookings(page = 1) {
         currentPage = page;
-        const res = await fetch(`/api/Booking/my?page=${page}&pageSize=10`);
-        if (res.status === 401) { window.location = '/Account/Login'; return; }
-        if (!res.ok) {
-            document.getElementById('mb-list').innerHTML = '<div class="mb-empty">Unable to load bookings.</div>';
-            return;
+        try {
+            const res = await fetch(`/api/Booking/my?page=${page}&pageSize=10`);
+            if (res.status === 401) { window.location.href = '/Account/Login'; return; }
+            if (!res.ok) {
+                document.getElementById('mb-list').innerHTML = '<div class="mb-empty-state luxe-card"><p>Unable to load passes at this moment.</p></div>';
+                return;
+            }
+            const data = await res.json();
+            renderBookings(data.items || []);
+            renderPagination(data);
+        } catch (e) {
+            document.getElementById('mb-list').innerHTML = '<div class="mb-empty-state luxe-card"><p>Network error loading passes.</p></div>';
         }
-        const data = await res.json();
-        renderBookings(data.items || []);
-        renderPagination(data);
     }
 
     function renderBookings(items) {
         const container = document.getElementById('mb-list');
         if (!items.length) {
-            container.innerHTML = '<div class="mb-empty">You have no bookings yet.</div>';
+            container.innerHTML = `
+                <div class="mb-empty-state luxe-card" data-aos="fade-up">
+                    <i data-lucide="ticket" style="width:48px;height:48px;opacity:0.4;"></i>
+                    <h3 style="font-size:1.25rem;">No Boarding Passes Yet</h3>
+                    <p>You have no scheduled upcoming bus departures on this account.</p>
+                    <a href="/Home/BookTicket" class="btn-luxe-primary">Search Available Trips</a>
+                </div>`;
+            if (window.lucide) window.lucide.createIcons();
             return;
         }
-        container.innerHTML = items.map(b => {
+
+        container.innerHTML = items.map((b, idx) => {
             const status = b.bookingStatus || 'Pending';
-            const badgeClass =
-                status === 'Pending' ? 'mb-badge-pending' :
-                status === 'Confirmed' ? 'mb-badge-confirmed' :
-                status === 'Cancelled' ? 'mb-badge-cancelled' :
-                'mb-badge-completed';
-            const dep = b.departureTimeUtc ? new Date(b.departureTimeUtc).toLocaleString() : '';
+            let badgeHtml = '<span class="badge-luxe badge-warning"><i data-lucide="clock"></i> Pending Payment</span>';
+            if (status === 'Confirmed' || status === 'Paid') {
+                badgeHtml = '<span class="badge-luxe badge-success"><i data-lucide="check-circle-2"></i> Confirmed Ticket</span>';
+            } else if (status === 'Cancelled') {
+                badgeHtml = '<span class="badge-luxe badge-danger"><i data-lucide="x-circle"></i> Cancelled</span>';
+            } else if (status === 'Completed') {
+                badgeHtml = '<span class="badge-luxe badge-neutral"><i data-lucide="archive"></i> Completed</span>';
+            }
+
+            const dep = b.departureTimeUtc ? new Date(b.departureTimeUtc).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'Scheduled';
             const total = Number(b.totalAmount || b.seatsBooked * b.unitPrice || 0).toFixed(2);
+
             const payBtn = status === 'Pending'
-                ? `<button class="mb-btn mb-pay-btn" onclick="window.location.href='/Home/Pay?bookingId=${b.id}'">Pay</button>` : '';
+                ? `<a href="/Home/Pay?bookingId=${b.id}" class="btn-luxe-primary btn-stub-pay"><i data-lucide="credit-card"></i> Pay Now</a>`
+                : '';
             const cancelBtn = (status === 'Pending' || status === 'Confirmed')
-                ? `<button class="mb-btn mb-cancel-btn" onclick="cancelBooking(${b.id})">Cancel</button>` : '';
+                ? `<button type="button" class="btn-stub-cancel" onclick="cancelBooking(${b.id})">Cancel Ticket</button>`
+                : '';
+
             return `
-                <div class="mb-card">
-                    <div>
-                        <div class="mb-route">${esc(b.originName)} to ${esc(b.destinationName)}</div>
-                        <div class="mb-meta">Departure: ${esc(dep)} | Seats: ${b.seatsBooked} | Total: $${total}</div>
-                        <div style="margin-top:8px"><span class="mb-badge ${badgeClass}">${esc(status)}</span></div>
+                <div class="boarding-pass-card" data-aos="fade-up" data-aos-delay="${(idx % 4) * 80}">
+                    <!-- Main Ticket Body -->
+                    <div class="pass-main-section">
+                        <div>
+                            <div class="pass-top-meta">
+                                <span class="pass-ref-pill"><i data-lucide="barcode"></i> Reference #${b.id}</span>
+                                ${badgeHtml}
+                            </div>
+                            <h2 class="pass-route-title">${esc(b.originName)} <i data-lucide="arrow-right"></i> ${esc(b.destinationName)}</h2>
+                        </div>
+
+                        <div class="pass-details-row">
+                            <div class="pass-detail-item">
+                                <span class="detail-item-label">Departure</span>
+                                <span class="detail-item-val">${esc(dep)}</span>
+                            </div>
+                            <div class="pass-detail-item">
+                                <span class="detail-item-label">Seats Reserved</span>
+                                <span class="detail-item-val">${b.seatsBooked} Seat(s)</span>
+                            </div>
+                            <div class="pass-detail-item">
+                                <span class="detail-item-label">Total Fare</span>
+                                <span class="detail-item-val" style="color:var(--text-primary);font-weight:700;">$${total}</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="mb-actions">${payBtn}${cancelBtn}</div>
+
+                    <!-- Right Stub / QR Column -->
+                    <div class="pass-stub-section">
+                        <div class="stub-qr-code">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=BENLAN-${b.id}" alt="Boarding QR" />
+                        </div>
+                        <div class="stub-actions">
+                            ${payBtn}
+                            ${cancelBtn}
+                        </div>
+                    </div>
                 </div>
             `;
         }).join('');
+
+        if (window.lucide) window.lucide.createIcons();
     }
 
     function renderPagination(data) {
         const container = document.getElementById('mb-pagination');
         const pages = Math.ceil(data.totalCount / data.pageSize);
         if (pages <= 1) { container.innerHTML = ''; return; }
-        let html = '';
+        let html = '<div class="btn-group">';
         for (let i = 1; i <= pages; i++) {
-            html += `<button class="mb-page-btn ${i === data.page ? 'active' : ''}" onclick="loadMyBookings(${i})">${i}</button>`;
+            html += `<button class="btn btn-sm ${i === data.page ? 'btn-light' : 'btn-outline-secondary'}" onclick="loadMyBookings(${i})">${i}</button>`;
         }
+        html += '</div>';
         container.innerHTML = html;
     }
 
     async function cancelBooking(id) {
-        if (!confirm('Cancel this booking?')) return;
-        const res = await fetch(`/api/Booking/${id}/cancel`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ reason: 'Cancelled by user' })
-        });
-        if (res.ok) loadMyBookings(currentPage);
-        else alert('Failed to cancel booking.');
+        const confirmed = await window.BenLanToast?.confirm(
+            'Cancel Booking?',
+            'Are you sure you want to cancel this booking pass? This cannot be undone.',
+            'Yes, Cancel Booking'
+        );
+        if (!confirmed) return;
+
+        try {
+            const res = await fetch(`/api/Booking/${id}/cancel`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ reason: 'Cancelled by user' })
+            });
+
+            if (res.ok) {
+                window.BenLanToast?.success('Booking Cancelled', 'Your ticket has been cancelled.');
+                loadMyBookings(currentPage);
+            } else {
+                window.BenLanToast?.error('Cancellation Failed', 'Unable to cancel this booking.');
+            }
+        } catch (e) {
+            window.BenLanToast?.error('Error', e.message);
+        }
     }
 
-    loadMyBookings();
+    document.addEventListener('DOMContentLoaded', () => loadMyBookings());
 </script>
 }

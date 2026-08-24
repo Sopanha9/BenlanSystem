@@ -1,0 +1,11 @@
+**/.git
+**/.gitignore
+**/.vs
+**/.idea
+**/.vscode
+**/bin
+**/obj
+**/App_Data/DataProtectionKeys
+**/*.user
+**/*.suo
+**/node_modules

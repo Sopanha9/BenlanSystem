@@ -1,51 +1,139 @@
-// BenLan System - Site JavaScript
+/**
+ * BENLAN LUXURY TRANSIT — Master Script (site.js)
+ * Lucide Icons Init, AOS Animation, Theme Engine & Global Utilities
+ */
 
-// Mobile menu toggle
-document.addEventListener('DOMContentLoaded', function () {
-    const hamburger = document.getElementById('navbar-hamburger');
-    const navLinks = document.getElementById('navbar-links');
+(function () {
+  'use strict';
 
-    if (hamburger && navLinks) {
-        hamburger.addEventListener('click', function () {
-            navLinks.classList.toggle('open');
+  // 1. Theme Engine (Dark Mode / Light Mode with localStorage persistence)
+  const THEME_KEY = 'benlan_theme';
 
-            // Animate hamburger to X
-            const spans = hamburger.querySelectorAll('span');
-            hamburger.classList.toggle('active');
+  function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateFlatpickrTheme(savedTheme);
 
-            if (navLinks.classList.contains('open')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.opacity = '0';
-                spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.opacity = '1';
-                spans[2].style.transform = 'none';
-            }
-        });
+    const toggleBtn = document.getElementById('theme-toggle-btn');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', toggleTheme);
+    }
+  }
+
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    localStorage.setItem(THEME_KEY, nextTheme);
+    updateFlatpickrTheme(nextTheme);
+
+    // Re-render icons if needed
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  }
+
+  function updateFlatpickrTheme(theme) {
+    const darkLink = document.getElementById('flatpickr-dark-theme');
+    if (darkLink) {
+      darkLink.disabled = (theme === 'light');
+    }
+  }
+
+  // 2. Mobile Drawer
+  function initMobileDrawer() {
+    const toggleBtn = document.getElementById('mobile-menu-btn');
+    const drawer = document.getElementById('mobile-drawer');
+    if (!toggleBtn || !drawer) return;
+
+    toggleBtn.addEventListener('click', function () {
+      drawer.classList.toggle('open');
+      const openIcon = toggleBtn.querySelector('.menu-open-icon');
+      const closeIcon = toggleBtn.querySelector('.menu-close-icon');
+      if (openIcon && closeIcon) {
+        openIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      }
+    });
+  }
+
+  // 3. Lucide Icons & AOS Init
+  function initPlugins() {
+    if (window.lucide) {
+      window.lucide.createIcons();
     }
 
-    // Populate location datalist
-    fetch('/api/Location')
-        .then(r => r.ok ? r.json() : [])
-        .then(locations => {
-            const list = document.getElementById('location-list');
-            if (list) {
-                list.innerHTML = locations.map(l => `<option value="${l.name}">`).join('');
-            }
-        });
-
-    // Homepage search form
-    const bookingForm = document.getElementById('booking-form');
-    if (bookingForm) {
-        bookingForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const from = document.getElementById('input-departing').value.trim();
-            const to = document.getElementById('input-goingto').value.trim();
-            const date = document.getElementById('input-goingdate').value;
-            if (from && to) {
-                window.location.href = `/Home/BookTicket?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(date || '')}`;
-            }
-        });
+    if (window.AOS) {
+      window.AOS.init({
+        duration: 700,
+        easing: 'ease-out-cubic',
+        once: true,
+        offset: 50
+      });
     }
-});
+  }
+
+  // 4. SweetAlert2 Custom Toast Helpers
+  window.BenLanToast = {
+    success: function (title, message) {
+      if (window.Swal) {
+        window.Swal.fire({
+          icon: 'success',
+          title: title || 'Success',
+          text: message || '',
+          timer: 3000,
+          timerProgressBar: true,
+          showConfirmButton: false,
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+        });
+      } else {
+        alert(title + (message ? ': ' + message : ''));
+      }
+    },
+    error: function (title, message) {
+      if (window.Swal) {
+        window.Swal.fire({
+          icon: 'error',
+          title: title || 'Oops!',
+          text: message || 'Something went wrong.',
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+        });
+      } else {
+        alert(title + (message ? ': ' + message : ''));
+      }
+    },
+    confirm: async function (title, text, confirmBtnText) {
+      if (window.Swal) {
+        const result = await window.Swal.fire({
+          title: title,
+          text: text,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#10b981',
+          cancelButtonColor: '#ef4444',
+          confirmButtonText: confirmBtnText || 'Yes, proceed',
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+        });
+        return result.isConfirmed;
+      }
+      return confirm(text || title);
+    }
+  };
+
+  // Run on DOM Ready
+  document.addEventListener('DOMContentLoaded', function () {
+    initTheme();
+    initMobileDrawer();
+    initPlugins();
+  });
+
+  // Export refresh icons helper
+  window.refreshIcons = function () {
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+  };
+})();

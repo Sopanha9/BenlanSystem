@@ -1,146 +1,88 @@
 @{
-    ViewData["Title"] = "Book Ticket";
+    ViewData["Title"] = "Search & Book Tickets";
     ViewData["ActivePage"] = "Book";
-    ViewData["Description"] = "Search and book your bus tickets easily with BenLan.";
+    ViewData["Description"] = "Search scheduled departures, compare vehicle amenities, and reserve seats in seconds.";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/bookticket.css" asp-append-version="true"/>
 }
 
-<section class="bt-hero">
-    <div class="bt-hero-img-wrap">
-        <img src="~/designs/hero-bus.jpg" alt="BenLan Bus" class="bt-hero-img" />
-    </div>
+<!-- Search Hero Bar -->
+<section class="bt-search-section">
+    <div class="luxe-container">
+        <div class="bt-search-wrapper luxe-card" data-aos="fade-down">
+            <div class="bt-search-form">
+                <!-- Origin -->
+                <div class="bt-input-group">
+                    <label class="bt-label"><i data-lucide="map-pin"></i> Origin</label>
+                    <div class="bt-input-wrap">
+                        <input type="text" placeholder="Departing from" id="bt-input-from" autocomplete="off" list="bt-location-list-from" />
+                        <datalist id="bt-location-list-from"></datalist>
+                    </div>
+                </div>
 
-    <div class="bt-hero-glass">
-        <div class="bt-search-bar" id="bt-search-bar">
-            <div class="bt-field" id="bt-field-from">
-                <span class="bt-field-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                    </svg>
-                </span>
-                <input type="text" placeholder="Departing from" id="bt-input-from" autocomplete="off" list="bt-location-list" />
+                <!-- Swap -->
+                <button type="button" class="btn-swap-stations" id="bt-swap-btn" title="Swap Origin &amp; Destination" onclick="swapBtStations()">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+
+                <!-- Destination -->
+                <div class="bt-input-group">
+                    <label class="bt-label"><i data-lucide="navigation"></i> Destination</label>
+                    <div class="bt-input-wrap">
+                        <input type="text" placeholder="Going to" id="bt-input-to" autocomplete="off" list="bt-location-list-to" />
+                        <datalist id="bt-location-list-to"></datalist>
+                    </div>
+                </div>
+
+                <!-- Departure Date with Flatpickr -->
+                <div class="bt-input-group">
+                    <label class="bt-label"><i data-lucide="calendar"></i> Date</label>
+                    <div class="bt-input-wrap">
+                        <input type="text" placeholder="Select Date" id="bt-input-date" />
+                    </div>
+                </div>
+
+                <!-- Search CTA -->
+                <button class="btn-luxe-primary bt-search-submit" id="bt-search-btn" type="button">
+                    <i data-lucide="search"></i>
+                    <span>Search Trips</span>
+                </button>
             </div>
-
-            <div class="bt-field" id="bt-field-to">
-                <span class="bt-field-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                    </svg>
-                </span>
-                <input type="text" placeholder="Going to" id="bt-input-to" autocomplete="off" list="bt-location-list" />
-            </div>
-
-            <div class="bt-field" id="bt-field-date">
-                <span class="bt-field-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/>
-                        <line x1="16" y1="2" x2="16" y2="6"/>
-                        <line x1="8" y1="2" x2="8" y2="6"/>
-                        <line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
-                </span>
-                <input type="text" placeholder="Going date" id="bt-input-date" onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
-            </div>
-
-            <button class="bt-search-btn" id="bt-search-btn" type="button">Search</button>
         </div>
-        <datalist id="bt-location-list"></datalist>
     </div>
 </section>
 
+<!-- Results List Section -->
 <section class="bt-results-section">
-    <div class="bt-results-inner">
-        <div class="bt-filter-bar">
-            <span class="bt-results-count" id="bt-results-count">Showing <strong>0</strong> results</span>
+    <div class="luxe-container">
+        <!-- Results Header / Filter Bar -->
+        <div class="bt-filter-bar luxe-card" data-aos="fade-up">
+            <div class="bt-results-info">
+                <span class="bt-results-count" id="bt-results-count">Showing <strong>0</strong> available departures</span>
+            </div>
+
             <div class="bt-sort-group">
-                <label class="bt-sort-label">Sort by:</label>
+                <label class="bt-sort-label"><i data-lucide="arrow-up-down"></i> Sort by:</label>
                 <select class="bt-sort-select" id="bt-sort-select">
-                    <option value="departure">Departure time</option>
+                    <option value="departure">Earliest Departure</option>
                     <option value="price-asc">Price: Low to High</option>
                     <option value="price-desc">Price: High to Low</option>
-                    <option value="duration">Duration</option>
+                    <option value="duration">Fastest Duration</option>
                 </select>
             </div>
         </div>
 
+        <!-- Dynamic Trips List Container -->
         <div class="bt-ticket-list" id="bt-ticket-list">
-            <div style="padding:40px;text-align:center;color:#6b7280;">Choose a route and date to search available trips.</div>
+            <div class="bt-loading-state">
+                <div class="spinner-border text-light" role="status"></div>
+                <p>Loading available scheduled departures...</p>
+            </div>
         </div>
     </div>
 </section>
-
-<div class="bt-modal-backdrop" id="bt-modal-backdrop" onclick="closeBookingModal()"></div>
-<div class="bt-modal" id="bt-modal" role="dialog" aria-modal="true" aria-labelledby="bt-modal-title">
-    <div class="bt-modal-header">
-        <h3 class="bt-modal-title" id="bt-modal-title">Confirm Booking</h3>
-        <button class="bt-modal-close" onclick="closeBookingModal()" aria-label="Close">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"/>
-                <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-        </button>
-    </div>
-
-    <div class="bt-modal-body">
-        <div class="bt-modal-route">
-            <div class="bt-modal-city" id="bt-modal-from"></div>
-            <div class="bt-modal-arrow">
-                <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
-                    <path d="M1 8h28M22 2l8 6-8 6" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <div class="bt-modal-city" id="bt-modal-to"></div>
-        </div>
-
-        <div class="bt-modal-details">
-            <div class="bt-modal-detail-item">
-                <span class="bt-modal-detail-label">Departure</span>
-                <span class="bt-modal-detail-value" id="bt-modal-dep"></span>
-            </div>
-            <div class="bt-modal-detail-item">
-                <span class="bt-modal-detail-label">Arrival</span>
-                <span class="bt-modal-detail-value" id="bt-modal-arr"></span>
-            </div>
-            <div class="bt-modal-detail-item">
-                <span class="bt-modal-detail-label">Price</span>
-                <span class="bt-modal-detail-value bt-modal-price" id="bt-modal-price"></span>
-            </div>
-        </div>
-
-        <div class="bt-modal-form">
-            <div class="bt-modal-field-row">
-                <div class="bt-modal-field">
-                    <label>First Name</label>
-                    <input type="text" placeholder="Sopanha" id="bt-modal-firstname" />
-                </div>
-                <div class="bt-modal-field">
-                    <label>Last Name</label>
-                    <input type="text" placeholder="Soo" id="bt-modal-lastname" />
-                </div>
-            </div>
-            <div class="bt-modal-field">
-                <label>Phone Number</label>
-                <input type="tel" placeholder="012 345 678" id="bt-modal-phone" />
-            </div>
-            <div class="bt-modal-field">
-                <label>Number of Seats</label>
-                <div class="bt-seat-picker">
-                    <button type="button" class="bt-seat-btn" onclick="changeSeat(-1)">-</button>
-                    <span class="bt-seat-count" id="bt-seat-count">1</span>
-                    <button type="button" class="bt-seat-btn" onclick="changeSeat(1)">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="bt-modal-footer">
-        <button class="bt-modal-cancel" onclick="closeBookingModal()">Cancel</button>
-        <button class="bt-modal-confirm" id="bt-modal-confirm-btn" onclick="confirmBooking()">Confirm Booking</button>
-    </div>
-</div>
 
 @section Scripts {
     <script src="~/js/bookticket.js" asp-append-version="true"></script>

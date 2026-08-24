@@ -1,5 +1,5 @@
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Luxury Intercity Travel";
     ViewData["ActivePage"] = "Home";
 }
 
@@ -7,386 +7,415 @@
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true"/>
 }
 
-<!-- Hero Section -->
+<!-- ==========================================================================
+     HERO SECTION WITH FLATPICKR BOOKING WIDGET
+     ========================================================================== -->
 <section class="hero-section" id="hero-section">
-    <div class="hero-container">
-        <!-- Hero Image with Glow Border -->
-        <div class="hero-image-wrapper" id="hero-image-wrapper">
-            <img src="~/designs/hero.png" alt="Angkor Wat Temple - Cambodia" class="hero-image" id="hero-image" />
+    <div class="hero-backdrop">
+        <div class="hero-overlay"></div>
+        <img src="~/designs/hero.png" alt="Angkor Wat - Cambodia Luxury Transit" class="hero-bg-img" />
+    </div>
+
+    <div class="luxe-container hero-content">
+        <div class="hero-header-text" data-aos="fade-up">
+            <span class="hero-pill"><i data-lucide="sparkles"></i> The Standard of Premium Travel</span>
+            <h1 class="hero-title">Travel Cambodia in <span class="gradient-text">Absolute Comfort</span></h1>
+            <p class="hero-subtitle">Direct, punctual, and safe express buses &amp; VIP sleeper coaches across Phnom Penh, Siem Reap, Sihanoukville, and beyond.</p>
         </div>
 
-        <!-- Booking Form Card -->
-        <div class="booking-card" id="booking-card">
-            <h2 class="booking-title" id="booking-title">Book your ticket</h2>
+        <!-- Glassmorphism Booking Widget -->
+        <div class="hero-booking-widget luxe-card" data-aos="fade-up" data-aos-delay="150">
+            <div class="widget-tabs">
+                <button type="button" class="tab-btn active"><i data-lucide="bus"></i> One-Way Trip</button>
+            </div>
 
-            <form class="booking-form" id="booking-form">
-                <!-- Departing From -->
-                <div class="form-field" id="field-departing">
-                    <input type="text" placeholder="Departing from" id="input-departing" autocomplete="off" list="location-list" />
-                    <span class="field-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 2L11 13"/>
-                            <path d="M22 2L15 22L11 13L2 9L22 2Z"/>
-                        </svg>
-                    </span>
+            <form class="hero-search-form" id="hero-booking-form" onsubmit="handleHeroSearch(event)">
+                <!-- Origin -->
+                <div class="search-input-group">
+                    <label class="input-label"><i data-lucide="map-pin"></i> From</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="hero-input-from" placeholder="e.g. Phnom Penh" autocomplete="off" list="location-list-from" required />
+                        <datalist id="location-list-from"></datalist>
+                    </div>
                 </div>
 
-                <!-- Going To -->
-                <div class="form-field" id="field-goingto">
-                    <input type="text" placeholder="Going to" id="input-goingto" autocomplete="off" list="location-list" />
-                    <span class="field-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                    </span>
+                <!-- Swap Button -->
+                <button type="button" class="btn-swap-stations" id="btn-swap-stations" title="Swap Origin &amp; Destination" onclick="swapStations()">
+                    <i data-lucide="arrow-left-right"></i>
+                </button>
+
+                <!-- Destination -->
+                <div class="search-input-group">
+                    <label class="input-label"><i data-lucide="navigation"></i> To</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="hero-input-to" placeholder="e.g. Siem Reap" autocomplete="off" list="location-list-to" required />
+                        <datalist id="location-list-to"></datalist>
+                    </div>
                 </div>
 
-                <!-- Going Date -->
-                <div class="form-field" id="field-goingdate">
-                    <input type="text" placeholder="Going date" id="input-goingdate" onfocus="(this.type='date')" onblur="if(!this.value)(this.type='text')" />
-                    <span class="field-icon" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                            <line x1="16" y1="2" x2="16" y2="6"/>
-                            <line x1="8" y1="2" x2="8" y2="6"/>
-                            <line x1="3" y1="10" x2="21" y2="10"/>
-                        </svg>
-                    </span>
+                <!-- Departure Date with Flatpickr -->
+                <div class="search-input-group">
+                    <label class="input-label"><i data-lucide="calendar"></i> Date</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="hero-input-date" placeholder="Select Departure Date" required />
+                    </div>
                 </div>
 
-                <!-- Search Button -->
-                <button type="submit" class="search-btn" id="search-button">Search</button>
+                <!-- Search Action -->
+                <div class="search-action-group">
+                    <button type="submit" class="btn-search-trips" id="hero-search-btn">
+                        <i data-lucide="search"></i>
+                        <span>Find Trips</span>
+                    </button>
+                </div>
             </form>
-            <datalist id="location-list"></datalist>
         </div>
     </div>
 </section>
 
-<!-- =============================================
-     QUICK CHECK SECTION
-     ============================================= -->
-<section class="quick-check-section" id="quick-check-section">
-    <div class="section-container">
-
-        <!-- Section Header -->
-        <div class="section-header" id="quick-check-header">
-            <div class="section-title-group">
-                <!-- Lightning bolt icon -->
-                <svg class="section-title-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
-                </svg>
-                <h2 class="section-title" id="quick-check-title">Quick Check</h2>
+<!-- ==========================================================================
+     STATS & TRUST COUNTERS
+     ========================================================================== -->
+<section class="stats-strip">
+    <div class="luxe-container">
+        <div class="stats-grid">
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="stat-icon"><i data-lucide="clock-check"></i></div>
+                <div class="stat-info">
+                    <h3 class="stat-val">99.8%</h3>
+                    <p class="stat-desc">On-Time Departures</p>
+                </div>
             </div>
-            <button class="see-more-btn" id="see-more-btn" onclick="toggleQuickCheck()" style="display:none;">See more</button>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-icon"><i data-lucide="users"></i></div>
+                <div class="stat-info">
+                    <h3 class="stat-val">120,000+</h3>
+                    <p class="stat-desc">Happy Travelers</p>
+                </div>
+            </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="stat-icon"><i data-lucide="shield-check"></i></div>
+                <div class="stat-info">
+                    <h3 class="stat-val">100%</h3>
+                    <p class="stat-desc">Insured Fleet</p>
+                </div>
+            </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-icon"><i data-lucide="headphones"></i></div>
+                <div class="stat-info">
+                    <h3 class="stat-val">24/7</h3>
+                    <p class="stat-desc">Support in Khmer &amp; English</p>
+                </div>
+            </div>
         </div>
-
-        <!-- Ticket Cards Grid -->
-        <div class="tickets-grid" id="tickets-grid">
-            <div id="qc-loading" style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.5);">Loading available trips...</div>
-        </div><!-- end tickets-grid -->
     </div>
 </section>
 
-<!-- =============================================
-     WHY CHOOSE US SECTION
-     ============================================= -->
-<section class="why-choose-section" id="why-choose-section">
-    <div class="section-container">
-
-        <!-- Section Header -->
-        <div class="why-header" id="why-header">
-            <svg class="section-title-icon thumbs-up" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2 20h2a1 1 0 001-1V9a1 1 0 00-1-1H2v12zM22 9a2 2 0 00-2-2h-6.32l.96-4.57.03-.32a1.5 1.5 0 00-.44-1.06L13.17 0 7.59 5.59A2 2 0 007 7v11a2 2 0 002 2h9a1.99 1.99 0 001.84-1.22l3.02-7.05A2 2 0 0022 11V9z"/>
-            </svg>
-            <h2 class="section-title" id="why-choose-title">Why choose us!</h2>
+<!-- ==========================================================================
+     QUICK CHECK LIVE SCHEDULE SECTION
+     ========================================================================== -->
+<section class="luxe-section quick-check-section" id="quick-check-section">
+    <div class="luxe-container">
+        <div class="section-head" data-aos="fade-up">
+            <span class="section-tag"><i data-lucide="zap"></i> Live Departures</span>
+            <h2 class="section-heading">Featured Available Trips</h2>
+            <p class="section-subtext">Book directly from our upcoming schedule with instant seat reservation.</p>
         </div>
 
-        <!-- Feature Cards Grid -->
-        <div class="features-grid" id="features-grid">
-
-            <!-- Complimentary -->
-            <div class="feature-card" id="feature-card-1">
-                <div class="feature-icon-box" id="feature-icon-1">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4v-2z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Complimentary</h4>
-                    <p class="feature-desc">We offer a bottle of pure drinking water on board</p>
+        <div class="trips-grid-wrapper">
+            <div class="trips-grid" id="tickets-grid">
+                <div id="qc-loading" class="trips-loading-state">
+                    <div class="spinner-border text-light" role="status"></div>
+                    <p>Loading real-time available departures...</p>
                 </div>
             </div>
 
-            <!-- Liability Insurance -->
-            <div class="feature-card" id="feature-card-2">
-                <div class="feature-icon-box" id="feature-icon-2">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Liability Insurance</h4>
-                    <p class="feature-desc">All of our fleets are covering by liability insurance both domestic and international route.</p>
-                </div>
+            <div class="see-more-wrap text-center mt-5">
+                <button type="button" class="btn-luxe-outline" id="see-more-btn" onclick="toggleQuickCheck()" style="display:none;">
+                    <span>View More Trips</span>
+                    <i data-lucide="chevron-down"></i>
+                </button>
             </div>
-
-            <!-- Payment & Ticket -->
-            <div class="feature-card" id="feature-card-3">
-                <div class="feature-icon-box" id="feature-icon-3">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Payment & Ticket</h4>
-                    <p class="feature-desc">You can purchase our ticket and pay real time with varieties of payment method and our e-ticket will send to your email.</p>
-                </div>
-            </div>
-
-            <!-- Comfortable Seat -->
-            <div class="feature-card" id="feature-card-4">
-                <div class="feature-icon-box" id="feature-icon-4">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Comfortable Seat</h4>
-                    <p class="feature-desc">Generally, vans have up to 17 seats, but we removed 6 to provide more space and comfortable reclining seats.</p>
-                </div>
-            </div>
-
-            <!-- Customer Service -->
-            <div class="feature-card" id="feature-card-5">
-                <div class="feature-icon-box" id="feature-icon-5">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12l-4-2.12V14H6V6h8v2.12L18 6v8z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Customer Service</h4>
-                    <p class="feature-desc">Our 24/7 support team is ready to assist you in both Khmer and English.</p>
-                </div>
-            </div>
-
-            <!-- Air Conditioned -->
-            <div class="feature-card" id="feature-card-6">
-                <div class="feature-icon-box" id="feature-icon-6">
-                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M22 11h-4.17l3.24-3.24-1.41-1.42L15 11h-2V9l4.66-4.66-1.42-1.41L13 6.17V2h-2v4.17L7.76 2.93 6.34 4.34 11 9v2H9L4.34 6.34 2.93 7.76 6.17 11H2v2h4.17l-3.24 3.24 1.41 1.42L9 13h2v2l-4.66 4.66 1.42 1.41L11 17.83V22h2v-4.17l3.24 3.24 1.42-1.41L13 15v-2h2l4.66 4.66 1.41-1.42L17.83 13H22v-2z"/>
-                    </svg>
-                </div>
-                <div class="feature-text">
-                    <h4 class="feature-title">Air Conditioned</h4>
-                    <p class="feature-desc">Cambodia is a hot country, so our air-conditioning is regularly checked by professionals to ensure your comfort.</p>
-                </div>
-            </div>
-
-        </div><!-- end features-grid -->
+        </div>
     </div>
 </section>
 
-<!-- =============================================
-     DESTINATIONS SECTION
-     ============================================= -->
-<section class="destinations-section" id="destinations-section">
-    <div class="section-container">
-
-        <!-- Section Header -->
-        <div class="destinations-header" id="destinations-header">
-            <div class="section-title-group">
-                <!-- Arrow / location icon -->
-                <svg class="section-title-icon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>
-                </svg>
-                <h2 class="section-title" id="destinations-title">Destinations</h2>
-            </div>
-            <p class="destinations-subtitle" id="destinations-subtitle">Explore 6 available destinations.</p>
+<!-- ==========================================================================
+     FLEET SHOWCASE (SWIPER.JS CAROUSEL)
+     ========================================================================== -->
+<section class="luxe-section fleet-section">
+    <div class="luxe-container">
+        <div class="section-head" data-aos="fade-up">
+            <span class="section-tag"><i data-lucide="award"></i> Modern Fleet</span>
+            <h2 class="section-heading">Crafted for Exceptional Travel</h2>
+            <p class="section-subtext">Every vehicle in the BenLan fleet is meticulously inspected, climate-controlled, and equipped for maximum relaxation.</p>
         </div>
 
-        <!-- Destinations Grid -->
-        <div class="destinations-grid" id="destinations-grid">
+        <!-- Swiper Container -->
+        <div class="swiper fleet-swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper">
+                <!-- Slide 1: VIP Sleeper -->
+                <div class="swiper-slide">
+                    <div class="fleet-card luxe-card">
+                        <div class="fleet-badge">VIP Sleeper</div>
+                        <div class="fleet-img-wrap">
+                            <img src="~/designs/hero-bus.jpg" alt="VIP Sleeper Bus" class="fleet-img" />
+                        </div>
+                        <div class="fleet-info">
+                            <h3 class="fleet-title">Executive 180° Sleeper Coach</h3>
+                            <p class="fleet-desc">Full flat-bed suites designed for night journeys between Phnom Penh, Siem Reap, and Poipet.</p>
+                            <div class="fleet-amenities">
+                                <span><i data-lucide="wifi"></i> Free Wi-Fi</span>
+                                <span><i data-lucide="snowflake"></i> Air Conditioning</span>
+                                <span><i data-lucide="plug"></i> USB Port</span>
+                                <span><i data-lucide="cup-soda"></i> Free Drinks</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Siem Reap -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Siem Reap" class="dest-card" id="dest-card-siemreap">
+                <!-- Slide 2: Luxury Van -->
+                <div class="swiper-slide">
+                    <div class="fleet-card luxe-card">
+                        <div class="fleet-badge">VIP Van</div>
+                        <div class="fleet-img-wrap">
+                            <img src="~/designs/hero.png" alt="Luxury Express Van" class="fleet-img" />
+                        </div>
+                        <div class="fleet-info">
+                            <h3 class="fleet-title">11-Seat Luxury Express Van</h3>
+                            <p class="fleet-desc">Spacious reclining captain chairs with generous legroom for rapid daytime intercity transfers.</p>
+                            <div class="fleet-amenities">
+                                <span><i data-lucide="armchair"></i> Captain Recliner</span>
+                                <span><i data-lucide="snowflake"></i> Dual AC</span>
+                                <span><i data-lucide="shield"></i> GPS Monitored</span>
+                                <span><i data-lucide="luggage"></i> Luggage Space</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Classic Coach -->
+                <div class="swiper-slide">
+                    <div class="fleet-card luxe-card">
+                        <div class="fleet-badge">Express Coach</div>
+                        <div class="fleet-img-wrap">
+                            <img src="~/designs/hero-bus.jpg" alt="Express Intercity Bus" class="fleet-img" />
+                        </div>
+                        <div class="fleet-info">
+                            <h3 class="fleet-title">Intercity Panorama Coach</h3>
+                            <p class="fleet-desc">Panoramic scenic windows, ergonomic seating, and verified professional captains.</p>
+                            <div class="fleet-amenities">
+                                <span><i data-lucide="eye"></i> Scenic Windows</span>
+                                <span><i data-lucide="wifi"></i> 4G Hotspot</span>
+                                <span><i data-lucide="shield-check"></i> Certified Driver</span>
+                                <span><i data-lucide="snowflake"></i> Climate Control</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swiper Controls -->
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"><i data-lucide="arrow-left"></i></div>
+            <div class="swiper-button-next"><i data-lucide="arrow-right"></i></div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================================
+     POPULAR DESTINATIONS GRID
+     ========================================================================== -->
+<section class="luxe-section destinations-section" id="destinations-section">
+    <div class="luxe-container">
+        <div class="section-head" data-aos="fade-up">
+            <span class="section-tag"><i data-lucide="compass"></i> Top Destinations</span>
+            <h2 class="section-heading">Explore the Kingdom</h2>
+            <p class="section-subtext">Discover Cambodia's premier heritage, coastal, and cultural hubs with daily guaranteed departures.</p>
+        </div>
+
+        <div class="dest-grid">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Siem Reap" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="50">
                 <img src="~/designs/siemreap.png" alt="Siem Reap" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Siem Reap</span>
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Temple Gateway</span>
+                    <h3 class="dest-name">Siem Reap</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
 
-            <!-- Phnom Penh -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-from="Phnom Penh" class="dest-card" id="dest-card-phnompenh">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-from="Phnom Penh" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="100">
                 <img src="~/designs/phnompenh.png" alt="Phnom Penh" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Phnom Penh</span>
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Capital City</span>
+                    <h3 class="dest-name">Phnom Penh</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
 
-            <!-- Kompot -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampot" class="dest-card" id="dest-card-kompot">
-                <img src="~/designs/kompot.png" alt="Kompot" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Kompot</span>
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampot" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="150">
+                <img src="~/designs/kompot.png" alt="Kampot" class="dest-img" loading="lazy" />
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Riverside &amp; Pepper</span>
+                    <h3 class="dest-name">Kampot</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
 
-            <!-- Battambang -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Battambang" class="dest-card" id="dest-card-battambang">
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Battambang" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="200">
                 <img src="~/designs/btb.png" alt="Battambang" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Battambang</span>
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Heritage &amp; Arts</span>
+                    <h3 class="dest-name">Battambang</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
 
-            <!-- Kompong Thom -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampong Thom" class="dest-card" id="dest-card-kpc">
-                <img src="~/designs/kpc.png" alt="Kompong Thom" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Kompong thom</span>
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Kampong Thom" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="250">
+                <img src="~/designs/kpc.png" alt="Kampong Thom" class="dest-img" loading="lazy" />
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Central Hub</span>
+                    <h3 class="dest-name">Kampong Thom</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
 
-            <!-- Bonteay Meanchey -->
-            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Banteay Meanchey" class="dest-card" id="dest-card-bmc">
-                <img src="~/designs/bmc.png" alt="Bonteay Meanchey" class="dest-img" loading="lazy" />
-                <div class="dest-overlay"></div>
-                <span class="dest-name">Bonteay Meanchey</span>
+            <a asp-controller="Home" asp-action="BookTicket" asp-route-to="Banteay Meanchey" class="dest-card-luxe" data-aos="fade-up" data-aos-delay="300">
+                <img src="~/designs/bmc.png" alt="Banteay Meanchey" class="dest-img" loading="lazy" />
+                <div class="dest-gradient"></div>
+                <div class="dest-meta">
+                    <span class="dest-tag">Northwest Gate</span>
+                    <h3 class="dest-name">Banteay Meanchey</h3>
+                    <span class="dest-btn"><i data-lucide="arrow-up-right"></i> Book Trips</span>
+                </div>
             </a>
-
-        </div><!-- end destinations-grid -->
+        </div>
     </div>
 </section>
 
-<!-- =============================================
-     FAQs SECTION
-     ============================================= -->
-<section class="faqs-section" id="faqs-section">
-    <div class="section-container">
-
-        <!-- Section Header -->
-        <div class="faqs-header" id="faqs-header">
-            <svg class="section-title-icon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-            </svg>
-            <h2 class="section-title" id="faqs-title">FAQs</h2>
+<!-- ==========================================================================
+     WHY CHOOSE US & VALUES
+     ========================================================================== -->
+<section class="luxe-section features-section">
+    <div class="luxe-container">
+        <div class="section-head" data-aos="fade-up">
+            <span class="section-tag"><i data-lucide="check-circle-2"></i> The BenLan Advantage</span>
+            <h2 class="section-heading">Why Discerning Travelers Choose Us</h2>
+            <p class="section-subtext">Setting new benchmarks in safety, punctuality, and passenger convenience.</p>
         </div>
 
-        <!-- FAQ Accordion List -->
-        <div class="faqs-list" id="faqs-list">
+        <div class="features-grid">
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+                <h4 class="feature-title">Full Liability Insurance</h4>
+                <p class="feature-desc">Every passenger and vehicle is covered by comprehensive international and domestic transit insurance.</p>
+            </div>
 
-            <!-- FAQ 1: How to book? -->
-            <div class="faq-item" id="faq-item-1">
-                <button class="faq-trigger" id="faq-trigger-1" onclick="toggleFaq(this)" aria-expanded="false">
-                    <span class="faq-question">How to book?</span>
-                    <span class="faq-chevron" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </span>
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-icon"><i data-lucide="qr-code"></i></div>
+                <h4 class="feature-title">Instant KHQR &amp; Card Pay</h4>
+                <p class="feature-desc">Direct digital checkout with ABA KHQR, ACLEDA, Wing, and cards. Your digital boarding pass arrives instantly.</p>
+            </div>
+
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="feature-icon"><i data-lucide="armchair"></i></div>
+                <h4 class="feature-title">Reduced-Capacity Seating</h4>
+                <p class="feature-desc">We removed redundant seats across our fleet to give you generous legroom and true executive reclining comfort.</p>
+            </div>
+
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-icon"><i data-lucide="cup-soda"></i></div>
+                <h4 class="feature-title">Complimentary Refreshments</h4>
+                <p class="feature-desc">Pure bottled water, cold refreshing towels, and charging outlets are complimentary on every journey.</p>
+            </div>
+
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="feature-icon"><i data-lucide="snowflake"></i></div>
+                <h4 class="feature-title">Climate-Controlled Cabins</h4>
+                <p class="feature-desc">Precision temperature regulation and air filtration systems keep your ride pleasant throughout the trip.</p>
+            </div>
+
+            <div class="feature-card luxe-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-icon"><i data-lucide="phone-call"></i></div>
+                <h4 class="feature-title">24/7 Dedicated Support</h4>
+                <p class="feature-desc">Our dedicated team is reachable at any time via hotline, Telegram, and live station desks.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================================
+     FREQUENTLY ASKED QUESTIONS (ACCORDION)
+     ========================================================================== -->
+<section class="luxe-section faq-section" id="faqs-section">
+    <div class="luxe-container">
+        <div class="section-head" data-aos="fade-up">
+            <span class="section-tag"><i data-lucide="help-circle"></i> Clear Answers</span>
+            <h2 class="section-heading">Frequently Asked Questions</h2>
+            <p class="section-subtext">Everything you need to know about booking, baggage, check-in, and payments.</p>
+        </div>
+
+        <div class="faq-accordion" id="faqs-list">
+            <div class="faq-item luxe-card" data-aos="fade-up">
+                <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">How does online booking and seat selection work?</span>
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
                 </button>
-                <div class="faq-body" id="faq-body-1">
+                <div class="faq-body">
                     <div class="faq-content">
-                        <p>You can booking bus ticket via:</p>
-                        <ul class="faq-list">
-                            <li>Phone: <a href="tel:0123445534">0123445534</a></li>
-                            <li>Call Center: <a href="https://t.me/BenlanCentre" target="_blank" rel="noopener">t.me/BenlanCentre</a></li>
-                            <li>WhatsApp &amp; Line: 0182737232</li>
-                            <li>ChatBot: <a href="https://t.me/BenlanChat_bote" target="_blank" rel="noopener">t.me/BenlanChat_bote</a></li>
-                        </ul>
+                        Search your route, select your preferred departure time, and click <strong>Select Seat</strong> to view the live bus deck layout. Once selected, proceed to checkout with ABA KHQR, Card, or Station Pay to get your instant boarding pass.
                     </div>
                 </div>
             </div>
 
-            <!-- FAQ 2: Branch Locations? -->
-            <div class="faq-item" id="faq-item-2">
-                <button class="faq-trigger" id="faq-trigger-2" onclick="toggleFaq(this)" aria-expanded="false">
-                    <span class="faq-question">Branch Locations?</span>
-                    <span class="faq-chevron" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </span>
+            <div class="faq-item luxe-card" data-aos="fade-up" data-aos-delay="50">
+                <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">How early should I arrive at the departure terminal?</span>
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
                 </button>
-                <div class="faq-body" id="faq-body-2">
+                <div class="faq-body">
                     <div class="faq-content">
-                        <p>Our Branch Locations:</p>
-                        <ul class="faq-list">
-                            <li>Phnom Penh: <a href="https://maps.google.com/?q=Phnom+Penh+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Siem Reap: <a href="https://maps.google.com/?q=Siem+Reap+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Sihanoukville: <a href="https://maps.google.com/?q=Sihanoukville+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Battambang: <a href="https://maps.google.com/?q=Battambang+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
-                            <li>Poi Pet: <a href="https://maps.google.com/?q=Poipet+Bus+Station" target="_blank" rel="noopener">View Map</a></li>
-                        </ul>
+                        We recommend arriving at least <strong>15 to 20 minutes prior</strong> to scheduled departure to check in your luggage and board calmly.
                     </div>
                 </div>
             </div>
 
-            <!-- FAQ 3: When to arrive? -->
-            <div class="faq-item" id="faq-item-3">
-                <button class="faq-trigger" id="faq-trigger-3" onclick="toggleFaq(this)" aria-expanded="false">
-                    <span class="faq-question">When to arrive?</span>
-                    <span class="faq-chevron" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </span>
+            <div class="faq-item luxe-card" data-aos="fade-up" data-aos-delay="100">
+                <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">What payment methods are supported?</span>
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
                 </button>
-                <div class="faq-body" id="faq-body-3">
+                <div class="faq-body">
                     <div class="faq-content">
-                        <ul class="faq-list">
-                            <li>Be arrived at the bus station 15 minutes prior departure.</li>
-                        </ul>
+                        We support <strong>ABA KHQR</strong> (scan to pay with any Cambodian banking app), ACLEDA, Wing, Visa/Mastercard, and Cash payment at the terminal counter.
                     </div>
                 </div>
             </div>
 
-            <!-- FAQ 4: Payment options? -->
-            <div class="faq-item" id="faq-item-4">
-                <button class="faq-trigger" id="faq-trigger-4" onclick="toggleFaq(this)" aria-expanded="false">
-                    <span class="faq-question">Payment options?</span>
-                    <span class="faq-chevron" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </span>
+            <div class="faq-item luxe-card" data-aos="fade-up" data-aos-delay="150">
+                <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+                    <span class="faq-question">What is the luggage allowance per ticket?</span>
+                    <i data-lucide="chevron-down" class="faq-icon"></i>
                 </button>
-                <div class="faq-body" id="faq-body-4">
+                <div class="faq-body">
                     <div class="faq-content">
-                        <p>We are accepted payment:</p>
-                        <ul class="faq-list">
-                            <li>KHQR</li>
-                            <li>Credit/Debit Card</li>
-                        </ul>
+                        Each passenger is entitled to 1 standard suitcase/backpack (up to 20kg) stored in the luggage compartment plus 1 small carry-on personal bag inside the cabin.
                     </div>
                 </div>
             </div>
-
-            <!-- FAQ 5: Directions to? -->
-            <div class="faq-item" id="faq-item-5">
-                <button class="faq-trigger" id="faq-trigger-5" onclick="toggleFaq(this)" aria-expanded="false">
-                    <span class="faq-question">Directions to?</span>
-                    <span class="faq-chevron" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"/>
-                        </svg>
-                    </span>
-                </button>
-                <div class="faq-body" id="faq-body-5">
-                    <div class="faq-content">
-                        <p>Find directions to our stations:</p>
-                        <ul class="faq-list">
-                            <li>Phnom Penh Station: <a href="https://maps.google.com/?q=Phnom+Penh+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
-                            <li>Siem Reap Station: <a href="https://maps.google.com/?q=Siem+Reap+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
-                            <li>Battambang Station: <a href="https://maps.google.com/?q=Battambang+Bus+Station" target="_blank" rel="noopener">Get Directions</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div><!-- end faqs-list -->
+        </div>
     </div>
 </section>
 
 @section Scripts {
 <script>
     let quickCheckTrips = [];
+    let locations = [];
 
     function escHtml(value) {
         return String(value ?? '').replace(/[&<>"']/g, function(c) {
@@ -399,18 +428,72 @@
         return new Date(utcString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     }
 
+    // Initialize Flatpickr on Hero Search Date
+    function initHeroFlatpickr() {
+        flatpickr("#hero-input-date", {
+            minDate: "today",
+            dateFormat: "Y-m-d",
+            defaultDate: "today",
+            disableMobile: "true"
+        });
+    }
+
+    // Load locations for autocomplete
+    async function loadLocations() {
+        try {
+            const res = await fetch('/api/Location');
+            if (!res.ok) return;
+            locations = await res.json();
+
+            const fromList = document.getElementById('location-list-from');
+            const toList = document.getElementById('location-list-to');
+            if (fromList && toList) {
+                const options = locations.map(l => `<option value="${escHtml(l.name)}"></option>`).join('');
+                fromList.innerHTML = options;
+                toList.innerHTML = options;
+            }
+        } catch (e) {
+            console.error('Error loading locations:', e);
+        }
+    }
+
+    function swapStations() {
+        const fromInput = document.getElementById('hero-input-from');
+        const toInput = document.getElementById('hero-input-to');
+        if (fromInput && toInput) {
+            const temp = fromInput.value;
+            fromInput.value = toInput.value;
+            toInput.value = temp;
+        }
+    }
+
+    function handleHeroSearch(e) {
+        e.preventDefault();
+        const from = document.getElementById('hero-input-from').value.trim();
+        const to = document.getElementById('hero-input-to').value.trim();
+        const date = document.getElementById('hero-input-date').value.trim();
+
+        const params = new URLSearchParams();
+        if (from) params.append('from', from);
+        if (to) params.append('to', to);
+        if (date) params.append('date', date);
+
+        window.location.href = '/Home/BookTicket?' + params.toString();
+    }
+
+    // Quick Check Live Trips
     async function loadQuickCheck() {
         try {
             const res = await fetch('/api/Trip?StatusName=Open&PageSize=9');
             if (!res.ok) {
-                document.getElementById('qc-loading').textContent = 'Unable to load trips right now.';
+                document.getElementById('qc-loading').innerHTML = '<p class="text-muted">Unable to load live schedule at this moment.</p>';
                 return;
             }
             const data = await res.json();
             quickCheckTrips = data.items || [];
             renderQuickCheckCards(quickCheckTrips);
         } catch {
-            document.getElementById('qc-loading').textContent = 'Unable to load trips right now.';
+            document.getElementById('qc-loading').innerHTML = '<p class="text-muted">Unable to load live schedule at this moment.</p>';
         }
     }
 
@@ -419,103 +502,145 @@
         const seeMoreBtn = document.getElementById('see-more-btn');
 
         if (!trips.length) {
-            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:rgba(255,255,255,0.5);">No trips available at the moment. Check back soon.</div>';
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--text-muted);">No upcoming trips scheduled currently. Check back soon.</div>';
             if (seeMoreBtn) seeMoreBtn.style.display = 'none';
             return;
         }
 
         grid.innerHTML = trips.map(function(t, i) {
             const depTime = formatTime(t.departureTimeUtc);
-            const routeLabel = escHtml(t.originName) + ' to ' + escHtml(t.destinationName) + (depTime ? ' (' + depTime + ')' : '');
-            const departureDate = t.departureTimeUtc ? new Date(t.departureTimeUtc).toLocaleDateString() : '';
+            const departureDate = t.departureTimeUtc ? new Date(t.departureTimeUtc).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '';
             const price = '$' + Number(t.basePrice || 0).toFixed(2);
             const isExtra = i >= 3 ? ' ticket-card-extra hidden' : '';
             const seatsLeft = Number(t.availableSeats || 0);
+            const vehicleType = t.vehicleBrand ? `${t.vehicleBrand} ${t.vehicleModel || ''}` : 'VIP Transit';
 
             return `
-                <div class="ticket-card${isExtra}" id="qc-card-${i}">
-                    <div class="ticket-card-header">
-                        <div class="ticket-route-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M17 6H3a2 2 0 00-2 2v6a2 2 0 002 2h1v2a1 1 0 001 1h1a1 1 0 001-1v-2h8v2a1 1 0 001 1h1a1 1 0 001-1v-2h1a2 2 0 002-2V8a2 2 0 00-2-2zM6.5 13a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm11 0a1.5 1.5 0 110-3 1.5 1.5 0 010 3zM3 10V8h18v2H3z"/>
-                            </svg>
+                <div class="trip-card luxe-card${isExtra}" id="qc-card-${i}" data-aos="fade-up" data-aos-delay="${(i % 3) * 100}">
+                    <div class="trip-card-top">
+                        <div class="trip-vehicle-badge">
+                            <i data-lucide="bus"></i>
+                            <span>${escHtml(vehicleType)}</span>
                         </div>
-                        <h3 class="ticket-route">${routeLabel}</h3>
+                        <span class="trip-seats-pill ${seatsLeft < 5 ? 'low' : ''}">
+                            <i data-lucide="user"></i> ${seatsLeft} seats left
+                        </span>
                     </div>
-                    <p class="ticket-period">Departure: ${escHtml(departureDate)} | ${seatsLeft} seat${seatsLeft !== 1 ? 's' : ''} left</p>
-                    <div class="ticket-footer">
-                        <div class="ticket-price">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:#f0c040">
-                                <path d="M21.41 11.58l-9-9A2 2 0 0011 2H4a2 2 0 00-2 2v7a2 2 0 00.59 1.42l9 9A2 2 0 0013 22a2 2 0 001.41-.59l7-7A2 2 0 0021.41 11.58zM5.5 7a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-                            </svg>
-                            <span>${price}</span>
+
+                    <div class="trip-route-timeline">
+                        <div class="timeline-station">
+                            <span class="station-time">${depTime || '08:00 AM'}</span>
+                            <span class="station-name">${escHtml(t.originName)}</span>
                         </div>
-                        <button class="book-now-btn" onclick="quickBook('${escHtml(t.originName)}','${escHtml(t.destinationName)}')">Book now</button>
+                        <div class="timeline-divider">
+                            <i data-lucide="arrow-right"></i>
+                        </div>
+                        <div class="timeline-station right">
+                            <span class="station-date">${departureDate}</span>
+                            <span class="station-name">${escHtml(t.destinationName)}</span>
+                        </div>
+                    </div>
+
+                    <div class="trip-card-bottom">
+                        <div class="trip-price-wrap">
+                            <span class="price-label">Price per seat</span>
+                            <span class="price-amount">${price}</span>
+                        </div>
+                        <a href="/Home/SelectSeat?tripId=${t.id}" class="btn-luxe-primary btn-book-card">
+                            <span>Select Seat</span>
+                            <i data-lucide="chevron-right"></i>
+                        </a>
                     </div>
                 </div>`;
         }).join('');
 
         if (seeMoreBtn) {
-            seeMoreBtn.style.display = trips.length > 3 ? '' : 'none';
-            seeMoreBtn.textContent = 'See more';
+            seeMoreBtn.style.display = trips.length > 3 ? 'inline-flex' : 'none';
+        }
+
+        if (window.lucide) {
+            window.lucide.createIcons();
         }
     }
-
-    function quickBook(from, to) {
-        window.location.href = '/Home/BookTicket?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to);
-    }
-
-    // Call on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById('tickets-grid')) {
-            loadQuickCheck();
-        }
-    });
 
     function toggleQuickCheck() {
         const extras = document.querySelectorAll('.ticket-card-extra');
         const btn = document.getElementById('see-more-btn');
-        const isExpanded = btn.textContent.trim() === 'See less';
+        const isExpanded = btn.classList.contains('expanded');
 
-        extras.forEach(function(card, index) {
+        extras.forEach(function(card) {
             if (isExpanded) {
                 card.classList.add('hidden');
-                card.classList.remove('fade-in-card');
             } else {
                 card.classList.remove('hidden');
-                // staggered fade-in
-                setTimeout(function() {
-                    card.classList.add('fade-in-card');
-                }, index * 60);
             }
         });
 
-        btn.textContent = isExpanded ? 'See more' : 'See less';
+        if (isExpanded) {
+            btn.classList.remove('expanded');
+            btn.querySelector('span').textContent = 'View More Trips';
+        } else {
+            btn.classList.add('expanded');
+            btn.querySelector('span').textContent = 'View Less';
+        }
+
+        if (window.lucide) window.lucide.createIcons();
     }
 
-    function toggleFaq(trigger) {
-        var item = trigger.closest('.faq-item');
-        var body = item.querySelector('.faq-body');
-        var isOpen = item.classList.contains('faq-open');
+    // Swiper Carousel Initialization
+    function initFleetSwiper() {
+        new Swiper('.fleet-swiper', {
+            slidesPerView: 1,
+            spaceBetween: 24,
+            loop: true,
+            autoplay: {
+                delay: 4500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                }
+            }
+        });
+    }
 
-        // Close all open items first
-        document.querySelectorAll('.faq-item.faq-open').forEach(function(openItem) {
-            var openBody = openItem.querySelector('.faq-body');
-            openBody.style.maxHeight = openBody.scrollHeight + 'px';
-            // Next frame collapse
-            requestAnimationFrame(function() {
-                openBody.style.maxHeight = '0';
-            });
-            openItem.classList.remove('faq-open');
-            openItem.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+    // FAQ Accordion
+    function toggleFaq(trigger) {
+        const item = trigger.closest('.faq-item');
+        const body = item.querySelector('.faq-body');
+        const isOpen = item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-item.open').forEach(el => {
+            el.classList.remove('open');
+            el.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+            el.querySelector('.faq-body').style.maxHeight = '0';
         });
 
-        // If it was not open, open it now
         if (!isOpen) {
-            item.classList.add('faq-open');
+            item.classList.add('open');
             trigger.setAttribute('aria-expanded', 'true');
             body.style.maxHeight = body.scrollHeight + 'px';
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initHeroFlatpickr();
+        loadLocations();
+        loadQuickCheck();
+        initFleetSwiper();
+    });
 </script>
 }

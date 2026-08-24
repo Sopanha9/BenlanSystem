@@ -8,20 +8,22 @@ BenLanSystem is an ASP.NET Core MVC bus transportation booking management system
 
 ## Development Commands
 
-All commands are standard .NET CLI. Run from the project directory (`BenLanSystem/`):
-
-- `dotnet build` — Build the solution.
+- `docker compose up -d db` — Start the SQL Server database container in the background.
+- `docker compose down` — Stop and remove Docker containers.
+- `docker compose up --build` — Run both the database and the web application in Docker.
+- `dotnet build` — Build the solution (run from `BenLanSystem/`).
 - `dotnet run` — Run the development server (listens on `http://localhost:5216` and `https://localhost:7109`).
 - `dotnet ef migrations add <Name>` — Add an EF Core migration.
-- `dotnet ef database update` — Apply pending migrations to the local database.
+- `dotnet ef database update` — Apply pending migrations to the database.
 - `dotnet add package <Package>` — Add a NuGet package.
 
 **No automated test project exists.** Verify changes manually via the browser or Swagger UI (`/swagger` in development).
 
 ## Local Setup Requirements
 
-- SQL Server (Express or higher) running locally. The development connection string points to `Server=localhost\SQLEXPRESS;Database=BenLanDB_Dev` using Windows Authentication (`Trusted_Connection=True`).
-- On first run (or after `dotnet ef database update`), the app seeds:
+- Docker Desktop installed and running.
+- Start the SQL Server container with `docker compose up -d db`. The connection string points to `Server=localhost,1433;Database=BenLanDB_Dev;User Id=sa;Password=BenLan@Dev2026!;TrustServerCertificate=True;Encrypt=False`.
+- On first run (or after `dotnet ef database update`), the app automatically applies migrations and seeds:
   - Roles: `Admin`, `Staff`, `Customer`, `Driver`
   - Cambodian locations, routes, vehicles, sample trips, and blog posts
   - An admin user: `admin@benlan.com` / `Admin@123456`
