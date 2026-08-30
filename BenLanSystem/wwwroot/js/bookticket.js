@@ -1,6 +1,7 @@
 /**
- * BENLAN LUXURY TRANSIT — BookTicket Script (bookticket.js)
- * Flatpickr search widget, real-time trip rendering, Lucide icons & seat redirection
+ * BENLAN — BookTicket Script (bookticket.js)
+ * Flatpickr search widget, real-time trip rendering, Lucide icons,
+ * vehicle enrichment & seat redirection
  */
 
 (function () {
@@ -8,6 +9,8 @@
 
   let currentTrips = [];
   let locations = [];
+  let vehicles = [];
+  let selectedTripId = null;
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, function (c) {
@@ -42,6 +45,26 @@
     }
   }
 
+  async function loadVehicles() {
+    try {
+      const res = await fetch('/api/Vehicle');
+      if (!res.ok) return;
+      vehicles = await res.json();
+    } catch (e) {
+      console.error('Failed to load vehicles:', e);
+    }
+  }
+
+  function matchVehicle(trip) {
+    if (!vehicles.length || !trip.vehicleInfo) return null;
+    const info = String(trip.vehicleInfo).trim().toLowerCase();
+    return vehicles.find(v => {
+      const brandModel = v.brand && v.model ? `${v.brand} ${v.model}`.trim().toLowerCase() : '';
+      const plate = (v.plateNumber || '').trim().toLowerCase();
+      return (brandModel && brandModel === info) || (plate && plate === info);
+    }) || null;
+  }
+
   window.swapBtStations = function () {
     const fromInput = document.getElementById('bt-input-from');
     const toInput = document.getElementById('bt-input-to');
@@ -59,7 +82,7 @@
     const btn = document.getElementById('bt-search-btn');
 
     if (btn) {
-      btn.innerHTML = '<div class="spinner-border spinner-border-sm text-dark" role="status"></div> <span>Searching...</span>';
+      btn.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"></div> <span>Searching...</span>';
       btn.disabled = true;
     }
 
@@ -84,6 +107,8 @@
       }
       const data = await res.json();
       currentTrips = data.items || [];
+      clearSelection();
+      activateStep(2);
       renderTripList(currentTrips);
     } catch (err) {
       renderEmptyState('Failed to fetch schedule. Please try again.');
@@ -101,10 +126,10 @@
     const countEl = document.getElementById('bt-results-count');
     if (list) {
       list.innerHTML = `
-        <div class="bt-loading-state luxe-card">
-          <i data-lucide="compass" style="width:40px;height:40px;opacity:0.4;"></i>
+        <div class="cb-loading-state">
+          <i data-lucide="compass" style="width:42px;height:42px;opacity:0.45;color:var(--cb-green);"></i>
           <p>${escapeHtml(message)}</p>
-          <button type="button" class="btn-luxe-outline" onclick="window.location.href='/Home/BookTicket'">Clear Search Filters</button>
+          <button type="button" class="cb-btn-primary" onclick="window.location.href='/Home/BookTicket'">Clear Search Filters</button>
         </div>`;
     }
     if (countEl) countEl.innerHTML = 'Showing <strong>0</strong> departures';
@@ -127,7 +152,7 @@
     list.innerHTML = trips.map((t, idx) => {
       const depTime = t.departureTimeUtc ? new Date(t.departureTimeUtc).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '08:00 AM';
       const arrTime = t.arrivalTimeUtc ? new Date(t.arrivalTimeUtc).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '02:00 PM';
-      
+
       let duration = 'Direct';
       if (t.departureTimeUtc && t.arrivalTimeUtc) {
         const mins = Math.max(0, Math.round((new Date(t.arrivalTimeUtc) - new Date(t.departureTimeUtc)) / 60000));
@@ -138,62 +163,138 @@
 
       const availableSeats = Number(t.availableSeats || 0);
       const price = `$${Number(t.basePrice || 0).toFixed(2)}`;
-      const vehicleName = t.vehicleBrand ? `${t.vehicleBrand} ${t.vehicleModel || ''}` : 'VIP Transit Coach';
+      const vehicle = matchVehicle(t);
+      const vehicleName = escapeHtml(t.vehicleInfo || 'BenLan Coach');
+      const imageUrl = vehicle?.imageUrl || '/designs/bookticket/car.png';
+      const plate = vehicle?.plateNumber || '';
+      const capacity = t.vehicleSeatCapacity ? `${t.vehicleSeatCapacity} seats` : '';
+      const transmission = vehicle?.transmission || '';
+      const fuelType = vehicle?.fuelType || '';
+      const distance = t.distanceKm ? `${Number(t.distanceKm).toFixed(0)} km` : '';
       const isLowSeat = availableSeats <= 4;
+      const isSelected = selectedTripId === t.id;
+
+      const chips = [
+        capacity ? `<span class="cb-chip"><i data-lucide="users"></i> ${escapeHtml(capacity)}</span>` : '',
+        transmission ? `<span class="cb-chip"><i data-lucide="settings-2"></i> ${escapeHtml(transmission)}</span>` : '',
+        fuelType ? `<span class="cb-chip"><i data-lucide="fuel"></i> ${escapeHtml(fuelType)}</span>` : '',
+        distance ? `<span class="cb-chip"><i data-lucide="route"></i> ${escapeHtml(distance)}</span>` : ''
+      ].filter(Boolean).join('');
 
       return `
-        <div class="bt-ticket-card luxe-card" data-aos="fade-up" data-aos-delay="${(idx % 4) * 60}">
-          <!-- Vehicle Column -->
-          <div class="bt-ticket-vehicle">
-            <span class="bt-vehicle-pill"><i data-lucide="award"></i> BenLan VIP</span>
-            <h3 class="bt-vehicle-name">${escapeHtml(vehicleName)}</h3>
-            <span class="bt-vehicle-plate">${escapeHtml(t.vehiclePlateNumber || 'Certified Coach')}</span>
+        <article class="cb-car-card${isSelected ? ' cb-selected' : ''}" data-trip-id="${t.id}" data-aos="fade-up" data-aos-delay="${(idx % 4) * 60}">
+          <div class="cb-car-media">
+            <img src="${escapeHtml(imageUrl)}" alt="${vehicleName}" loading="lazy"
+                 onerror="this.onerror=null;this.src='/designs/bookticket/car.png';" />
+            ${plate ? `<span class="cb-car-plate">${escapeHtml(plate)}</span>` : ''}
+            <span class="cb-check-badge"><i data-lucide="check"></i></span>
           </div>
 
-          <!-- Timeline Schedule Column -->
-          <div class="bt-ticket-schedule">
-            <div class="bt-station-block">
-              <span class="bt-station-time">${depTime}</span>
-              <span class="bt-station-city">${escapeHtml(t.originName)}</span>
+          <div class="cb-car-body">
+            <div class="cb-car-head">
+              <div>
+                <h3 class="cb-car-name">${vehicleName}</h3>
+                <span class="cb-car-route">
+                  <i data-lucide="map-pin"></i>
+                  ${escapeHtml(t.originName)} &rarr; ${escapeHtml(t.destinationName)}
+                </span>
+              </div>
+              <span class="cb-seats-pill${isLowSeat ? ' low' : ''}">
+                <i data-lucide="user-check"></i> ${availableSeats} seats left
+              </span>
             </div>
 
-            <div class="bt-duration-block">
-              <span class="bt-duration-val">${duration}</span>
-              <div class="bt-route-line">
-                <span class="bt-dot"></span>
-                <span class="bt-line"></span>
-                <i data-lucide="chevron-right" style="width:14px;height:14px;"></i>
+            ${chips ? `<div class="cb-car-chips">${chips}</div>` : ''}
+
+            <div class="cb-car-schedule">
+              <div class="cb-stop">
+                <span class="cb-stop-time">${depTime}</span>
+                <span class="cb-stop-city">${escapeHtml(t.originName)}</span>
+              </div>
+
+              <div class="cb-leg">
+                <span class="cb-leg-duration">${duration}</span>
+                <div class="cb-leg-line">
+                  <span class="cb-dot"></span>
+                  <span class="cb-line"></span>
+                  <i data-lucide="bus-front"></i>
+                  <span class="cb-line"></span>
+                  <span class="cb-dot"></span>
+                </div>
+              </div>
+
+              <div class="cb-stop right">
+                <span class="cb-stop-time">${arrTime}</span>
+                <span class="cb-stop-city">${escapeHtml(t.destinationName)}</span>
               </div>
             </div>
-
-            <div class="bt-station-block right">
-              <span class="bt-station-time">${arrTime}</span>
-              <span class="bt-station-city">${escapeHtml(t.destinationName)}</span>
-            </div>
           </div>
 
-          <!-- Price & Action Column -->
-          <div class="bt-ticket-action">
-            <div class="bt-ticket-price-box">
-              <span class="bt-price-sub">Starting from</span>
-              <span class="bt-price-main">${price}</span>
+          <div class="cb-car-action">
+            <div class="cb-price-box">
+              <span class="cb-price-label">per seat</span>
+              <span class="cb-price">${price}</span>
             </div>
-
-            <span class="bt-seats-avail ${isLowSeat ? 'low' : ''}">
-              <i data-lucide="user-check"></i> ${availableSeats} seats remaining
-            </span>
-
-            <a href="/Home/SelectSeat?tripId=${t.id}" class="btn-luxe-primary btn-select-seat">
-              <span>Select Seat</span>
+            <a href="/Home/SelectSeat?tripId=${t.id}" class="cb-btn-primary cb-select-btn" data-select-link>
+              <span>Select Seats</span>
               <i data-lucide="arrow-right"></i>
             </a>
           </div>
-        </div>
+        </article>
       `;
     }).join('');
 
     if (window.lucide) {
       window.lucide.createIcons();
+    }
+  }
+
+  function selectTrip(tripId) {
+    selectedTripId = selectedTripId === tripId ? null : tripId;
+
+    document.querySelectorAll('.cb-car-card').forEach(card => {
+      card.classList.toggle('cb-selected', Number(card.dataset.tripId) === selectedTripId);
+    });
+
+    updateContinueBar();
+  }
+
+  function clearSelection() {
+    selectedTripId = null;
+    updateContinueBar();
+  }
+
+  function updateContinueBar() {
+    const bar = document.getElementById('cb-continue-bar');
+    const btn = document.getElementById('cb-continue-btn');
+    const routeEl = document.getElementById('cb-continue-route');
+    const metaEl = document.getElementById('cb-continue-meta');
+    if (!bar || !btn) return;
+
+    const trip = currentTrips.find(t => t.id === selectedTripId);
+    if (!trip) {
+      bar.classList.remove('visible');
+      bar.setAttribute('aria-hidden', 'true');
+      return;
+    }
+
+    const vehicle = matchVehicle(trip);
+    const vehicleName = trip.vehicleInfo || 'BenLan Coach';
+    const depLabel = trip.departureTimeUtc
+      ? new Date(trip.departureTimeUtc).toLocaleString([], { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+      : '';
+
+    if (routeEl) routeEl.textContent = `${vehicleName} — ${trip.originName} → ${trip.destinationName}`;
+    if (metaEl) metaEl.textContent = `${depLabel} · $${Number(trip.basePrice || 0).toFixed(2)} per seat`;
+    btn.href = `/Home/SelectSeat?tripId=${trip.id}`;
+
+    bar.classList.add('visible');
+    bar.setAttribute('aria-hidden', 'false');
+  }
+
+  function activateStep(step) {
+    for (let i = 1; i <= 3; i++) {
+      document.getElementById(`cb-step-${i}`)?.classList.toggle('active', i <= step);
     }
   }
 
@@ -226,12 +327,18 @@
 
   document.addEventListener('DOMContentLoaded', async function () {
     initFlatpickr();
-    await loadLocations();
+    await Promise.all([loadLocations(), loadVehicles()]);
     prefillFromUrl();
 
     document.getElementById('bt-search-btn')?.addEventListener('click', searchTrips);
     document.getElementById('bt-sort-select')?.addEventListener('change', function () {
       sortTrips(this.value);
+    });
+
+    document.getElementById('bt-ticket-list')?.addEventListener('click', function (e) {
+      if (e.target.closest('[data-select-link]')) return;
+      const card = e.target.closest('.cb-car-card');
+      if (card) selectTrip(Number(card.dataset.tripId));
     });
   });
 })();

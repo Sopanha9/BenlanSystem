@@ -3,7 +3,7 @@
     var profileInitial = displayName.Length > 0 ? char.ToUpperInvariant(displayName[0]).ToString() : "A";
 }
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -20,9 +20,9 @@
     
     <style>
         :root {
-            --admin-sidebar-bg: #0b0f19;
-            --admin-sidebar-border: rgba(255, 255, 255, 0.08);
-            --admin-active-bg: rgba(255, 255, 255, 0.12);
+            --admin-sidebar-bg: #102C25;
+            --admin-sidebar-border: rgba(247, 243, 234, 0.14);
+            --admin-active-bg: rgba(247, 243, 234, 0.14);
         }
 
         body {
@@ -57,9 +57,9 @@
         .admin-logo-mark {
             width: 38px;
             height: 38px;
-            border-radius: 10px;
-            background: var(--text-primary);
-            color: var(--text-inverse);
+            border-radius: 8px;
+            background: #D6B47A;
+            color: #10241D;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -70,12 +70,13 @@
             font-weight: 800;
             margin: 0;
             line-height: 1.2;
+            color: #F7F3EA;
         }
         .admin-brand-info span {
-            font-size: 0.75rem;
-            color: var(--text-muted);
+            font-size: 0.72rem;
+            color: rgba(247, 243, 234, 0.55);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
 
         .admin-menu {
@@ -91,7 +92,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
-            color: var(--text-muted);
+            color: #D6B47A;
             padding: 12px 14px 4px;
         }
         .admin-nav-link {
@@ -99,21 +100,21 @@
             align-items: center;
             gap: 12px;
             padding: 10px 14px;
-            border-radius: 10px;
+            border-radius: 8px;
             font-size: 0.875rem;
             font-weight: 500;
-            color: var(--text-secondary);
+            color: rgba(247, 243, 234, 0.72);
             transition: all 0.2s ease;
         }
         .admin-nav-link i { width: 18px; height: 18px; opacity: 0.75; }
         .admin-nav-link:hover {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
+            color: #F7F3EA;
+            background: rgba(247, 243, 234, 0.08);
         }
         .admin-nav-link.active {
-            color: var(--text-inverse);
-            background: var(--text-primary);
-            font-weight: 600;
+            color: #10241D;
+            background: #D6B47A;
+            font-weight: 700;
         }
         .admin-nav-link.active i { opacity: 1; }
 
@@ -123,6 +124,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            color: #F7F3EA;
         }
         .admin-user-summary {
             display: flex;
@@ -133,8 +135,8 @@
             width: 34px;
             height: 34px;
             border-radius: 50%;
-            background: var(--text-primary);
-            color: var(--text-inverse);
+            background: #D6B47A;
+            color: #10241D;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -288,8 +290,8 @@
                 <div class="admin-user-summary">
                     <div class="admin-avatar">@profileInitial</div>
                     <div>
-                        <div style="font-size:0.8125rem;font-weight:700;">@displayName.Split('@')[0]</div>
-                        <div style="font-size:0.6875rem;color:var(--text-muted);">Operator</div>
+                        <div style="font-size:0.8125rem;font-weight:700;color:#F7F3EA;">@displayName.Split('@')[0]</div>
+                        <div style="font-size:0.6875rem;color:rgba(247,243,234,0.55);">Operator</div>
                     </div>
                 </div>
 

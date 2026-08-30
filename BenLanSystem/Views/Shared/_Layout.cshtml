@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -34,8 +34,7 @@
     <!-- Top Announcement Bar -->
     <div class="top-announcement" id="top-announcement">
         <div class="announcement-content">
-            <span class="announcement-badge"><i data-lucide="sparkles"></i> New</span>
-            <span>Premium Sleeper & Express Routes now available between Phnom Penh, Siem Reap & Sihanoukville!</span>
+            <span>Premium Sleeper &amp; Express Routes now available between Phnom Penh, Siem Reap &amp; Sihanoukville</span>
         </div>
     </div>
 
@@ -53,37 +52,31 @@
                 <ul class="nav-menu" id="navbar-links">
                     <li>
                         <a asp-controller="Home" asp-action="Index" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")" id="nav-home">
-                            <i data-lucide="home" class="nav-icon"></i>
                             <span>Home</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Home" asp-action="BookTicket" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Book" ? "active" : "")" id="nav-book">
-                            <i data-lucide="ticket" class="nav-icon"></i>
                             <span>Book Ticket</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Home" asp-action="MyBookings" class="nav-item @(ViewData["ActivePage"]?.ToString() == "MyBookings" ? "active" : "")" id="nav-mybooking">
-                            <i data-lucide="calendar-check" class="nav-icon"></i>
                             <span>My Bookings</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Home" asp-action="Blog" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Blog" ? "active" : "")" id="nav-blog">
-                            <i data-lucide="newspaper" class="nav-icon"></i>
                             <span>Travel Blog</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Home" asp-action="About" class="nav-item @(ViewData["ActivePage"]?.ToString() == "About" ? "active" : "")" id="nav-about">
-                            <i data-lucide="shield-check" class="nav-icon"></i>
                             <span>About</span>
                         </a>
                     </li>
                     <li>
                         <a asp-controller="Home" asp-action="Contact" class="nav-item @(ViewData["ActivePage"]?.ToString() == "Contact" ? "active" : "")" id="nav-contact">
-                            <i data-lucide="map-pin" class="nav-icon"></i>
                             <span>Contact</span>
                         </a>
                     </li>
@@ -135,21 +128,21 @@
             <!-- Mobile Navigation Drawer -->
             <div class="mobile-drawer" id="mobile-drawer">
                 <ul class="mobile-nav-list">
-                    <li><a asp-controller="Home" asp-action="Index" class="mobile-nav-item"><i data-lucide="home"></i> Home</a></li>
-                    <li><a asp-controller="Home" asp-action="BookTicket" class="mobile-nav-item"><i data-lucide="ticket"></i> Book Ticket</a></li>
-                    <li><a asp-controller="Home" asp-action="MyBookings" class="mobile-nav-item"><i data-lucide="calendar-check"></i> My Bookings</a></li>
-                    <li><a asp-controller="Home" asp-action="Blog" class="mobile-nav-item"><i data-lucide="newspaper"></i> Travel Blog</a></li>
-                    <li><a asp-controller="Home" asp-action="About" class="mobile-nav-item"><i data-lucide="shield-check"></i> About Us</a></li>
-                    <li><a asp-controller="Home" asp-action="Contact" class="mobile-nav-item"><i data-lucide="map-pin"></i> Contact & Stations</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" class="mobile-nav-item">Home</a></li>
+                    <li><a asp-controller="Home" asp-action="BookTicket" class="mobile-nav-item">Book Ticket</a></li>
+                    <li><a asp-controller="Home" asp-action="MyBookings" class="mobile-nav-item">My Bookings</a></li>
+                    <li><a asp-controller="Home" asp-action="Blog" class="mobile-nav-item">Travel Blog</a></li>
+                    <li><a asp-controller="Home" asp-action="About" class="mobile-nav-item">About Us</a></li>
+                    <li><a asp-controller="Home" asp-action="Contact" class="mobile-nav-item">Contact &amp; Stations</a></li>
                     @if (isAdminOrStaff)
                     {
-                        <li><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="mobile-nav-item admin-link"><i data-lucide="layout-dashboard"></i> Admin Operations</a></li>
+                        <li><a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="mobile-nav-item admin-link">Admin Operations</a></li>
                     }
                     @if (!isAuthenticated)
                     {
                         <li class="mobile-auth-divider"></li>
-                        <li><a asp-controller="Account" asp-action="Login" class="mobile-nav-item"><i data-lucide="log-in"></i> Sign In</a></li>
-                        <li><a asp-controller="Account" asp-action="Register" class="mobile-nav-item highlight"><i data-lucide="user-plus"></i> Create Account</a></li>
+                        <li><a asp-controller="Account" asp-action="Login" class="mobile-nav-item">Sign In</a></li>
+                        <li><a asp-controller="Account" asp-action="Register" class="mobile-nav-item highlight">Create Account</a></li>
                     }
                 </ul>
             </div>

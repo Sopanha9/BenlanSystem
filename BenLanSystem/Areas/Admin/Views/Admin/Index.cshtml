@@ -76,7 +76,7 @@
         align-items: center;
         gap: 4px;
     }
-    .kpi-sub.positive { color: var(--brand-emerald); font-weight: 600; }
+    .kpi-sub.positive { color: var(--color-success); font-weight: 600; }
 
     /* Analytics Chart Grid */
     .charts-grid {
@@ -295,13 +295,13 @@
                     datasets: [{
                         label: 'Gross Revenue ($)',
                         data: [1200, 1900, 1700, 2400, 3100, 4200, 3800],
-                        borderColor: '#ffffff',
-                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
+                        borderColor: '#163D32',
+                        backgroundColor: 'rgba(22, 61, 50, 0.08)',
                         borderWidth: 2.5,
                         fill: true,
                         tension: 0.4,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#0b0f19',
+                        pointBackgroundColor: '#163D32',
+                        pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 4
                     }]
@@ -314,12 +314,12 @@
                     },
                     scales: {
                         x: {
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#94a3b8' }
+                            grid: { color: 'rgba(24, 32, 28, 0.06)' },
+                            ticks: { color: '#68736D' }
                         },
                         y: {
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#94a3b8' }
+                            grid: { color: 'rgba(24, 32, 28, 0.06)' },
+                            ticks: { color: '#68736D' }
                         }
                     }
                 }
@@ -335,8 +335,8 @@
                     labels: ['PP - Siem Reap', 'PP - Sihanoukville', 'PP - Battambang', 'Other'],
                     datasets: [{
                         data: [45, 25, 20, 10],
-                        backgroundColor: ['#ffffff', '#94a3b8', '#475569', '#1e293b'],
-                        borderColor: '#0b0f19',
+                        backgroundColor: ['#163D32', '#D6B47A', '#C76B42', '#A9BDB3'],
+                        borderColor: '#ffffff',
                         borderWidth: 3
                     }]
                 },
@@ -346,7 +346,7 @@
                     plugins: {
                         legend: {
                             position: 'bottom',
-                            labels: { color: '#94a3b8', boxWidth: 12, padding: 16 }
+                            labels: { color: '#68736D', boxWidth: 12, padding: 16 }
                         }
                     },
                     cutout: '70%'
@@ -412,7 +412,7 @@
             const data = await res.json();
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<div class="alert-item-box"><span class="alert-text"><i data-lucide="check-circle-2" style="color:var(--brand-emerald);"></i> All systems operational. No active critical alerts.</span></div>';
+                container.innerHTML = '<div class="alert-item-box"><span class="alert-text"><i data-lucide="check-circle-2" style="color:var(--color-success);"></i> All systems operational. No active critical alerts.</span></div>';
                 if (window.lucide) window.lucide.createIcons();
                 return;
             }

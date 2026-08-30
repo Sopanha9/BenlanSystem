@@ -6,107 +6,112 @@
 @section Styles {
     <style>
         .my-bookings-section {
-            padding: 50px 0 80px;
+            padding: 44px 0 80px;
         }
         .mb-page-header {
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
-            margin-bottom: 32px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
             gap: 16px;
         }
         .mb-header-title {
-            font-size: 2rem;
+            font-size: 1.9rem;
             font-weight: 800;
+            margin-bottom: 6px;
         }
 
         .passes-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
         }
 
         .boarding-pass-card {
             display: grid;
-            grid-template-columns: 1fr 240px;
+            grid-template-columns: 1fr 230px;
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
-            border-radius: 20px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            transition: all 0.25s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         .boarding-pass-card:hover {
             border-color: var(--border-medium);
-            transform: translateY(-2px);
             box-shadow: var(--shadow-md);
         }
 
         .pass-main-section {
-            padding: 28px 32px;
+            padding: 26px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 20px;
+            gap: 18px;
         }
         .pass-top-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
         }
         .pass-ref-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            font-size: 0.8125rem;
+            font-size: 0.75rem;
             font-weight: 700;
             color: var(--brand-accent);
             text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
         .pass-ref-pill i { width: 14px; height: 14px; }
 
         .pass-route-title {
             display: inline-flex;
             align-items: center;
-            gap: 14px;
-            font-size: 1.5rem;
+            gap: 12px;
+            font-size: 1.4rem;
             font-weight: 800;
-            margin: 6px 0 12px;
+            margin: 8px 0 14px;
         }
-        .pass-route-title i { width: 20px; height: 20px; color: var(--text-muted); }
+        .pass-route-title i { width: 19px; height: 19px; color: var(--brand-sand); }
 
         .pass-details-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 16px;
-            background: var(--bg-pill);
-            padding: 14px 20px;
-            border-radius: 12px;
+            background: var(--bg-app);
+            padding: 14px 18px;
+            border-radius: var(--radius-md);
             border: 1px solid var(--border-subtle);
         }
         .pass-detail-item {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
+            min-width: 0;
         }
         .detail-item-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
             color: var(--text-muted);
         }
         .detail-item-val {
-            font-size: 0.9375rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        /* Right Stub Column */
+        /* Right stub column */
         .pass-stub-section {
-            background: var(--bg-surface);
+            background: var(--bg-app);
             border-left: 2px dashed var(--border-medium);
-            padding: 28px 24px;
+            padding: 26px 22px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -115,11 +120,12 @@
             gap: 16px;
         }
         .stub-qr-code {
-            width: 100px;
-            height: 100px;
+            width: 96px;
+            height: 96px;
             background: #ffffff;
             border-radius: 8px;
             padding: 6px;
+            border: 1px solid var(--border-subtle);
         }
         .stub-qr-code img {
             width: 100%;
@@ -134,7 +140,7 @@
         }
         .btn-stub-pay {
             width: 100%;
-            padding: 8px 14px;
+            padding: 9px 14px;
             font-size: 0.8125rem;
         }
         .btn-stub-cancel {
@@ -142,26 +148,27 @@
             background: transparent;
             border: 1px solid var(--border-subtle);
             color: var(--text-muted);
-            padding: 6px 14px;
-            border-radius: 9999px;
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
             font-size: 0.75rem;
             font-weight: 600;
             cursor: pointer;
         }
         .btn-stub-cancel:hover {
-            color: var(--brand-rose);
-            border-color: var(--brand-rose);
+            color: var(--color-danger);
+            border-color: var(--color-danger);
         }
 
         .mb-empty-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 72px 20px;
             color: var(--text-secondary);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
         }
+        .mb-empty-state:hover { transform: none; box-shadow: var(--shadow-sm); }
 
         @@media (max-width: 840px) {
             .boarding-pass-card {
@@ -173,6 +180,11 @@
                 flex-direction: row;
             }
             .stub-actions { width: auto; }
+        }
+        @@media (max-width: 560px) {
+            .pass-details-row { grid-template-columns: 1fr; gap: 10px; }
+            .pass-stub-section { flex-direction: column; }
+            .stub-actions { width: 100%; }
         }
     </style>
 }
@@ -192,7 +204,7 @@
 
         <div class="passes-container" id="mb-list">
             <div class="mb-empty-state luxe-card">
-                <div class="spinner-border text-light" role="status"></div>
+                <div class="spinner-border text-success" role="status"></div>
                 <p>Loading your active boarding passes...</p>
             </div>
         </div>

@@ -154,7 +154,7 @@
     }
 
     const btn = document.getElementById('ss-checkout-btn');
-    btn.innerHTML = '<div class="spinner-border spinner-border-sm text-dark" role="status"></div> <span>Reserving seats...</span>';
+    btn.innerHTML = '<div class="spinner-border spinner-border-sm text-light" role="status"></div> <span>Reserving seats...</span>';
     btn.disabled = true;
 
     const passengerName = `${firstname} ${lastname}`.trim();

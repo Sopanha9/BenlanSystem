@@ -1,46 +1,46 @@
 /* ==========================================================================
-   BENLAN LUXURY TRANSIT — Contact Us Stylesheet (contact.css)
+   BENLAN — Contact Us (contact.css)
    ========================================================================== */
 
 .contact-section {
-  padding: 50px 0 80px;
+  padding: 48px 0 80px;
 }
 .section-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 28px;
 }
 
 .contact-page-header {
-  text-align: center;
-  margin-bottom: 48px;
+  max-width: 640px;
+  margin: 0 0 40px;
 }
 .contact-page-title {
-  font-size: 2.75rem;
+  font-size: 2.1rem;
   font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .contact-page-subtitle {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   color: var(--text-secondary);
-  max-width: 600px;
-  margin: 0 auto;
+  line-height: 1.65;
 }
 
 .contact-panels {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
-  gap: 32px;
+  gap: 28px;
 }
 
 .contact-info-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 40px;
+  border-radius: var(--radius-lg);
+  padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 26px;
+  box-shadow: var(--shadow-sm);
 }
 
 .contact-phone-row {
@@ -51,85 +51,81 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 .contact-label {
-  font-size: 0.8125rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   color: var(--text-muted);
 }
 .contact-value a {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-primary);
 }
-.contact-value a:hover {
-  text-decoration: underline;
-}
+.contact-value a:hover { color: var(--brand-primary); }
+[data-theme="dark"] .contact-value a:hover { color: var(--brand-sand); }
 
 .contact-branches {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
+.contact-branches > .contact-label { margin-bottom: 2px; }
 .branch-group {
   border: 1px solid var(--border-subtle);
-  border-radius: 14px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--bg-surface);
 }
 .branch-toggle {
   width: 100%;
-  padding: 16px 20px;
+  padding: 15px 18px;
   background: transparent;
   border: none;
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   color: var(--text-primary);
   text-align: left;
   cursor: pointer;
 }
 .branch-toggle-icon {
-  font-size: 1.25rem;
-  color: var(--text-muted);
+  font-size: 1.1rem;
+  color: var(--brand-primary);
+  width: 16px;
+  text-align: center;
 }
+[data-theme="dark"] .branch-toggle-icon { color: var(--brand-sand); }
 .branch-sub-list {
-  padding: 0 20px 16px 44px;
+  padding: 0 18px 14px 46px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   font-size: 0.875rem;
   color: var(--text-secondary);
 }
-.branch-sub-list.collapsed {
-  display: none;
-}
-.branch-dot {
-  color: var(--brand-accent);
-}
+.branch-sub-list.collapsed { display: none; }
+.branch-dot { color: var(--brand-sand); }
 
 .contact-map-panel {
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border-subtle);
-  min-height: 420px;
+  min-height: 440px;
   box-shadow: var(--shadow-sm);
 }
 #contact-map {
   width: 100%;
   height: 100%;
-  min-height: 420px;
+  min-height: 440px;
   border: 0;
-  filter: invert(90%) hue-rotate(180deg);
 }
-[data-theme="light"] #contact-map {
-  filter: none;
+[data-theme="dark"] #contact-map {
+  filter: invert(92%) hue-rotate(180deg);
 }
 
 @media (max-width: 900px) {
-  .contact-panels {
-    grid-template-columns: 1fr;
-  }
+  .contact-panels { grid-template-columns: 1fr; }
 }

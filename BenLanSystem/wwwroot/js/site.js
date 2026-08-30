@@ -10,7 +10,7 @@
   const THEME_KEY = 'benlan_theme';
 
   function initTheme() {
-    const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateFlatpickrTheme(savedTheme);
 
@@ -21,7 +21,7 @@
   }
 
   function toggleTheme() {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
     const nextTheme = currentTheme === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', nextTheme);
     localStorage.setItem(THEME_KEY, nextTheme);
@@ -84,8 +84,8 @@
           timer: 3000,
           timerProgressBar: true,
           showConfirmButton: false,
-          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
-          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#163026',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#18201C' : '#F2EFE6'
         });
       } else {
         alert(title + (message ? ': ' + message : ''));
@@ -97,8 +97,8 @@
           icon: 'error',
           title: title || 'Oops!',
           text: message || 'Something went wrong.',
-          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
-          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#163026',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#18201C' : '#F2EFE6'
         });
       } else {
         alert(title + (message ? ': ' + message : ''));
@@ -111,11 +111,11 @@
           text: text,
           icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: '#10b981',
-          cancelButtonColor: '#ef4444',
+          confirmButtonColor: '#163D32',
+          cancelButtonColor: '#B3402A',
           confirmButtonText: confirmBtnText || 'Yes, proceed',
-          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#0e1422',
-          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#090d16' : '#ffffff'
+          background: document.documentElement.getAttribute('data-theme') === 'light' ? '#ffffff' : '#163026',
+          color: document.documentElement.getAttribute('data-theme') === 'light' ? '#18201C' : '#F2EFE6'
         });
         return result.isConfirmed;
       }

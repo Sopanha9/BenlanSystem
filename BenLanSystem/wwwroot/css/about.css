@@ -1,23 +1,23 @@
 /* ==========================================================================
-   BENLAN LUXURY TRANSIT — About Us Stylesheet (about.css)
+   BENLAN — About Us (about.css)
+   Editorial layout: photography + typography, restrained containers
    ========================================================================== */
 
 .about-hero-section {
-  padding: 60px 0 40px;
+  padding: 56px 0 32px;
 }
 .about-hero-inner {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 28px;
   display: grid;
   grid-template-columns: 1fr 1.1fr;
   gap: 48px;
   align-items: center;
 }
 .about-hero-img-wrap {
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: var(--shadow-md);
   border: 1px solid var(--border-subtle);
 }
 .about-hero-img {
@@ -26,122 +26,103 @@
   object-fit: cover;
 }
 .about-hero-title {
-  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-size: clamp(1.9rem, 3.5vw, 2.6rem);
   font-weight: 800;
-  margin-bottom: 20px;
-  line-height: 1.15;
+  margin-bottom: 18px;
+  line-height: 1.12;
 }
 .about-hero-desc {
-  font-size: 1rem;
+  font-size: 0.975rem;
   color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 16px;
+  line-height: 1.75;
+  margin-bottom: 14px;
 }
 
 .about-section-container {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 28px;
 }
 
 .about-why-section {
-  padding: 40px 0;
+  padding: 36px 0;
 }
 .about-why-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 48px;
+  border-radius: var(--radius-lg);
+  padding: 44px;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 48px;
+  gap: 44px;
   align-items: center;
+  box-shadow: var(--shadow-sm);
 }
 .about-why-title {
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: 800;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 .about-why-desc {
   font-size: 0.9375rem;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 .about-why-img-wrap {
-  border-radius: 20px;
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 .about-why-img {
   width: 100%;
-  height: 320px;
+  height: 300px;
   object-fit: cover;
 }
 
 .about-provides-section {
-  padding: 40px 0;
+  padding: 36px 0;
 }
 .about-provides-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 28px;
 }
 .about-provides-card {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  padding: 36px;
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
 }
 .about-provides-title {
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 .about-provides-desc {
   font-size: 0.9375rem;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .about-landscape-section {
-  padding: 40px 0;
   max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 36px 28px 72px;
 }
 .about-landscape-img {
   width: 100%;
-  height: 360px;
+  height: 380px;
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
-}
-
-.about-recap-section {
-  padding: 40px 0 80px;
-}
-.about-recap-inner {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 24px;
-  padding: 48px;
-  text-align: center;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.about-recap-title {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 16px;
-}
-.about-recap-desc {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
 }
 
 @media (max-width: 960px) {
   .about-hero-inner, .about-why-card, .about-provides-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 28px;
   }
+  .about-hero-img, .about-why-img { height: 280px; }
+  .about-landscape-img { height: 260px; }
+  .about-why-card { padding: 28px; }
 }

@@ -8,81 +8,137 @@
     <link rel="stylesheet" href="~/css/bookticket.css" asp-append-version="true"/>
 }
 
-<!-- Search Hero Bar -->
-<section class="bt-search-section">
-    <div class="luxe-container">
-        <div class="bt-search-wrapper luxe-card" data-aos="fade-down">
-            <div class="bt-search-form">
+<div class="cb-page">
+
+    <!-- Immersive Hero -->
+    <section class="cb-hero">
+        <div class="cb-hero-overlay"></div>
+        <div class="luxe-container cb-hero-content">
+            <span class="cb-hero-tag" data-aos="fade-up">
+                <i data-lucide="landmark"></i> BenLan Intercity Travel
+            </span>
+            <h1 class="cb-hero-title" data-aos="fade-up" data-aos-delay="80">
+                Explore Cambodia,<br />
+                <span class="cb-hero-accent">Your Way.</span>
+            </h1>
+            <p class="cb-hero-sub" data-aos="fade-up" data-aos-delay="160">
+                Search scheduled departures, choose your vehicle, and reserve your seats in seconds.
+            </p>
+        </div>
+    </section>
+
+    <!-- Floating Booking / Search Panel -->
+    <div class="luxe-container cb-panel-anchor">
+        <div class="cb-search-panel" data-aos="fade-up" data-aos-delay="200">
+            <div class="cb-search-form">
                 <!-- Origin -->
-                <div class="bt-input-group">
-                    <label class="bt-label"><i data-lucide="map-pin"></i> Origin</label>
-                    <div class="bt-input-wrap">
+                <div class="cb-input-group">
+                    <label class="cb-label" for="bt-input-from"><i data-lucide="map-pin"></i> Origin</label>
+                    <div class="cb-input-wrap">
                         <input type="text" placeholder="Departing from" id="bt-input-from" autocomplete="off" list="bt-location-list-from" />
                         <datalist id="bt-location-list-from"></datalist>
                     </div>
                 </div>
 
                 <!-- Swap -->
-                <button type="button" class="btn-swap-stations" id="bt-swap-btn" title="Swap Origin &amp; Destination" onclick="swapBtStations()">
+                <button type="button" class="cb-swap-btn" id="bt-swap-btn" title="Swap Origin &amp; Destination" onclick="swapBtStations()">
                     <i data-lucide="arrow-left-right"></i>
                 </button>
 
                 <!-- Destination -->
-                <div class="bt-input-group">
-                    <label class="bt-label"><i data-lucide="navigation"></i> Destination</label>
-                    <div class="bt-input-wrap">
+                <div class="cb-input-group">
+                    <label class="cb-label" for="bt-input-to"><i data-lucide="navigation"></i> Destination</label>
+                    <div class="cb-input-wrap">
                         <input type="text" placeholder="Going to" id="bt-input-to" autocomplete="off" list="bt-location-list-to" />
                         <datalist id="bt-location-list-to"></datalist>
                     </div>
                 </div>
 
                 <!-- Departure Date with Flatpickr -->
-                <div class="bt-input-group">
-                    <label class="bt-label"><i data-lucide="calendar"></i> Date</label>
-                    <div class="bt-input-wrap">
+                <div class="cb-input-group">
+                    <label class="cb-label" for="bt-input-date"><i data-lucide="calendar-days"></i> Departure Date</label>
+                    <div class="cb-input-wrap">
                         <input type="text" placeholder="Select Date" id="bt-input-date" />
                     </div>
                 </div>
 
                 <!-- Search CTA -->
-                <button class="btn-luxe-primary bt-search-submit" id="bt-search-btn" type="button">
+                <button class="cb-btn-primary cb-search-submit" id="bt-search-btn" type="button">
                     <i data-lucide="search"></i>
                     <span>Search Trips</span>
                 </button>
             </div>
         </div>
     </div>
-</section>
 
-<!-- Results List Section -->
-<section class="bt-results-section">
+    <!-- Booking Flow Steps -->
     <div class="luxe-container">
-        <!-- Results Header / Filter Bar -->
-        <div class="bt-filter-bar luxe-card" data-aos="fade-up">
-            <div class="bt-results-info">
-                <span class="bt-results-count" id="bt-results-count">Showing <strong>0</strong> available departures</span>
+        <div class="cb-steps" id="cb-steps" data-aos="fade-up">
+            <div class="cb-step active" id="cb-step-1">
+                <span class="cb-step-dot"><i data-lucide="search"></i></span>
+                <span class="cb-step-text">Search Trips</span>
             </div>
-
-            <div class="bt-sort-group">
-                <label class="bt-sort-label"><i data-lucide="arrow-up-down"></i> Sort by:</label>
-                <select class="bt-sort-select" id="bt-sort-select">
-                    <option value="departure">Earliest Departure</option>
-                    <option value="price-asc">Price: Low to High</option>
-                    <option value="price-desc">Price: High to Low</option>
-                    <option value="duration">Fastest Duration</option>
-                </select>
+            <span class="cb-step-line"></span>
+            <div class="cb-step" id="cb-step-2">
+                <span class="cb-step-dot"><i data-lucide="car-front"></i></span>
+                <span class="cb-step-text">Choose Vehicle</span>
             </div>
-        </div>
-
-        <!-- Dynamic Trips List Container -->
-        <div class="bt-ticket-list" id="bt-ticket-list">
-            <div class="bt-loading-state">
-                <div class="spinner-border text-light" role="status"></div>
-                <p>Loading available scheduled departures...</p>
+            <span class="cb-step-line"></span>
+            <div class="cb-step" id="cb-step-3">
+                <span class="cb-step-dot"><i data-lucide="credit-card"></i></span>
+                <span class="cb-step-text">Review &amp; Pay</span>
             </div>
         </div>
     </div>
-</section>
+
+    <!-- Results Section -->
+    <section class="cb-results-section">
+        <div class="luxe-container">
+            <!-- Results Header / Filter Bar -->
+            <div class="cb-filter-bar" data-aos="fade-up">
+                <div class="cb-results-info">
+                    <span class="cb-results-count" id="bt-results-count">Showing <strong>0</strong> available departures</span>
+                </div>
+
+                <div class="cb-sort-group">
+                    <label class="cb-sort-label" for="bt-sort-select"><i data-lucide="arrow-up-down"></i> Sort by:</label>
+                    <select class="cb-sort-select" id="bt-sort-select">
+                        <option value="departure">Earliest Departure</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="duration">Fastest Duration</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Dynamic Trips List Container -->
+            <div class="cb-ticket-list" id="bt-ticket-list">
+                <div class="cb-loading-state">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p>Loading available scheduled departures...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sticky Continue Bar (appears when a vehicle is selected) -->
+    <div class="cb-continue-bar" id="cb-continue-bar" aria-hidden="true">
+        <div class="luxe-container cb-continue-inner">
+            <div class="cb-continue-summary">
+                <span class="cb-continue-check"><i data-lucide="check"></i></span>
+                <div class="cb-continue-text">
+                    <strong id="cb-continue-route">Selected vehicle</strong>
+                    <span id="cb-continue-meta"></span>
+                </div>
+            </div>
+            <a href="#" class="cb-btn-primary cb-continue-btn" id="cb-continue-btn">
+                <span>Continue to Seat Selection</span>
+                <i data-lucide="arrow-right"></i>
+            </a>
+        </div>
+    </div>
+
+</div>
 
 @section Scripts {
     <script src="~/js/bookticket.js" asp-append-version="true"></script>

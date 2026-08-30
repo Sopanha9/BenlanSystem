@@ -7,99 +7,111 @@
 @section Styles {
     <style>
         .pay-page-section {
-            padding: 50px 0 80px;
+            padding: 44px 0 80px;
         }
         .pay-grid-layout {
             display: grid;
-            grid-template-columns: 1fr 420px;
-            gap: 32px;
+            grid-template-columns: 1fr 400px;
+            gap: 28px;
             align-items: start;
         }
-        
+
         .pay-methods-card, .pay-order-summary {
-            padding: 32px;
+            padding: 28px;
         }
-        
+        .pay-methods-card:hover, .pay-order-summary:hover {
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+
         .pay-section-title {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.35rem;
-            margin-bottom: 24px;
+            font-size: 1.2rem;
+            margin-bottom: 22px;
         }
-        .pay-section-title i { width: 22px; height: 22px; }
+        .pay-section-title i { width: 20px; height: 20px; color: var(--brand-primary); }
+        [data-theme="dark"] .pay-section-title i { color: var(--brand-sand); }
 
         .payment-options-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-bottom: 28px;
+            gap: 10px;
+            margin-bottom: 24px;
         }
 
         .pay-option-card {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 18px 20px;
-            border-radius: 14px;
-            border: 2px solid var(--border-medium);
+            gap: 12px;
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            border: 1.5px solid var(--border-subtle);
             background: var(--bg-surface);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: border-color 0.15s ease, background-color 0.15s ease;
         }
         .pay-option-card:hover {
-            border-color: var(--text-primary);
-            background: var(--bg-pill);
+            border-color: var(--border-medium);
         }
         .pay-option-card.selected {
-            border-color: var(--text-primary);
-            background: var(--bg-pill);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.08);
+            border-color: #163D32;
+            background: rgba(22, 61, 50, 0.05);
+        }
+        [data-theme="dark"] .pay-option-card.selected {
+            border-color: #D6B47A;
+            background: rgba(214, 180, 122, 0.07);
         }
 
         .pay-option-left {
             display: flex;
             align-items: center;
             gap: 14px;
+            min-width: 0;
         }
         .pay-radio {
-            accent-color: var(--text-primary);
+            accent-color: #163D32;
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
         }
+        [data-theme="dark"] .pay-radio { accent-color: #D6B47A; }
         .pay-method-name {
-            font-size: 1rem;
+            font-size: 0.9375rem;
             font-weight: 700;
             color: var(--text-primary);
         }
         .pay-method-tag {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 2px 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 3px 9px;
             border-radius: 6px;
-            background: rgba(16, 185, 129, 0.15);
-            color: var(--brand-emerald);
-            border: 1px solid rgba(16, 185, 129, 0.25);
+            background: rgba(31, 107, 74, 0.1);
+            color: var(--color-success);
+            border: 1px solid rgba(31, 107, 74, 0.25);
+            white-space: nowrap;
         }
 
-        /* KHQR Simulation Area */
         .khqr-preview-box {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-align: center;
-            background: var(--bg-surface);
+            background: var(--bg-app);
             border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 24px;
-            margin-top: 16px;
+            border-radius: var(--radius-md);
+            padding: 22px;
+            margin-top: 14px;
         }
         .qr-placeholder {
-            width: 160px;
-            height: 160px;
+            width: 156px;
+            height: 156px;
             background: #ffffff;
-            border-radius: 12px;
-            padding: 12px;
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid var(--border-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -115,35 +127,41 @@
             color: var(--text-secondary);
         }
 
-        /* Summary Card */
         .pay-order-summary {
             position: sticky;
-            top: 96px;
+            top: 92px;
         }
         .pay-summary-rows {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-bottom: 24px;
+            gap: 13px;
+            margin-bottom: 22px;
         }
         .pay-summary-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.9375rem;
+            gap: 12px;
+            font-size: 0.9rem;
         }
         .pay-summary-row .label { color: var(--text-secondary); }
-        .pay-summary-row .val { font-weight: 600; color: var(--text-primary); }
-        .pay-divider { height: 1px; background: var(--border-subtle); margin: 6px 0; }
-        .pay-total-row { font-size: 1.125rem; }
-        .pay-total-val { font-size: 1.75rem; font-weight: 800; color: var(--text-primary); }
+        .pay-summary-row .val { font-weight: 600; color: var(--text-primary); text-align: right; }
+        .pay-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+        .pay-total-row { font-size: 1.05rem; }
+        .pay-total-val {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: var(--brand-primary);
+        }
+        [data-theme="dark"] .pay-total-val { color: var(--brand-sand); }
 
         .btn-submit-pay {
             width: 100%;
             padding: 14px;
-            font-size: 1rem;
+            font-size: 0.9375rem;
         }
-        
+
         .pay-status-message {
             margin-top: 14px;
             text-align: center;
@@ -251,7 +269,7 @@
                 <div class="pay-status-message" id="pay-status"></div>
 
                 <div class="trust-guarantee-note" style="margin-top:20px;">
-                    <i data-lucide="lock" style="width:16px;height:16px;color:var(--brand-emerald);"></i>
+                    <i data-lucide="lock" style="width:16px;height:16px;color:var(--color-success);"></i>
                     <span>256-bit encrypted checkout. Boarding pass generated automatically upon payment.</span>
                 </div>
             </div>
@@ -342,7 +360,7 @@
         const btn = document.getElementById('pay-btn');
         
         btn.disabled = true;
-        btn.innerHTML = '<div class="spinner-border spinner-border-sm text-dark" role="status"></div> <span>Processing payment...</span>';
+        btn.innerHTML = '<div class="spinner-border spinner-border-sm text-light" role="status"></div> <span>Processing payment...</span>';
 
         try {
             const res = await fetch('/api/Payment', {
